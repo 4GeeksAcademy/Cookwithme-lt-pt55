@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Chef
+from api.models import db, User, Chef, Ingredient
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -76,6 +76,59 @@ def update_chef(chef_id):
 
 
 
-   
 
 
+
+
+@api.route('/ingredients', methods=['GET'])
+def get_all_ingredients():
+    all_ingredients = Ingredient.query.all()
+    results = list(map( lambda ingredient: ingredient.serialize(), all_ingredients))
+    return jsonify(results), 200
+
+@api.route('/ingredients/<int:ingredient_id>', methods=['GET'])
+def get_ingredient(ingredient_id):
+    ingredient = Ingredient.query.filter_by(id=ingredient_id).first()
+    if ingredient is None:
+        return {"error-msg":"enter a valid ingredient"},400
+    return jsonify(ingredient.serialize()), 200
+
+@api.route('/ingredients/<int:ingredient_id>', methods=['DELETE'])
+def delete_ingredient(ingredient_id):
+    ingredient = Ingredient.query.filter_by(id=ingredient_id).first()
+    if ingredient is None:
+        return {"error-msg":"enter a valid ingredient"},400
+    db.session.delete(ingredient)
+    db.session.commit()
+    response_body = {
+        "message": "se elimino el ingredient " + ingredient.name
+    }
+
+    return jsonify(response_body), 200
+
+@api.route('/ingredients', methods=['POST'])
+def add_ingredient():
+    body = request.get_json()
+    ingredient = Ingredient(name=body["name"],description=body["description"],image=body["image"])
+    db.session.add(ingredient)
+    db.session.commit()
+    response_body = {
+        "se creo el ingredient ": ingredient.serialize()
+    }
+
+    return jsonify(response_body), 200
+
+@api.route('/ingredients/<int:ingredient_id>', methods=['PUT'])
+def update_ingredient(ingredient_id):
+    ingredient = Ingredient.query.filter_by(id=ingredient_id).first()
+    if ingredient is None:
+        return {"error-msg":"ingredient does not exist"},400
+    
+    body = request.get_json()
+    ingredient.name = body["name"]
+    db.session.commit()
+    response_body = {
+        "message": "ingredient " + ingredient.name + " successfully update"
+    }
+
+    return jsonify(response_body), 200

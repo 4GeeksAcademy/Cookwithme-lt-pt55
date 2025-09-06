@@ -36,5 +36,22 @@ class Chef(db.Model):
             # do not serialize the password, its a security breach
         }
         
+
+class Ingredient(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] =  mapped_column(String(120), unique=True, nullable=False)
+    description: Mapped[str] = mapped_column(nullable=False)
+    image: Mapped[str] =  mapped_column(String(120), unique=True, nullable=False)
+
+
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "image": self.image
+            # do not serialize the password, its a security breach
+        }
  
     
