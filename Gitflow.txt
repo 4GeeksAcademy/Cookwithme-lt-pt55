@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-Luis
-=======
 Anthony
 Jesus
->>>>>>> develop
+Zapata
+Luis
