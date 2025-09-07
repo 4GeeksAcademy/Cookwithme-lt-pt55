@@ -147,7 +147,7 @@ def add_utensil():
 
 @api.route('/utensils/<int:utensil_id>', methods=['PUT'])
 def update_utensil(utensil_id):
-    utensil = utensil.query.filter_by(id=utensil_id).first()
+    utensil = Utensil.query(id=utensil_id).first()
     if utensil is None:
         return jsonify({"error-msg": "utensil does not exist"}), 404
     
