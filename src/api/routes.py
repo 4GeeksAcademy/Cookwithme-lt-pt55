@@ -80,7 +80,6 @@ def update_chef(chef_id):
 
     return jsonify(response_body), 200
 
-<<<<<<< HEAD
 @api.route('/recipes', methods=['GET'])
 def get_all_recipes():
 
@@ -109,7 +108,6 @@ def get_all_recipes():
     # results = list(map( lambda recipe: recipe.serialize(), all_recipes))
     # return jsonify(results), 200
 
-=======
 #-------------------  utensilios ----------------------------------------
 @api.route('/utensils', methods=['GET'])
 def get_all_utensil():
@@ -148,7 +146,6 @@ def add_utensil():
     }
 
     return jsonify(response_body), 200
->>>>>>> develop
 
 
 
