@@ -2,7 +2,11 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
+<<<<<<< HEAD
 from api.models import db, User, Chef, Recipe
+=======
+from api.models import db, User, Chef, Utensil,Ingredient
+>>>>>>> develop
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -76,6 +80,7 @@ def update_chef(chef_id):
 
     return jsonify(response_body), 200
 
+<<<<<<< HEAD
 @api.route('/recipes', methods=['GET'])
 def get_all_recipes():
 
@@ -104,8 +109,120 @@ def get_all_recipes():
     # results = list(map( lambda recipe: recipe.serialize(), all_recipes))
     # return jsonify(results), 200
 
+=======
+#-------------------  utensilios ----------------------------------------
+@api.route('/utensils', methods=['GET'])
+def get_all_utensil():
+    all_utensils = Utensil.query.all()
+    results = list(map( lambda utensil: utensil.serialize(), all_utensils))
+    return jsonify(results), 200
+
+@api.route('/utensils/<int:utensil_id>', methods=['GET'])
+def get_utensil(utensil_id):
+    utensil = Utensil.query.filter_by(id=utensil_id).first()
+    if utensil is None:
+        return {"error-msg":"enter a valid utensil"},400
+    return jsonify(utensil.serialize()), 200
+
+@api.route('/utensils/<int:utensil_id>', methods=['DELETE'])
+def delete_utensil(utensil_id):
+    utensil = Utensil.query.filter_by(id=utensil_id).first()
+    if utensil is None:
+        return {"error-msg":"enter a valid utensil"},400
+    db.session.delete(utensil)
+    db.session.commit()
+    response_body = {
+        "message": "se elimino el chef " + utensil.name
+    }
+
+    return jsonify(response_body), 200
+
+@api.route('/utensils', methods=['POST'])
+def add_utensil():
+    body = request.get_json()
+    utensil = Utensil(name=body["name"],description=body["description"],url_img=body["url_img"])
+    db.session.add(utensil)
+    db.session.commit()
+    response_body = {
+        "se creo el utensilio ": utensil.serialize()
+    }
+
+    return jsonify(response_body), 200
+>>>>>>> develop
 
 
-   
+
+@api.route('/utensils/<int:utensil_id>', methods=['PUT'])
+def update_utensil(utensil_id):
+    utensil = utensil.query.filter_by(id=utensil_id).first()
+    if utensil is None:
+        return jsonify({"error-msg": "utensil does not exist"}), 404
+    
+    body = request.get_json()
+    utensil.name = body.get("name", utensil.name)
+    utensil.description = body.get("description", utensil.description)
+    utensil.url_img = body.get("image", utensil.url_img)
+    db.session.commit()
+    response_body = {
+        "message": f"utensil {utensil.id} updated successfully",
+        "utensil": utensil.serialize()
+    }
+    return jsonify(response_body), 200
+
+@api.route('/ingredients', methods=['GET'])
+def get_all_ingredients():
+    all_ingredients = Ingredient.query.all()
+    results = list(map( lambda ingredient: ingredient.serialize(), all_ingredients))
+    return jsonify(results), 200
+
+@api.route('/ingredients/<int:ingredient_id>', methods=['GET'])
+def get_ingredient(ingredient_id):
+    ingredient = Ingredient.query.filter_by(id=ingredient_id).first()
+    if ingredient is None:
+        return {"error-msg":"enter a valid ingredient"},400
+    return jsonify(ingredient.serialize()), 200
+
+@api.route('/ingredients/<int:ingredient_id>', methods=['DELETE'])
+def delete_ingredient(ingredient_id):
+    ingredient = Ingredient.query.filter_by(id=ingredient_id).first()
+    if ingredient is None:
+        return {"error-msg":"enter a valid ingredient"},400
+    db.session.delete(ingredient)
+    db.session.commit()
+    response_body = {
+        "message": "se elimino el ingredient " + ingredient.name
+    }
+
+    return jsonify(response_body), 200
+
+@api.route('/ingredients', methods=['POST'])
+def add_ingredient():
+    body = request.get_json()
+    ingredient = Ingredient(name=body["name"],description=body["description"],image=body["image"])
+    db.session.add(ingredient)
+    db.session.commit()
+    response_body = {
+        "se creo el ingredient ": ingredient.serialize()
+    }
+
+    return jsonify(response_body), 200
 
 
+@api.route('/ingredients/<int:ingredient_id>', methods=['PUT'])
+def update_ingredient(ingredient_id):
+    ingredient = Ingredient.query.filter_by(id=ingredient_id).first()
+    if ingredient is None:
+        return jsonify({"error-msg": "ingredient does not exist"}), 404
+    
+    body = request.get_json()
+    ingredient.name = body.get("name", ingredient.name)
+    ingredient.description = body.get("description", ingredient.description)
+    ingredient.image = body.get("image", ingredient.image)
+    db.session.commit()
+    response_body = {
+        "message": f"Ingredient {ingredient.id} updated successfully",
+        "ingredient": ingredient.serialize()
+    }
+
+
+    return jsonify(response_body), 200
