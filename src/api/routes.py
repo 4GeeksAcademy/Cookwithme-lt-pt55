@@ -118,17 +118,21 @@ def add_ingredient():
 
     return jsonify(response_body), 200
 
+
 @api.route('/ingredients/<int:ingredient_id>', methods=['PUT'])
 def update_ingredient(ingredient_id):
     ingredient = Ingredient.query.filter_by(id=ingredient_id).first()
     if ingredient is None:
-        return {"error-msg":"ingredient does not exist"},400
+        return jsonify({"error-msg": "ingredient does not exist"}), 404
     
     body = request.get_json()
-    ingredient.name = body["name"]
+    ingredient.name = body.get("name", ingredient.name)
+    ingredient.description = body.get("description", ingredient.description)
+    ingredient.image = body.get("image", ingredient.image)
     db.session.commit()
     response_body = {
-        "message": "ingredient " + ingredient.name + " successfully update"
+        "message": f"Ingredient {ingredient.id} updated successfully",
+        "ingredient": ingredient.serialize()
     }
 
     return jsonify(response_body), 200
