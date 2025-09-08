@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Chef, Utensil,Ingredient,Recipe,Admin_user
+from api.models import db, User, Chef, Utensil,Ingredient,Admin_user
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -71,15 +71,6 @@ def update_chef(chef_id):
     response_body = {
         "message": "chef " + chef.name + " successfully update"
     }
-
-    return jsonify(response_body), 200
-
-@api.route('/recipes', methods=['GET'])
-def get_all_recipes():
-
-    response_body = {
-            "Recipe": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
-        }
 
     return jsonify(response_body), 200
 
