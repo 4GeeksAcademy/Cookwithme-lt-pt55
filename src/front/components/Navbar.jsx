@@ -18,6 +18,11 @@ export const Navbar = () => {
 						<button className="btn btn-primary">Ingredientes</button>
 					</Link>
 				</div>
+					<div className="ml-auto">
+					<Link to="/adminuser">
+						<button className="btn btn-primary">Admins</button>
+					</Link>
+				</div>
 			</div>
 		</nav>
 	);
