@@ -2,11 +2,13 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Chef, Utensil,Ingredient
+from api.models import db, User, Chef, Utensil,Ingredient,Recipe,Admin_user
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
 api = Blueprint('api', __name__)
+
+
 
 # Allow CORS requests to this API
 CORS(api)
@@ -16,7 +18,7 @@ CORS(api)
 def handle_hello():
 
     response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
+        "message": "Hello from BACK"
     }
 
     return jsonify(response_body), 200
@@ -71,6 +73,15 @@ def update_chef(chef_id):
     response_body = {
         "message": "chef " + chef.name + " successfully update"
     }
+
+    return jsonify(response_body), 200
+
+@api.route('/recipes', methods=['GET'])
+def get_all_recipes():
+
+    response_body = {
+            "Recipe": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+        }
 
     return jsonify(response_body), 200
 
@@ -189,3 +200,59 @@ def update_ingredient(ingredient_id):
 
 
     return jsonify(response_body), 200
+
+    # #--------Administrador-----------------------
+
+@api.route('/adminuser', methods=['GET'])
+def get_all_adminusers():
+    all_admins = Admin_user.query.all()
+    results = list(map( lambda adminuser: adminuser.serialize(), all_admins))
+    return jsonify(results), 200
+
+
+@api.route('/adminuser/<int:adminuser_id>', methods=['GET'])
+def get_admin(adminuser_id):
+    admin = Admin_user.query.filter_by(id=adminuser_id).first()
+    if admin is None:
+        return {"error-msg":"enter a valid admin"},400
+    return jsonify(admin.serialize()), 200
+
+@api.route('/adminuser/<int:adminuser_id>', methods=['DELETE'])
+def delete_admin(adminuser_id):
+    adminuser = Admin_user.query.filter_by(id=adminuser_id).first()
+    if adminuser is None:
+        return {"error-msg":"enter a valid Admin User"},400
+    db.session.delete(adminuser)
+    db.session.commit()
+    admin_response_body = {
+        "message": "se elimino el Admin " + adminuser.email}
+    return jsonify(admin_response_body), 200
+
+@api.route('/adminuser', methods=['POST'])
+def add_admin():
+    admin_body = request.get_json()
+    admin = Admin_user(email=admin_body["email"],password=admin_body["password"])
+    db.session.add(admin)
+    db.session.commit()
+    admin_response_body = {
+        "Se registro un nuevo administrador": admin.serialize()
+    }
+
+    return jsonify(admin_response_body), 200
+
+@api.route('/adminuser/<int:adminuser_id>', methods=['PUT'])
+def update_admin(adminuser_id):
+    admin = Admin_user.query.filter_by(id=adminuser_id).first()
+    if admin is None:
+        return jsonify({"error-msg": "admin does not exist"}), 404
+    
+    admin_body = request.get_json()
+    admin.email = admin_body.get("email", admin.email)
+    admin.password = admin_body.get("password", admin.password)
+    db.session.commit()
+    admin_response_body = {
+        "message": f"Admin {admin.id} updated successfully",
+        "utensil": admin.serialize()
+    }
+
+    return jsonify(admin_response_body), 200

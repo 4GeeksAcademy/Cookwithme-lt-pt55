@@ -56,7 +56,8 @@ export const Ingrediente = () => {
                     <Link to={"/ingredientes/"+ingrediente.id}>
                         <button className="btn btn-primary">Ver Ingrediente</button>
                     </Link>
-                    <Link to="/demo">
+
+                    <Link to={"/ingredientes/" + ingrediente.id + "/edit"}>
                         <button className="btn btn-info">Editar Ingrediente</button>
                     </Link>
 
