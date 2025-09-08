@@ -26,10 +26,6 @@ class Chef(db.Model):
     name: Mapped[str] =  mapped_column(String(120), unique=True, nullable=False)
     rating: Mapped[int] = mapped_column(nullable=False)
 
-    recipe: Mapped[List["Recipe"]] = relationship(back_populates="chef")
-
-
-
     def serialize(self):
         return {
             "id": self.id,
