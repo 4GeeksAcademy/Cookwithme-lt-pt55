@@ -31,7 +31,7 @@ export const router = createBrowserRouter(
         <Route path= "/ingredientes/:ingrediente_id" element={<SingleIngrediente />} />
         <Route path= "/add_ingrediente" element={<NewIngrediente />} />
         <Route path="/ingredientes/:ingrediente_id/edit" element={<EditIngrediente />} />
-
+ 
 
         <Route path="/single/:theId" element={ <Single />} />  {/* Dynamic route for single items */}
         <Route path="/demo" element={<Demo />} />
