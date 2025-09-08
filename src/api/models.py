@@ -26,7 +26,7 @@ class Chef(db.Model):
     name: Mapped[str] =  mapped_column(String(120), unique=True, nullable=False)
     rating: Mapped[int] = mapped_column(nullable=False)
 
-    recipe: Mapped[List["Recipe"]] = relationship(back_populates="chef")
+    # recipe: Mapped[List["Recipe"]] = relationship(back_populates="chef")
 
 
 
@@ -49,8 +49,8 @@ class Recipe(db.Model):
     # chef_id: Mapped[int] = mapped_column(ForeignKey("chef"))
     # chef: Mapped["Chef"] = relationship(back_populates="recipe")
 
-    chef_id: Mapped[int] = mapped_column(ForeignKey("chef.id"))
-    chef: Mapped["Chef"] = relationship(back_populates="recipe")
+    # chef_id: Mapped[int] = mapped_column(ForeignKey("chef.id"))
+    # chef: Mapped["Chef"] = relationship(back_populates="recipe")
 
 
 
@@ -97,4 +97,17 @@ class Ingredient(db.Model):
             # do not serialize the password, its a security breach
         }
 
+class Admin_user(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    email: Mapped[str] = mapped_column(String(120), nullable=False)
+    password: Mapped[str] = mapped_column(nullable=False)
+
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "email": self.email,
+            "password": self.password,
+            # do not serialize the password, its a security breach
+        }
     
