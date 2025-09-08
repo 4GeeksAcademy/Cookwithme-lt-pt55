@@ -2,11 +2,17 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Chef, Ingredient
+<<<<<<< HEAD
+from api.models import db, User, Chef, Recipe
+=======
+from api.models import db, User, Chef, Utensil,Ingredient
+>>>>>>> develop
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
 api = Blueprint('api', __name__)
+
+
 
 # Allow CORS requests to this API
 CORS(api)
@@ -16,7 +22,7 @@ CORS(api)
 def handle_hello():
 
     response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
+        "message": "Hello from BACK"
     }
 
     return jsonify(response_body), 200
@@ -74,11 +80,94 @@ def update_chef(chef_id):
 
     return jsonify(response_body), 200
 
+<<<<<<< HEAD
+@api.route('/recipes', methods=['GET'])
+def get_all_recipes():
+
+    response_body = {
+            "Recipe": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+        }
+
+    return jsonify(response_body), 200
+
+# @api.route('/chefs/recipes', methods=['POST'])
+# def add_recipe():
+#     body = request.get_json()
+#     chef = Chef(name=body["name"],email=body["email"],rating=body["rating"], password=body["password"])
+#     db.session.add(chef)
+#     db.session.commit()
+#     response_body = {
+#         "se creo el chef ": chef.serialize()
+#     }
+
+#     return jsonify(response_body), 200
 
 
 
 
+    # all_recipes = Recipe.query.all()
+    # results = list(map( lambda recipe: recipe.serialize(), all_recipes))
+    # return jsonify(results), 200
 
+=======
+#-------------------  utensilios ----------------------------------------
+@api.route('/utensils', methods=['GET'])
+def get_all_utensil():
+    all_utensils = Utensil.query.all()
+    results = list(map( lambda utensil: utensil.serialize(), all_utensils))
+    return jsonify(results), 200
+
+@api.route('/utensils/<int:utensil_id>', methods=['GET'])
+def get_utensil(utensil_id):
+    utensil = Utensil.query.filter_by(id=utensil_id).first()
+    if utensil is None:
+        return {"error-msg":"enter a valid utensil"},400
+    return jsonify(utensil.serialize()), 200
+
+@api.route('/utensils/<int:utensil_id>', methods=['DELETE'])
+def delete_utensil(utensil_id):
+    utensil = Utensil.query.filter_by(id=utensil_id).first()
+    if utensil is None:
+        return {"error-msg":"enter a valid utensil"},400
+    db.session.delete(utensil)
+    db.session.commit()
+    response_body = {
+        "message": "se elimino el chef " + utensil.name
+    }
+
+    return jsonify(response_body), 200
+
+@api.route('/utensils', methods=['POST'])
+def add_utensil():
+    body = request.get_json()
+    utensil = Utensil(name=body["name"],description=body["description"],url_img=body["url_img"])
+    db.session.add(utensil)
+    db.session.commit()
+    response_body = {
+        "se creo el utensilio ": utensil.serialize()
+    }
+
+    return jsonify(response_body), 200
+>>>>>>> develop
+
+
+
+@api.route('/utensils/<int:utensil_id>', methods=['PUT'])
+def update_utensil(utensil_id):
+    utensil = utensil.query.filter_by(id=utensil_id).first()
+    if utensil is None:
+        return jsonify({"error-msg": "utensil does not exist"}), 404
+    
+    body = request.get_json()
+    utensil.name = body.get("name", utensil.name)
+    utensil.description = body.get("description", utensil.description)
+    utensil.url_img = body.get("image", utensil.url_img)
+    db.session.commit()
+    response_body = {
+        "message": f"utensil {utensil.id} updated successfully",
+        "utensil": utensil.serialize()
+    }
+    return jsonify(response_body), 200
 
 @api.route('/ingredients', methods=['GET'])
 def get_all_ingredients():
@@ -134,5 +223,6 @@ def update_ingredient(ingredient_id):
         "message": f"Ingredient {ingredient.id} updated successfully",
         "ingredient": ingredient.serialize()
     }
+
 
     return jsonify(response_body), 200
