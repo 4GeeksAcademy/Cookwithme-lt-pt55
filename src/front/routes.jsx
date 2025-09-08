@@ -14,6 +14,7 @@ import { SingleChef } from "./pages/SingleChef";
 import { Ingrediente } from "./pages/Ingrediente";
 import { SingleIngrediente } from "./pages/SingleIngrediente";
 import NewIngrediente from "./pages/NewIngrediente";
+import {EditIngrediente} from "./pages/EditIngrediente";
 import NewChef from "./pages/NewChef";
 import NewAdmin from "./pages/NewAdmin";
 import { AdminList } from "./pages/AdminList";
