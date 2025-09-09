@@ -1,64 +1,69 @@
-import React, {useState} from "react";
-import { useNavigate } from "react-router-dom";
-import { Link , useParams} from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
-const EditAdmin = () => {
+export const EditAdmin = () => {
+  const { admin_id } = useParams();
+  const navigate = useNavigate();
 
- const { editAdmId } = useParams()
+  const [email, setEmail] = useState('');
+  const [password, setPasword] = useState('');
 
-    const [editEmail, seteditEmail] = useState('')
-    const [editPassword, seteditPassword] = useState('')
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-     const backendUrl = import.meta.env.VITE_BACKEND_URL
+    useEffect(() => {
+    fetch(backendUrl + "/api/adminuser/" + admin_id)
+        .then(response => response.json())
+        .then((data) => {
+        setEmail(data.email);
+        setPasword(data.password);
+        });
+    }, [admin_id]);
 
   
-   function editAdminuser(){
+  function updateAdmin(e) {
+    e.preventDefault();
 
-       const myHeaders = new Headers();
-      myHeaders.append('Content-Type', 'application/json');
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({email, password }),
+    };
 
-const raw = JSON.stringify({
-  "email": editEmail,
-  "password": editPassword
-});
+    fetch(backendUrl + "/api/adminuser/" + admin_id, requestOptions)
+      .then(response => response.json())
+      .then((data) => {
+        console.log("Admin actualizado:", data);
+        navigate("/adminuser");
+      })
+  }
 
-const requestOptions = {
-  method: "PUT",
-  headers: myHeaders,
-  body: raw,
-  redirect: "follow"
-};
-
-fetch( backendUrl + editAdmId, requestOptions)
-  .then((response) => response.text())
-        seteditEmail('')
-       seteditPassword('')
-        
-       }
-         
   return (
     <div className="container">
-
-      <div className="mb-3">
-        <label for="exampleFormControlInput1" className="form-label">Email</label>
-        <input type="text" value={editEmail} onChange={(e) =>seteditEmail(e.target.value)} className="form-control" id="exampleFormControlInput1" placeholder="Enter New Email"/>
-        </div>
-
+      <h1 className="display-4">Editar</h1>
+      <form className="w-50 mx-auto" onSubmit={updateAdmin}>
         <div className="mb-3">
-        <label for="exampleFormControlInput1" className="form-label">Password</label>
-        <input type="password" value={editPassword} onChange={(e) => seteditPassword(e.target.value)} className="form-control" id="exampleFormControlInput1" placeholder="Enter New Password"/>
+          <label className="form-label">Email</label>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            className="form-control"
+          />
         </div>
-
-      <button className="btn btn-success" onClick={editAdminuser}> Save </button>
-      <Link to="/">
-        <button className="btn btn-primary">Back home</button>
-      </Link>
+        <div className="mb-3">
+          <label className="form-label">Password</label>
+          <input
+            value={password}
+            onChange={(e) => setPasword(e.target.value)}
+            type="text"
+            className="form-control"
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">
+          Guardar Cambios
+        </button>
+      </form>
     </div>
   );
 };
-   
-
-
 export default EditAdmin
-
-
