@@ -97,7 +97,7 @@ class Ingredient(db.Model):
             # do not serialize the password, its a security breach
         }
 
-class Admin_user(db.Model):
+class Adminuser(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(String(120), nullable=False)
     password: Mapped[str] = mapped_column(nullable=False)
@@ -107,7 +107,7 @@ class Admin_user(db.Model):
         return {
             "id": self.id,
             "email": self.email,
-            "password": self.password,
+            "password": self.password
             # do not serialize the password, its a security breach
         }
     

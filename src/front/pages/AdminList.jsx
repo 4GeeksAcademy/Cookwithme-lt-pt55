@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 
 export const AdminList = () => {
 
-
     const[adminUsers, setadminUsers] = useState([])
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL
@@ -52,13 +51,14 @@ export const AdminList = () => {
                     email: {adminuser.email}
 
                     <Link to={"/adminuser/"+ adminuser.id}>
-                        <button className="btn btn-primary">Ver Usuario</button>
-                    </Link>
-                    <Link to="/demo">
-                        <button className="btn btn-info">Editar Usuario</button>
+                            <button className="btn btn-primary m-2">Ver Usuario</button>
                     </Link>
 
-                        <button className="btn btn-danger" onClick={()=>deleteadminuser(adminuser.id)}>Eliminar Usuario</button>
+                    <Link to={"/adminuser/"+ adminuser.id+"/edit"}>
+                        <button className="btn btn-info m-2">Editar Usuario</button>
+                    </Link>
+
+                        <button className="btn btn-danger m-2" onClick={()=>deleteadminuser(adminuser.id)}>Eliminar Usuario</button>
                                   
                 </p>
             ))}
