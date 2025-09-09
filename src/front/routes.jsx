@@ -15,10 +15,15 @@ import { Ingrediente } from "./pages/Ingrediente";
 import { SingleIngrediente } from "./pages/SingleIngrediente";
 import NewIngrediente from "./pages/NewIngrediente";
 import {EditIngrediente} from "./pages/EditIngrediente";
+import { EditUtensilio } from "./pages/EditUtensilio";
+import NewUtensilio from "./pages/NewUtensilio";
+import { SingleUtensilio } from "./pages/SingleUtensilio";
+import { Utensilio } from "./pages/Utensilio";
 import NewChef from "./pages/NewChef";
 import NewAdmin from "./pages/NewAdmin";
 import { AdminList } from "./pages/AdminList";
 import EditAdmin from "./pages/EditAdmin";
+
 
 
 export const router = createBrowserRouter(
@@ -38,6 +43,12 @@ export const router = createBrowserRouter(
         <Route path= "/ingredientes/:ingrediente_id" element={<SingleIngrediente />} />
         <Route path= "/add_ingrediente" element={<NewIngrediente />} />
         <Route path="/ingredientes/:ingrediente_id/edit" element={<EditIngrediente />} />
+
+          {/* Utensilios */}
+          <Route path="/utensilios" element={<Utensilio />} />
+          <Route path="/utensilios/:utensilio_id" element={<SingleUtensilio />} />
+          <Route path="/add_utensilio" element={<NewUtensilio />} />
+          <Route path="/utensilios/:utensilio_id/edit" element={<EditUtensilio />} />   
  
 
         <Route path="/single/:theId" element={ <Single />} />  {/* Dynamic route for single items */}
