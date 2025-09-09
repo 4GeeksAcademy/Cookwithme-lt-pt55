@@ -23,7 +23,6 @@ import NewChef from "./pages/NewChef";
 import NewAdmin from "./pages/NewAdmin";
 import { AdminList } from "./pages/AdminList";
 import EditAdmin from "./pages/EditAdmin";
-import { EditIngrediente } from "./pages/EditIngrediente";
 import { SingleAdmin } from "./pages/SingleAdmin";
 
 
