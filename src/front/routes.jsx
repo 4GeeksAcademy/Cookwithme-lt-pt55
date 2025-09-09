@@ -20,9 +20,6 @@ import NewAdmin from "./pages/NewAdmin";
 import { AdminList } from "./pages/AdminList";
 import EditAdmin from "./pages/EditAdmin";
 
-// import { Chef } from "./pages/Chef";
-// import { SingleChef } from "./pages/SingleChef";
-// import NewChef from "./pages/NewChef";
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
