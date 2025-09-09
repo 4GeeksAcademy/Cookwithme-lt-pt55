@@ -14,8 +14,8 @@ import { SingleChef } from "./pages/SingleChef";
 import { Ingrediente } from "./pages/Ingrediente";
 import { SingleIngrediente } from "./pages/SingleIngrediente";
 import NewIngrediente from "./pages/NewIngrediente";
-import {EditIngrediente} from "./pages/EditIngrediente";
 import { EditUtensilio } from "./pages/EditUtensilio";
+import {EditIngrediente} from "./pages/EditIngrediente";
 import NewUtensilio from "./pages/NewUtensilio";
 import { SingleUtensilio } from "./pages/SingleUtensilio";
 import { Utensilio } from "./pages/Utensilio";
@@ -23,7 +23,6 @@ import NewChef from "./pages/NewChef";
 import NewAdmin from "./pages/NewAdmin";
 import { AdminList } from "./pages/AdminList";
 import EditAdmin from "./pages/EditAdmin";
-import { EditIngrediente } from "./pages/EditIngrediente";
 import { SingleAdmin } from "./pages/SingleAdmin";
 
 
