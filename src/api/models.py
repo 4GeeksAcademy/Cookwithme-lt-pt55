@@ -76,7 +76,7 @@ class Utensil(db.Model):
         return {
             "id": self.id,
             "name": self.name,
-            "description": self.name,
+            "description": self.description,
             "url_img": self.url_img
             # do not serialize the password, its a security breach
         }
