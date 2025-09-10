@@ -128,3 +128,14 @@ class Answer(db.Model):
         }
    
 
+class Calification(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    stars: Mapped[str] = mapped_column(String(120), nullable=False)
+
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "stars": self.stars
+        }
+

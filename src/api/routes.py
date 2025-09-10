@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Chef, Utensil,Ingredient,Admin_user,Question,Answer, Recipe
+from api.models import db, User, Chef, Utensil,Ingredient,Admin_user,Question,Answer, Recipe,Calification
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -365,4 +365,60 @@ def update_answer(answer_id):
     }
 
     return jsonify(response_body), 200
+
+    #----Calification---------------------------------------------
+
+@api.route('/reviews', methods=['GET'])
+def get_all_reviews():
+    all_reviews = Calification.query.all()
+    results = list(map( lambda calification: calification.serialize(), all_reviews))
+    return jsonify(results), 200
+
+
+@api.route('/reviews/<int:review_id>', methods=['GET'])
+def get_review(review_id):
+    review = Calification.query.filter_by(id=review_id).first()
+    if review is None:
+        return {"error-msg":"enter a valid Calification"},400
+    return jsonify(review.serialize()), 200
+
+@api.route('/reviews/<int:review_id>', methods=['DELETE'])
+def delete_review(review_id):
+    review = Calification.query.filter_by(id=review_id).first()
+    if review is None:
+        return {"error-msg":"enter a valid Admin User"},400
+    db.session.delete(review)
+    db.session.commit()
+    stars_response_body = {
+        "message": "se elimino la calificacion "}
+    return jsonify(stars_response_body), 200
+
+@api.route('/reviews', methods=['POST'])
+def add_review():
+    review_body = request.get_json()
+    review = Calification(stars=review_body["stars"])
+    db.session.add(review)
+    db.session.commit()
+    admin_response_body = {
+        "Se registro una nueva reseña": review.serialize()
+    }
+
+    return jsonify(admin_response_body), 200
+
+@api.route('/reviews/<int:review_id>', methods=['PUT'])
+def update_review(review_id):
+    review = Calification.query.filter_by(id=review_id).first()
+    if review is None:
+        return jsonify({"error-msg": "review does not exist"}), 404
+    
+    review_body = request.get_json()
+    review.stars = review_body.get("stars", review.stars)
+    db.session.commit()
+    admin_response_body = {
+        "message": f"Admin {review.id} updated successfully",
+        "Review": review.serialize()
+    }
+
+    return jsonify(admin_response_body), 200
+
 
