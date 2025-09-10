@@ -257,10 +257,3 @@ def add_recipe():
     }
 
     return jsonify(response_body), 200
-
-
-
-
-    # all_recipes = Recipe.query.all()
-    # results = list(map( lambda recipe: recipe.serialize(), all_recipes))
-    # return jsonify(results), 200

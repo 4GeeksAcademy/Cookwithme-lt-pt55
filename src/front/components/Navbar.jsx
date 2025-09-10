@@ -14,16 +14,21 @@ export const Navbar = () => {
 					</Link>
 				</div>
 				<div className="ml-auto">
+					<Link to="/chef">
+						<button className="btn btn-primary">Chefs</button>
+					</Link>
+				</div>
+				<div className="ml-auto">
 					<Link to="/ingredientes">
 						<button className="btn btn-primary">Ingredientes</button>
 					</Link>
 				</div>
-								<div className="ml-auto">
+				<div className="ml-auto">
 					<Link to="/utensilios">
 						<button className="btn btn-primary">Utensilios</button>
 					</Link>
 				</div>
-					<div className="ml-auto">
+				<div className="ml-auto">
 					<Link to="/adminuser">
 						<button className="btn btn-primary">Admins</button>
 					</Link>
