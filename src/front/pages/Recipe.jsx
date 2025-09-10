@@ -30,7 +30,7 @@ export const Recipe = props => {
                     <li>Name: {recipe.name}</li>
                     <li>Description: {recipe.description}</li>
                     <li>Img: {recipe.img}</li>
-                    <Link to="/recipes">
+                    <Link to={"/recipes/" + recipe.id}>
                         <button className="btn btn-primary">See recipe</button>
                     </Link>
                     {/* <button className="btn btn-danger" onClick={() => deleteChefs(chef.id)}>Delete chef</button> */}

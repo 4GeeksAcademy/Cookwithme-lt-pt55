@@ -256,6 +256,12 @@ def get_all_recipes():
     results = list(map( lambda recipe: recipe.serialize(), all_recipes))
     return jsonify(results), 200
 
+@api.route('/recipes/<int:recipe_id>', methods=['GET'])
+def get_recipe(recipe_id):
+    recipe = Recipe.query.filter_by(id=recipe_id).first()
+    if recipe is None:
+        return {"error-msg":"enter a valid recipe"},400
+    return jsonify(recipe.serialize()), 200
 
 @api.route('/recipes', methods=['POST'])
 def add_recipe():

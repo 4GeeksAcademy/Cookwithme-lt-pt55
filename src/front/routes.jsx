@@ -33,6 +33,8 @@ import { Answer } from "./pages/Answer";
 import { SingleAnswer } from "./pages/SingleAnswer";
 import NewAnswer from "./pages/NewAnswer";
 import { EditAnswer } from "./pages/EditAnswer";
+import { Recipe } from "./pages/Recipe";
+import { SingleRecipe } from "./pages/SingleRecipe";
 
 
 
@@ -84,6 +86,9 @@ export const router = createBrowserRouter(
         <Route path="/answers/:answer_id" element={<SingleAnswer />} />
         <Route path="/add_answer" element={<NewAnswer />} />
         <Route path="/answers/:answer_id/edit" element={<EditAnswer />} />
+
+        <Route path= "/recipes" element={<Recipe />} />
+        <Route path="/recipes/:recipe_id" element={ <SingleRecipe />} />
 
       
       </Route>
