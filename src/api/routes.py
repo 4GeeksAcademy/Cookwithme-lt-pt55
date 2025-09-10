@@ -194,21 +194,21 @@ def update_ingredient(ingredient_id):
 
 @api.route('/adminuser', methods=['GET'])
 def get_all_adminusers():
-    all_admins = Admin_user.query.all()
+    all_admins = Adminuser.query.all()
     results = list(map( lambda adminuser: adminuser.serialize(), all_admins))
     return jsonify(results), 200
 
 
 @api.route('/adminuser/<int:adminuser_id>', methods=['GET'])
 def get_admin(adminuser_id):
-    admin = Admin_user.query.filter_by(id=adminuser_id).first()
+    admin = Adminuser.query.filter_by(id=adminuser_id).first()
     if admin is None:
         return {"error-msg":"enter a valid admin"},400
     return jsonify(admin.serialize()), 200
 
 @api.route('/adminuser/<int:adminuser_id>', methods=['DELETE'])
 def delete_admin(adminuser_id):
-    adminuser = Admin_user.query.filter_by(id=adminuser_id).first()
+    adminuser = Adminuser.query.filter_by(id=adminuser_id).first()
     if adminuser is None:
         return {"error-msg":"enter a valid Admin User"},400
     db.session.delete(adminuser)
@@ -220,7 +220,7 @@ def delete_admin(adminuser_id):
 @api.route('/adminuser', methods=['POST'])
 def add_admin():
     admin_body = request.get_json()
-    admin = Admin_user(email=admin_body["email"],password=admin_body["password"])
+    admin = Adminuser(email=admin_body["email"],password=admin_body["password"])
     db.session.add(admin)
     db.session.commit()
     admin_response_body = {
@@ -231,7 +231,7 @@ def add_admin():
 
 @api.route('/adminuser/<int:adminuser_id>', methods=['PUT'])
 def update_admin(adminuser_id):
-    admin = Admin_user.query.filter_by(id=adminuser_id).first()
+    admin = Adminuser.query.filter_by(id=adminuser_id).first()
     if admin is None:
         return jsonify({"error-msg": "admin does not exist"}), 404
     
