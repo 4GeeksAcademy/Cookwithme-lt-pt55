@@ -19,6 +19,10 @@ import NewChef from "./pages/NewChef";
 import NewAdmin from "./pages/NewAdmin";
 import { AdminList } from "./pages/AdminList";
 import EditAdmin from "./pages/EditAdmin";
+import { Question } from "./pages/Question";
+import { SingleQuestion } from "./pages/SingleQuestion";
+import NewQuestion from "./pages/NewQuestion";
+import {EditQuestion} from "./pages/EditQuestion";
 
 
 export const router = createBrowserRouter(
@@ -49,6 +53,13 @@ export const router = createBrowserRouter(
         <Route path= "/add_admin" element={<NewAdmin/>} />
         <Route path= "/adminuser" element={<AdminList/>} />
         <Route path= "/edit_admin/:editAdmId" element={<EditAdmin/>} />
+
+        <Route path= "/ingredientes" element={<Question />} />
+        <Route path= "/ingredientes/:ingrediente_id" element={<SingleQuestion />} />
+        <Route path= "/add_ingrediente" element={<NewQuestion />} />
+        <Route path="/ingredientes/:ingrediente_id/edit" element={<EditQuestion />} />
+
+
       </Route>
     )
 );

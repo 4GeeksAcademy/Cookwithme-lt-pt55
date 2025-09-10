@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Chef, Utensil,Ingredient,Recipe,Admin_user
+from api.models import db, User, Chef, Utensil,Ingredient,Recipe,Admin_user,Question
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -143,6 +143,8 @@ def update_utensil(utensil_id):
     }
     return jsonify(response_body), 200
 
+    # #--------Ingrediente-----------------------
+
 @api.route('/ingredients', methods=['GET'])
 def get_all_ingredients():
     all_ingredients = Ingredient.query.all()
@@ -256,3 +258,64 @@ def update_admin(adminuser_id):
     }
 
     return jsonify(admin_response_body), 200
+
+
+    # #--------Question-----------------------
+
+@api.route('/questions', methods=['GET'])
+def get_all_questions():
+    all_questions = Question.query.all()
+    results = list(map( lambda question: question.serialize(), all_questions))
+    return jsonify(results), 200
+
+@api.route('/questions/<int:question_id>', methods=['GET'])
+def get_question(question_id):
+    question = Question.query.filter_by(id=question_id).first()
+    if question is None:
+        return {"error-msg":"enter a valid question"},400
+    return jsonify(question.serialize()), 200
+
+@api.route('/questions/<int:question_id>', methods=['DELETE'])
+def delete_question(question_id):
+    question = Question.query.filter_by(id=question_id).first()
+    if question is None:
+        return {"error-msg":"enter a valid question"},400
+    db.session.delete(question)
+    db.session.commit()
+    response_body = {
+        "message": "se elimino el question " + question.name
+    }
+
+    return jsonify(response_body), 200
+
+@api.route('/questions', methods=['POST'])
+def add_question():
+    body = request.get_json()
+    question = Question(text=body["text"])
+    db.session.add(question)
+    db.session.commit()
+    response_body = {
+        "se creo el question ": question.serialize()
+    }
+
+    return jsonify(response_body), 200
+
+
+@api.route('/questions/<int:question_id>', methods=['PUT'])
+def update_question(question_id):
+    question = Question.query.filter_by(id=question_id).first()
+    if question is None:
+        return jsonify({"error-msg": "question does not exist"}), 404
+    
+    body = request.get_json()
+    question.text = body.get("text", question.text)
+    db.session.commit()
+    response_body = {
+        "message": f"Question {question.id} updated successfully",
+        "question": question.serialize()
+    }
+
+
+    return jsonify(response_body), 200
+
+
