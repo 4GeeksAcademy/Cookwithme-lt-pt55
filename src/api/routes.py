@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Chef, Utensil,Ingredient,Admin_user,Question,Answer
+from api.models import db, User, Chef, Utensil,Ingredient,Admin_user,Question,Answer, Recipe
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -247,7 +247,20 @@ def update_admin(adminuser_id):
     }
 
     return jsonify(admin_response_body), 200
+  
+  # #--------Recipes-----------------------
 
+@api.route('/chefs/recipes', methods=['POST'])
+def add_recipe():
+    body = request.get_json()
+    recipe = Recipe(name=body["name"],description=body["description"],img=body["img"], preparation=body["preparation"])
+    db.session.add(recipe)
+    db.session.commit()
+    response_body = {
+        "se creo el recipe ": recipe.serialize()
+    }
+
+    return jsonify(response_body), 200
 
     # #--------Question-----------------------
 
@@ -296,18 +309,6 @@ def update_question(question_id):
     if question is None:
         return jsonify({"error-msg": "question does not exist"}), 404
     
-    body = request.get_json()
-    question.text = body.get("text", question.text)
-    db.session.commit()
-    response_body = {
-        "message": f"Question {question.id} updated successfully",
-        "question": question.serialize()
-    }
-
-
-    return jsonify(response_body), 200
-
-
     # #--------Answer-----------------------
 
 @api.route('/answers', methods=['GET'])
