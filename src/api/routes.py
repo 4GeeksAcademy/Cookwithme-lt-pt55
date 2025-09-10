@@ -2,13 +2,11 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Chef, Utensil,Ingredient,Recipe,Adminuser
+from api.models import db, User, Chef, Utensil,Ingredient,Admin_user
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
 api = Blueprint('api', __name__)
-
-
 
 # Allow CORS requests to this API
 CORS(api)
@@ -68,20 +66,11 @@ def update_chef(chef_id):
         return {"error-msg":"chef does not exist"},400
     
     body = request.get_json()
-    chef.name = body["name"]
+    chef = Chef(name=body["name"],email=body["email"],rating=body["rating"])
     db.session.commit()
     response_body = {
         "message": "chef " + chef.name + " successfully update"
     }
-
-    return jsonify(response_body), 200
-
-@api.route('/recipes', methods=['GET'])
-def get_all_recipes():
-
-    response_body = {
-            "Recipe": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
-        }
 
     return jsonify(response_body), 200
 
@@ -128,7 +117,7 @@ def add_utensil():
 
 @api.route('/utensils/<int:utensil_id>', methods=['PUT'])
 def update_utensil(utensil_id):
-    utensil = utensil.query.filter_by(id=utensil_id).first()
+    utensil = Utensil.query.filter_by(id=utensil_id).first()
     if utensil is None:
         return jsonify({"error-msg": "utensil does not exist"}), 404
     
@@ -205,21 +194,21 @@ def update_ingredient(ingredient_id):
 
 @api.route('/adminuser', methods=['GET'])
 def get_all_adminusers():
-    all_admins = Adminuser.query.all()
+    all_admins = Admin_user.query.all()
     results = list(map( lambda adminuser: adminuser.serialize(), all_admins))
     return jsonify(results), 200
 
 
 @api.route('/adminuser/<int:adminuser_id>', methods=['GET'])
 def get_admin(adminuser_id):
-    admin = Adminuser.query.filter_by(id=adminuser_id).first()
+    admin = Admin_user.query.filter_by(id=adminuser_id).first()
     if admin is None:
         return {"error-msg":"enter a valid admin"},400
     return jsonify(admin.serialize()), 200
 
 @api.route('/adminuser/<int:adminuser_id>', methods=['DELETE'])
 def delete_admin(adminuser_id):
-    adminuser = Adminuser.query.filter_by(id=adminuser_id).first()
+    adminuser = Admin_user.query.filter_by(id=adminuser_id).first()
     if adminuser is None:
         return {"error-msg":"enter a valid Admin User"},400
     db.session.delete(adminuser)
@@ -231,7 +220,7 @@ def delete_admin(adminuser_id):
 @api.route('/adminuser', methods=['POST'])
 def add_admin():
     admin_body = request.get_json()
-    admin = Adminuser(email=admin_body["email"],password=admin_body["password"])
+    admin = Admin_user(email=admin_body["email"],password=admin_body["password"])
     db.session.add(admin)
     db.session.commit()
     admin_response_body = {
@@ -242,7 +231,7 @@ def add_admin():
 
 @api.route('/adminuser/<int:adminuser_id>', methods=['PUT'])
 def update_admin(adminuser_id):
-    admin = Adminuser.query.filter_by(id=adminuser_id).first()
+    admin = Admin_user.query.filter_by(id=adminuser_id).first()
     if admin is None:
         return jsonify({"error-msg": "admin does not exist"}), 404
     

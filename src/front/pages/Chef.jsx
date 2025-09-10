@@ -45,7 +45,7 @@ export const Chef = () => {
                     <Link to={"/chef/" + chef.id}>
                         <button className="btn btn-primary">See chef</button>
                     </Link>
-                    <Link to="/">
+                    <Link to={"/chef/" + chef.id + "/update"}>
                         <button className="btn btn-warning">Edit chef</button>
                     </Link>
                     <button className="btn btn-danger" onClick={() => deleteChefs(chef.id)}>Delete chef</button>

@@ -23,6 +23,7 @@ import NewChef from "./pages/NewChef";
 import NewAdmin from "./pages/NewAdmin";
 import { AdminList } from "./pages/AdminList";
 import EditAdmin from "./pages/EditAdmin";
+import { EditChef } from "./pages/EditChef";
 import { SingleAdmin } from "./pages/SingleAdmin";
 
 
@@ -58,6 +59,8 @@ export const router = createBrowserRouter(
         <Route path= "/chef" element={<Chef />} />
         <Route path="/chef/:chef_id" element={ <SingleChef />} />
         <Route path= "/add_chef" element={<NewChef/>} />
+        <Route path="/chef/:chef_id/update" element={<EditChef />} />
+
         <Route path= "/add_admin" element={<NewAdmin/>} />
         <Route path= "/adminuser" element={<AdminList/>} />
         <Route path= "/adminuser/:admin_id" element={<SingleAdmin />} />
