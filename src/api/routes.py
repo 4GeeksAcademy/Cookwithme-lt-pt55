@@ -250,7 +250,14 @@ def update_admin(adminuser_id):
   
   # #--------Recipes-----------------------
 
-@api.route('/chefs/recipes', methods=['POST'])
+@api.route('/recipes', methods=['GET'])
+def get_all_recipes():
+    all_recipes = Recipe.query.all()
+    results = list(map( lambda recipe: recipe.serialize(), all_recipes))
+    return jsonify(results), 200
+
+
+@api.route('/recipes', methods=['POST'])
 def add_recipe():
     body = request.get_json()
     recipe = Recipe(name=body["name"],description=body["description"],img=body["img"], preparation=body["preparation"])
@@ -261,6 +268,20 @@ def add_recipe():
     }
 
     return jsonify(response_body), 200
+
+@api.route('/recipes/<int:recipe_id>', methods=['DELETE'])
+def delete_recipe(recipe_id):
+    recipe = Recipe.query.filter_by(id=recipe_id).first()
+    if recipe is None:
+        return {"error-msg":"enter a valid recipe"},400
+    db.session.delete(recipe)
+    db.session.commit()
+    response_body = {
+        "message": "se elimino el recipe " + recipe.name
+    }
+
+    return jsonify(response_body), 200
+
 
     # #--------Question-----------------------
 
