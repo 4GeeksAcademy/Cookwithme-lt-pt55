@@ -124,7 +124,7 @@ def update_utensil(utensil_id):
     body = request.get_json()
     utensil.name = body.get("name", utensil.name)
     utensil.description = body.get("description", utensil.description)
-    utensil.url_img = body.get("image", utensil.url_img)
+    utensil.url_img = body.get("url_img", utensil.url_img)
     db.session.commit()
     response_body = {
         "message": f"utensil {utensil.id} updated successfully",
@@ -392,4 +392,3 @@ def update_answer(answer_id):
     }
 
     return jsonify(response_body), 200
-

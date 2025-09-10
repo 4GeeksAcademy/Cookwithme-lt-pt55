@@ -127,4 +127,23 @@ class Answer(db.Model):
             # do not serialize the password, its a security breach
         }
    
+# class Fav_recipe(db.Model):
+#     id: Mapped[int] = mapped_column(primary_key=True)
 
+#     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
+#     recipe_id: Mapped[int] = mapped_column(ForeignKey("recipe.id"), nullable=False)
+
+#     chef_id: Mapped[int] = mapped_column(ForeignKey("chef.id"))
+#     chef: Mapped["Chef"] = relationship(back_populates="recipe")
+
+#     user: Mapped["User"] = relationship(back_populates="favoritescharacters")
+#     recipe: Mapped["Character"] = relationship(back_populates="favorites")
+     
+#     def serialize(self):
+#         return {
+#             "id": self.id,
+#             "description": self.description,
+#             "name": self.name,
+#             "img": self.img,
+#             "preparation": self.preparation
+#         }  
