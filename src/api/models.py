@@ -85,6 +85,19 @@ class Admin_user(db.Model):
             # do not serialize the password, its a security breach
         }
     
+
+class Question(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    text: Mapped[str] = mapped_column(nullable=False)
+
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "text": self.text
+            # do not serialize the password, its a security breach
+        }
+
 class Recipe(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     description: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
@@ -94,8 +107,6 @@ class Recipe(db.Model):
 
     chef_id: Mapped[int] = mapped_column(ForeignKey("chef.id"))
     chef: Mapped["Chef"] = relationship(back_populates="recipe")
-
-
 
     def serialize(self):
         return {
@@ -107,4 +118,5 @@ class Recipe(db.Model):
             
             # do not serialize the password, its a security breach
         }
-    
+   
+
