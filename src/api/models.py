@@ -59,7 +59,7 @@ class Ingredient(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] =  mapped_column(String(120), unique=True, nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
-    image: Mapped[str] =  mapped_column(String(120), unique=True, nullable=False)
+    image: Mapped[str] =  mapped_column(unique=True, nullable=False)
 
 
     def serialize(self):
