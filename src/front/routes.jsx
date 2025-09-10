@@ -14,7 +14,11 @@ import { SingleChef } from "./pages/SingleChef";
 import { Ingrediente } from "./pages/Ingrediente";
 import { SingleIngrediente } from "./pages/SingleIngrediente";
 import NewIngrediente from "./pages/NewIngrediente";
+import { EditUtensilio } from "./pages/EditUtensilio";
 import {EditIngrediente} from "./pages/EditIngrediente";
+import NewUtensilio from "./pages/NewUtensilio";
+import { SingleUtensilio } from "./pages/SingleUtensilio";
+import { Utensilio } from "./pages/Utensilio";
 import NewChef from "./pages/NewChef";
 import NewAdmin from "./pages/NewAdmin";
 import { AdminList } from "./pages/AdminList";
@@ -23,6 +27,8 @@ import { Question } from "./pages/Question";
 import { SingleQuestion } from "./pages/SingleQuestion";
 import NewQuestion from "./pages/NewQuestion";
 import {EditQuestion} from "./pages/EditQuestion";
+import { SingleAdmin } from "./pages/SingleAdmin";
+import {EditChef} from "./pages/EditChef";
 
 
 export const router = createBrowserRouter(
@@ -42,6 +48,12 @@ export const router = createBrowserRouter(
         <Route path= "/ingredientes/:ingrediente_id" element={<SingleIngrediente />} />
         <Route path= "/add_ingrediente" element={<NewIngrediente />} />
         <Route path="/ingredientes/:ingrediente_id/edit" element={<EditIngrediente />} />
+
+          {/* Utensilios */}
+          <Route path="/utensilios" element={<Utensilio />} />
+          <Route path="/utensilios/:utensilio_id" element={<SingleUtensilio />} />
+          <Route path="/add_utensilio" element={<NewUtensilio />} />
+          <Route path="/utensilios/:utensilio_id/edit" element={<EditUtensilio />} />   
  
 
         <Route path="/single/:theId" element={ <Single />} />  {/* Dynamic route for single items */}
@@ -50,16 +62,19 @@ export const router = createBrowserRouter(
         <Route path= "/chef" element={<Chef />} />
         <Route path="/chef/:chef_id" element={ <SingleChef />} />
         <Route path= "/add_chef" element={<NewChef/>} />
+        <Route path="/chef/:chef_id/update" element={<EditChef />} />
+
         <Route path= "/add_admin" element={<NewAdmin/>} />
         <Route path= "/adminuser" element={<AdminList/>} />
         <Route path= "/edit_admin/:editAdmId" element={<EditAdmin/>} />
+        <Route path= "/adminuser/:admin_id" element={<SingleAdmin />} />
+        <Route path= "/adminuser/:admin_id/edit" element={<EditAdmin/>} />
 
         <Route path= "/ingredientes" element={<Question />} />
         <Route path= "/ingredientes/:ingrediente_id" element={<SingleQuestion />} />
         <Route path= "/add_ingrediente" element={<NewQuestion />} />
         <Route path="/ingredientes/:ingrediente_id/edit" element={<EditQuestion />} />
-
-
+      
       </Route>
     )
 );

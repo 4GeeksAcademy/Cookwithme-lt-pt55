@@ -2,13 +2,11 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Chef, Utensil,Ingredient,Recipe,Admin_user,Question
+from api.models import db, User, Chef, Utensil,Ingredient,Admin_user,Question
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
 api = Blueprint('api', __name__)
-
-
 
 # Allow CORS requests to this API
 CORS(api)
@@ -68,20 +66,11 @@ def update_chef(chef_id):
         return {"error-msg":"chef does not exist"},400
     
     body = request.get_json()
-    chef.name = body["name"]
+    chef = Chef(name=body["name"],email=body["email"],rating=body["rating"])
     db.session.commit()
     response_body = {
         "message": "chef " + chef.name + " successfully update"
     }
-
-    return jsonify(response_body), 200
-
-@api.route('/recipes', methods=['GET'])
-def get_all_recipes():
-
-    response_body = {
-            "Recipe": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
-        }
 
     return jsonify(response_body), 200
 
@@ -128,7 +117,7 @@ def add_utensil():
 
 @api.route('/utensils/<int:utensil_id>', methods=['PUT'])
 def update_utensil(utensil_id):
-    utensil = utensil.query.filter_by(id=utensil_id).first()
+    utensil = Utensil.query.filter_by(id=utensil_id).first()
     if utensil is None:
         return jsonify({"error-msg": "utensil does not exist"}), 404
     
