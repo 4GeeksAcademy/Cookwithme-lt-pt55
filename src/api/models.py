@@ -107,7 +107,7 @@ class Recipe(db.Model):
 
     chef_id: Mapped[int] = mapped_column(ForeignKey("chef.id"))
     chef: Mapped["Chef"] = relationship(back_populates="recipe")
-
+     
     def serialize(self):
         return {
             "id": self.id,
@@ -115,7 +115,15 @@ class Recipe(db.Model):
             "name": self.name,
             "img": self.img,
             "preparation": self.preparation
-            
+        }      
+class Answer(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    text: Mapped[str] = mapped_column(nullable=False)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "text": self.text
             # do not serialize the password, its a security breach
         }
    

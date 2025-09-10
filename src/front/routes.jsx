@@ -29,6 +29,11 @@ import NewQuestion from "./pages/NewQuestion";
 import {EditQuestion} from "./pages/EditQuestion";
 import { SingleAdmin } from "./pages/SingleAdmin";
 import {EditChef} from "./pages/EditChef";
+import { Answer } from "./pages/Answer";
+import { SingleAnswer } from "./pages/SingleAnswer";
+import NewAnswer from "./pages/NewAnswer";
+import { EditAnswer } from "./pages/EditAnswer";
+
 
 
 export const router = createBrowserRouter(
@@ -70,10 +75,16 @@ export const router = createBrowserRouter(
         <Route path= "/adminuser/:admin_id" element={<SingleAdmin />} />
         <Route path= "/adminuser/:admin_id/edit" element={<EditAdmin/>} />
 
-        <Route path= "/ingredientes" element={<Question />} />
-        <Route path= "/ingredientes/:ingrediente_id" element={<SingleQuestion />} />
-        <Route path= "/add_ingrediente" element={<NewQuestion />} />
-        <Route path="/ingredientes/:ingrediente_id/edit" element={<EditQuestion />} />
+        <Route path= "/questions" element={<Question />} />
+        <Route path= "/questions/:question_id" element={<SingleQuestion />} />
+        <Route path= "/add_question" element={<NewQuestion />} />
+        <Route path="/questions/:question_id/edit" element={<EditQuestion />} />
+
+        <Route path="/answers" element={<Answer />} />
+        <Route path="/answers/:answer_id" element={<SingleAnswer />} />
+        <Route path="/add_answer" element={<NewAnswer />} />
+        <Route path="/answers/:answer_id/edit" element={<EditAnswer />} />
+
       
       </Route>
     )
