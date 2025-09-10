@@ -96,5 +96,17 @@ class Question(db.Model):
             "text": self.text
             # do not serialize the password, its a security breach
         }
+
+class Answer(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    text: Mapped[str] = mapped_column(nullable=False)
+
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "text": self.text
+            # do not serialize the password, its a security breach
+        }
    
 
