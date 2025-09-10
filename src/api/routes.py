@@ -66,7 +66,7 @@ def update_chef(chef_id):
         return {"error-msg":"chef does not exist"},400
     
     body = request.get_json()
-    chef.name = body["name"]
+    chef = Chef(name=body["name"],email=body["email"],rating=body["rating"])
     db.session.commit()
     response_body = {
         "message": "chef " + chef.name + " successfully update"
