@@ -70,7 +70,7 @@ class Ingredient(db.Model):
             # do not serialize the password, its a security breach
         }
 
-class Adminuser(db.Model):
+class Admin_user(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(String(120), nullable=False)
     password: Mapped[str] = mapped_column(nullable=False)

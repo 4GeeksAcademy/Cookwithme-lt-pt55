@@ -23,8 +23,8 @@ import NewChef from "./pages/NewChef";
 import NewAdmin from "./pages/NewAdmin";
 import { AdminList } from "./pages/AdminList";
 import EditAdmin from "./pages/EditAdmin";
-import { SingleAdmin } from "./pages/SingleAdmin";
 import { EditChef } from "./pages/EditChef";
+import { SingleAdmin } from "./pages/SingleAdmin";
 
 
 
