@@ -124,7 +124,7 @@ def update_utensil(utensil_id):
     body = request.get_json()
     utensil.name = body.get("name", utensil.name)
     utensil.description = body.get("description", utensil.description)
-    utensil.url_img = body.get("url_img", utensil.url_img)
+    utensil.url_img = body.get("image", utensil.url_img)
     db.session.commit()
     response_body = {
         "message": f"utensil {utensil.id} updated successfully",
@@ -250,14 +250,7 @@ def update_admin(adminuser_id):
   
   # #--------Recipes-----------------------
 
-@api.route('/recipes', methods=['GET'])
-def get_all_recipes():
-    all_recipes = Recipe.query.all()
-    results = list(map( lambda recipe: recipe.serialize(), all_recipes))
-    return jsonify(results), 200
-
-
-@api.route('/recipes', methods=['POST'])
+@api.route('/chefs/recipes', methods=['POST'])
 def add_recipe():
     body = request.get_json()
     recipe = Recipe(name=body["name"],description=body["description"],img=body["img"], preparation=body["preparation"])
@@ -268,20 +261,6 @@ def add_recipe():
     }
 
     return jsonify(response_body), 200
-
-@api.route('/recipes/<int:recipe_id>', methods=['DELETE'])
-def delete_recipe(recipe_id):
-    recipe = Recipe.query.filter_by(id=recipe_id).first()
-    if recipe is None:
-        return {"error-msg":"enter a valid recipe"},400
-    db.session.delete(recipe)
-    db.session.commit()
-    response_body = {
-        "message": "se elimino el recipe " + recipe.name
-    }
-
-    return jsonify(response_body), 200
-
 
     # #--------Question-----------------------
 
@@ -386,3 +365,60 @@ def update_answer(answer_id):
     }
 
     return jsonify(response_body), 200
+
+    #----Calification---------------------------------------------
+
+# @api.route('/reviews', methods=['GET'])
+# def get_all_reviews():
+#     all_reviews = Calification.query.all()
+#     results = list(map( lambda calification: calification.serialize(), all_reviews))
+#     return jsonify(results), 200
+
+
+# @api.route('/reviews/<int:review_id>', methods=['GET'])
+# def get_review(review_id):
+#     review = Calification.query.filter_by(id=review_id).first()
+#     if review is None:
+#         return {"error-msg":"enter a valid Calification"},400
+#     return jsonify(review.serialize()), 200
+
+# @api.route('/reviews/<int:review_id>', methods=['DELETE'])
+# def delete_review(review_id):
+#     review = Calification.query.filter_by(id=review_id).first()
+#     if review is None:
+#         return {"error-msg":"enter a valid Admin User"},400
+#     db.session.delete(review)
+#     db.session.commit()
+#     stars_response_body = {
+#         "message": "se elimino la calificacion "}
+#     return jsonify(stars_response_body), 200
+
+# @api.route('/reviews', methods=['POST'])
+# def add_review():
+#     review_body = request.get_json()
+#     review = Calification(stars=review_body["stars"])
+#     db.session.add(review)
+#     db.session.commit()
+#     admin_response_body = {
+#         "Se registro una nueva reseña": review.serialize()
+#     }
+
+#     return jsonify(admin_response_body), 200
+
+# @api.route('/reviews/<int:review_id>', methods=['PUT'])
+# def update_review(review_id):
+#     review = Calification.query.filter_by(id=review_id).first()
+#     if review is None:
+#         return jsonify({"error-msg": "review does not exist"}), 404
+    
+#     review_body = request.get_json()
+#     review.stars = review_body.get("stars", review.stars)
+#     db.session.commit()
+#     admin_response_body = {
+#         "message": f"Admin {review.id} updated successfully",
+#         "Review": review.serialize()
+#     }
+
+#     return jsonify(admin_response_body), 200
+
+

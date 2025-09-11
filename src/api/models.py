@@ -1,7 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import String, Boolean, ForeignKey
+from sqlalchemy import String, Boolean, ForeignKey,Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List
+
 
 db = SQLAlchemy()
 
@@ -10,7 +11,11 @@ class User(db.Model):
     email: Mapped[str] = mapped_column(String(120), nullable=False)
     password: Mapped[str] = mapped_column(nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
+    
+    # user_califications: Mapped[List["Calification"]] = relationship(back_populates="user")
 
+    def __repr__(self):
+        return '<User ' + self.email + ' >'
 
     def serialize(self):
         return {
@@ -107,6 +112,11 @@ class Recipe(db.Model):
 
     chef_id: Mapped[int] = mapped_column(ForeignKey("chef.id"))
     chef: Mapped["Chef"] = relationship(back_populates="recipe")
+
+    # recipe_califications: Mapped[List["Calification"]] = relationship(back_populates="recipe")
+
+    def __repr__(self):
+        return '<Recipe ' + self.name + ' >'
      
     def serialize(self):
         return {
@@ -130,20 +140,23 @@ class Answer(db.Model):
 # class Fav_recipe(db.Model):
 #     id: Mapped[int] = mapped_column(primary_key=True)
 
-#     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
-#     recipe_id: Mapped[int] = mapped_column(ForeignKey("recipe.id"), nullable=False)
+# class Calification(db.Model):
+#     id: Mapped[int] = mapped_column(primary_key=True)
+#     stars: Mapped[str] = mapped_column(String(120), nullable=False)
+    
+#     recipe_id: Mapped[int] = mapped_column(Integer, ForeignKey("recipe.id"), nullable=False)
+#     recipe = relationship("Recipe", back_populates="recipe_califications")
 
-#     chef_id: Mapped[int] = mapped_column(ForeignKey("chef.id"))
-#     chef: Mapped["Chef"] = relationship(back_populates="recipe")
+#     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("user.id"), nullable=False)
+#     user = relationship("User", back_populates="user_califications")
 
-#     user: Mapped["User"] = relationship(back_populates="favoritescharacters")
-#     recipe: Mapped["Character"] = relationship(back_populates="favorites")
-     
 #     def serialize(self):
 #         return {
 #             "id": self.id,
-#             "description": self.description,
-#             "name": self.name,
-#             "img": self.img,
-#             "preparation": self.preparation
-#         }  
+#             "stars": self.stars,
+#             "recipe_id": self.recipe_id,
+#             "user_id": self.user_id,
+#             "user": self.user.serialize() if self.user else None,
+#             "recipe": self.recipe.serialize() if self.recipe else None
+#         }
+
