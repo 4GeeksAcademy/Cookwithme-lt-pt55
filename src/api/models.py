@@ -137,6 +137,8 @@ class Answer(db.Model):
             # do not serialize the password, its a security breach
         }
    
+# class Fav_recipe(db.Model):
+#     id: Mapped[int] = mapped_column(primary_key=True)
 
 # class Calification(db.Model):
 #     id: Mapped[int] = mapped_column(primary_key=True)
