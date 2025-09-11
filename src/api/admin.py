@@ -22,6 +22,7 @@ def setup_admin(app):
     admin.add_view(ModelView(Admin_user, db.session))
     admin.add_view(ModelView(Question, db.session))
     admin.add_view(ModelView(Answer, db.session))
+    # admin.add_view(ModelView(Calification, db.session))
 
     admin.add_view(RecipeAdmin(Recipe, db.session))
 
