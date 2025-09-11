@@ -15,6 +15,20 @@ export const Recipe = props => {
             .then(data => setRecipe(data))
     }
 
+    function deleteRecipe(recipe_id) {
+        const requestOptions = {
+            method: 'DELETE'
+        }
+
+        fetch(backendUrl + `/api/recipes/` + recipe_id, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                getRecipes()
+            })
+    }
+
+
     useEffect(() => {
         getRecipes()
     }, [])
@@ -24,6 +38,9 @@ export const Recipe = props => {
     return (
         <div className="container text-center">
             <h1>Recipes</h1>
+            <Link to="/add_recipe">
+                <button className="btn btn-success">Add new chef</button>
+            </Link>
 
             {recipe.map((recipe) =>
                 <ul key={recipe.id}>
@@ -33,7 +50,7 @@ export const Recipe = props => {
                     <Link to={"/recipes/" + recipe.id}>
                         <button className="btn btn-primary">See recipe</button>
                     </Link>
-                    {/* <button className="btn btn-danger" onClick={() => deleteChefs(chef.id)}>Delete chef</button> */}
+                    <button className="btn btn-danger" onClick={() => deleteRecipe(recipe.id)}>Delete recipe</button>
                 </ul>
             )}
         </div>
