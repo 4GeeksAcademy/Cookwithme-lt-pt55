@@ -11,7 +11,7 @@ const NewRecipe = () => {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [preparation, setPreparation] = useState('')
-    const [img, setImg] = useState()
+    const [img, setImg] = useState('')
 
 
     function sendData(e) {
@@ -27,6 +27,7 @@ const NewRecipe = () => {
                     "description": description,
                     "preparation": preparation,
                     "img": img,
+                    "chef_id": 2
 
                 }
             )
@@ -63,8 +64,8 @@ const NewRecipe = () => {
                     <input value={preparation} onChange={(e) => setPreparation(e.target.value)} type="text" className="form-control" id="exampleInputPreparation" />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="exampleInputPassword1" className="form-label">Img</label>
-                    <input value={img} onChange={(e) => setImg(e.target.value)} type="text" className="form-control" id="exampleInputImg" />
+                    <label htmlFor="exampleInputPassword1" className="form-label">Imagen</label>
+                    <input value={img} onChange={(e) => setImg(e.target.value)} type="text" className="form-control" id="exampleInputImage" />
                 </div>
                 <button type="submit" className="btn btn-primary" onClick={sendData}>Create</button>
                 <Link to="/recipes">
