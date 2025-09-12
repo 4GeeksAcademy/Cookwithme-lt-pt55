@@ -42,10 +42,10 @@ export const Chef = () => {
                     <li>Name: {chef.name}</li>
                     <li>Email: {chef.email}</li>
                     <li>Rating: {chef.rating}</li>
-                    <Link to={"/chef/" + chef.id}>
+                    <Link to={"/chefs/" + chef.id}>
                         <button className="btn btn-primary">See chef</button>
                     </Link>
-                    <Link to={"/chef/" + chef.id + "/update"}>
+                    <Link to={"/chefs/" + chef.id + "/update"}>
                         <button className="btn btn-warning">Edit chef</button>
                     </Link>
                     <button className="btn btn-danger" onClick={() => deleteChefs(chef.id)}>Delete chef</button>

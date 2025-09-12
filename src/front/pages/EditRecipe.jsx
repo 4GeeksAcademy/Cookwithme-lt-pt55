@@ -26,6 +26,7 @@ export const EditRecipe = () => {
         fetch(backendUrl + `/api/recipes/` + recipe_id)
             .then(response => response.json())
             .then((data) => {
+                console.log(data)
                 setName(data.name);
                 setDescription(data.description);
                 setPreparation(data.preparation);
