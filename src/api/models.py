@@ -105,9 +105,9 @@ class Question(db.Model):
 
 class Recipe(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    description: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
-    img: Mapped[str] = mapped_column(nullable=False)
-    name: Mapped[str] =  mapped_column(String(120), unique=True, nullable=False)
+    description: Mapped[str] = mapped_column(String(120), unique=False, nullable=False)
+    img: Mapped[str] = mapped_column(String(120), unique=False, nullable=False)
+    name: Mapped[str] =  mapped_column(String(120), unique=False, nullable=False)
     preparation: Mapped[str] = mapped_column(String(120), nullable=False)
 
     chef_id: Mapped[int] = mapped_column(ForeignKey("chef.id"))

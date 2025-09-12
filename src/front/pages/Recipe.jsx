@@ -50,6 +50,9 @@ export const Recipe = props => {
                     <Link to={"/recipes/" + recipe.id}>
                         <button className="btn btn-primary">See recipe</button>
                     </Link>
+                    <Link to={"/recipes/" + recipe.id + "/update"}>
+                        <button className="btn btn-warning">Edit recipe</button>
+                    </Link>
                     <button className="btn btn-danger" onClick={() => deleteRecipe(recipe.id)}>Delete recipe</button>
                 </ul>
             )}
