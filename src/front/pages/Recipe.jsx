@@ -39,7 +39,7 @@ export const Recipe = props => {
         <div className="container text-center">
             <h1>Recipes</h1>
             <Link to="/add_recipe">
-                <button className="btn btn-success">Add new chef</button>
+                <button className="btn btn-success">Add new recipe</button>
             </Link>
 
             {recipe.map((recipe) =>

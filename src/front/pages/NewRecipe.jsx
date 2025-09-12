@@ -12,7 +12,7 @@ const NewRecipe = () => {
     const [description, setDescription] = useState('')
     const [preparation, setPreparation] = useState('')
     const [img, setImg] = useState()
-    
+
 
     function sendData(e) {
         e.preventDefault()
@@ -20,20 +20,26 @@ const NewRecipe = () => {
         console.log(name, description, preparation, img)
         const requestOptions = {
             method: 'POST',
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(
                 {
                     "name": name,
                     "description": description,
                     "preparation": preparation,
-                    "img": "img",
+                    "img": img,
 
                 }
             )
         }
 
-        fetch(backendUrl + `/api/recipes`, requestOptions)
-            .then(response => response.json())
+        fetch(backendUrl + "/api/recipes", requestOptions)
+            .then(response =>{
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to create recipe.');
+                }
+            })
             .then(data => {
                 console.log(data)
                 navigate("/recipes")
@@ -43,7 +49,7 @@ const NewRecipe = () => {
 
     return (
         <div>
-            <form className="w-50 mx-auto" onSubmit={sendData}>
+            <form className="w-50 mx-auto">
                 <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">Name</label>
                     <input value={name} onChange={(e) => setName(e.target.value)} type="text" className="form-control" id="exampleInputName" />
@@ -58,9 +64,9 @@ const NewRecipe = () => {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">Img</label>
-                    <input value={img} onChange={(e) => setImg(e.target.value)} type="image" className="form-control" id="exampleInputImg" />
+                    <input value={img} onChange={(e) => setImg(e.target.value)} type="text" className="form-control" id="exampleInputImg" />
                 </div>
-                <button type="submit" className="btn btn-primary">Create</button>
+                <button type="submit" className="btn btn-primary" onClick={sendData}>Create</button>
                 <Link to="/recipes">
                     <button className="btn btn-primary">Back to recipes</button>
                 </Link>
