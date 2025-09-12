@@ -11,8 +11,9 @@ class User(db.Model):
     email: Mapped[str] = mapped_column(String(120), nullable=False)
     password: Mapped[str] = mapped_column(nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
-    
-    # user_califications: Mapped[List["Calification"]] = relationship(back_populates="user")
+
+    calification: Mapped[List["Calification"]] = relationship(back_populates="user")
+    fav_recipe: Mapped[List["Fav_recipe"]] = relationship(back_populates="user")
 
     def __repr__(self):
         return '<User ' + self.email + ' >'
@@ -110,13 +111,16 @@ class Recipe(db.Model):
     name: Mapped[str] =  mapped_column(String(120), unique=True, nullable=False)
     preparation: Mapped[str] = mapped_column(String(120), nullable=False)
 
+    calification: Mapped[List["Calification"]] = relationship(back_populates="recipe")
+    fav_recipe: Mapped[List["Fav_recipe"]] = relationship(back_populates="recipe")
+
     chef_id: Mapped[int] = mapped_column(ForeignKey("chef.id"))
     chef: Mapped["Chef"] = relationship(back_populates="recipe")
 
-    # recipe_califications: Mapped[List["Calification"]] = relationship(back_populates="recipe")
+   
 
     def __repr__(self):
-        return '<Recipe ' + self.name + ' >'
+        return 'Recipe: ' + self.name 
      
     def serialize(self):
         return {
@@ -137,26 +141,33 @@ class Answer(db.Model):
             # do not serialize the password, its a security breach
         }
    
-# class Fav_recipe(db.Model):
-#     id: Mapped[int] = mapped_column(primary_key=True)
+class Fav_recipe(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
 
-# class Calification(db.Model):
-#     id: Mapped[int] = mapped_column(primary_key=True)
-#     stars: Mapped[str] = mapped_column(String(120), nullable=False)
+    user_id: Mapped[int] = mapped_column(Integer,ForeignKey("user.id"), nullable=False)
+    user: Mapped["User"] = relationship(back_populates="fav_recipe")
+
+    recipe_id: Mapped[int] = mapped_column(Integer,ForeignKey("recipe.id"), nullable=False)
+    recipe: Mapped["Recipe"] = relationship(back_populates="fav_recipe")
+
+class Calification(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    stars: Mapped[str] = mapped_column(String(120), nullable=False)
     
-#     recipe_id: Mapped[int] = mapped_column(Integer, ForeignKey("recipe.id"), nullable=False)
-#     recipe = relationship("Recipe", back_populates="recipe_califications")
+    user_id: Mapped[int] = mapped_column(Integer,ForeignKey("user.id"), nullable=False)
+    user: Mapped["User"] = relationship(back_populates="calification")
 
-#     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("user.id"), nullable=False)
-#     user = relationship("User", back_populates="user_califications")
+    recipe_id: Mapped[int] = mapped_column(Integer,ForeignKey("recipe.id"), nullable=False)
+    recipe: Mapped["Recipe"] = relationship(back_populates="calification")
 
-#     def serialize(self):
-#         return {
-#             "id": self.id,
-#             "stars": self.stars,
-#             "recipe_id": self.recipe_id,
-#             "user_id": self.user_id,
-#             "user": self.user.serialize() if self.user else None,
-#             "recipe": self.recipe.serialize() if self.recipe else None
-#         }
+
+    def serialize(self):
+         return {
+            "id": self.id,
+            "stars": self.stars,
+            "user": self.user.serialize() if self.user else None,
+            "user_id": self.user_id,
+            "recipe_id": self.recipe_id,
+            "recipe": self.recipe.serialize() if self.recipe else None
+         }
 
