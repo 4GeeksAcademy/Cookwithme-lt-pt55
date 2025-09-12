@@ -115,8 +115,8 @@ class Recipe(db.Model):
 
     # recipe_califications: Mapped[List["Calification"]] = relationship(back_populates="recipe")
 
-    def __repr__(self):
-        return '<Recipe ' + self.name + ' >'
+    # def __repr__(self):
+    #     return '<Recipe ' + self.name + ' >'
      
     def serialize(self):
         return {
@@ -126,6 +126,7 @@ class Recipe(db.Model):
             "img": self.img,
             "preparation": self.preparation
         }      
+    
 class Answer(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str] = mapped_column(nullable=False)
