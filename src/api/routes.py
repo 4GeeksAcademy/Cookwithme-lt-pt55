@@ -288,6 +288,21 @@ def delete_recipe(recipe_id):
 
     return jsonify(response_body), 200
 
+@api.route('/recipes/<int:recipe_id>', methods=['PUT'])
+def update_recipe(recipe_id):
+    recipe = Recipe.query.filter_by(id=recipe_id).first()
+    if recipe is None:
+        return {"error-msg":"recipe does not exist"},400
+    
+    body = request.get_json()
+    recipe = Recipe(name=body["name"],description=body["description"],preparation=body["preparation"],img=body["img"])
+    db.session.commit()
+    response_body = {
+        "message": "recipe " + recipe.name + " successfully update"
+    }
+
+    return jsonify(response_body), 200
+
     # #--------Question-----------------------
 
 @api.route('/questions', methods=['GET'])

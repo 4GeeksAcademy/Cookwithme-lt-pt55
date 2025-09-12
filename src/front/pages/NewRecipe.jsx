@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const NewRecipe = () => {
 
@@ -12,6 +12,16 @@ const NewRecipe = () => {
     const [description, setDescription] = useState('')
     const [preparation, setPreparation] = useState('')
     const [img, setImg] = useState('')
+
+    const [chefs, setChefs] = useState([])
+
+    const [currentChef, setCurrentChef] = useState(null)
+
+    function getChefs() {
+        fetch(backendUrl + `/api/chefs`)
+            .then(response => response.json())
+            .then(data => setChefs(data))
+    }
 
 
     function sendData(e) {
@@ -27,14 +37,14 @@ const NewRecipe = () => {
                     "description": description,
                     "preparation": preparation,
                     "img": img,
-                    "chef_id": 2
+                    "chef_id": currentChef.id
 
                 }
             )
         }
 
         fetch(backendUrl + "/api/recipes", requestOptions)
-            .then(response =>{
+            .then(response => {
                 if (response.ok) {
                     return response.json();
                 } else {
@@ -46,6 +56,10 @@ const NewRecipe = () => {
                 navigate("/recipes")
             })
     }
+
+    useEffect(() => {
+        getChefs()
+    }, [])
 
 
     return (
@@ -67,6 +81,18 @@ const NewRecipe = () => {
                     <label htmlFor="exampleInputPassword1" className="form-label">Imagen</label>
                     <input value={img} onChange={(e) => setImg(e.target.value)} type="text" className="form-control" id="exampleInputImage" />
                 </div>
+
+                    <div className="dropdown">
+                        <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {!currentChef ? "Select chef" : "Chef: " + currentChef.name}
+                        </button>
+                        <ul className="dropdown-menu">
+                        {chefs.map((chef) =>
+                            <li key={chef.id} onClick={()=>setCurrentChef(chef)}><button className="dropdown-item" type="button">{chef.name}</button></li>
+                        )}
+                        </ul>
+                    </div>
+
                 <button type="submit" className="btn btn-primary" onClick={sendData}>Create</button>
                 <Link to="/recipes">
                     <button className="btn btn-primary">Back to recipes</button>
