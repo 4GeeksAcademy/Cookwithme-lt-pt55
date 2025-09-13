@@ -21,6 +21,13 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
+@api.route('/users', methods=['GET'])
+def get_all_users():
+    all_users = User.query.all()
+    results = list(map( lambda user: user.serialize(), all_users))
+    return jsonify(results), 200
+
+
 @api.route('/chefs', methods=['GET'])
 def get_all_chef():
     all_chefs = Chef.query.all()

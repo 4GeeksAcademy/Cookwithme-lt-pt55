@@ -68,10 +68,10 @@ export const router = createBrowserRouter(
         <Route path="/single/:theId" element={ <Single />} />  {/* Dynamic route for single items */}
         <Route path="/demo" element={<Demo />} />
 
-        <Route path= "/chef" element={<Chef />} />
-        <Route path="/chef/:chef_id" element={ <SingleChef />} />
+        <Route path= "/chefs" element={<Chef />} />
+        <Route path="/chefs/:chef_id" element={ <SingleChef />} />
         <Route path= "/add_chef" element={<NewChef/>} />
-        <Route path="/chef/:chef_id/update" element={<EditChef />} />
+        <Route path="/chefs/:chef_id/update" element={<EditChef />} />
 
         <Route path= "/add_admin" element={<NewAdmin/>} />
         <Route path= "/adminuser" element={<AdminList/>} />
