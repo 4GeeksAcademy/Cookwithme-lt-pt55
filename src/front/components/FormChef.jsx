@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { Link, Navigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 
 const FormChef = () => {
+
+    const navigate = useNavigate();
 
     const { store, dispatch } = useGlobalReducer()
 
@@ -31,13 +34,14 @@ const FormChef = () => {
                 console.log(response.status)
                 if (response.status == 200) {
                     //cambiar auth a true
-                    dispatch({ type: "set_auth", payload: true })
+                    dispatch({ type: "set_auth_chef", payload: true })
                 }
                 return response.json()
             })
             .then(data => {
                 console.log(data)
-                localStorage.setItem("token", data.access_token);
+                localStorage.setItem("tokenChef", data.access_token);
+                navigate("/test");
 
             });
     }

@@ -13,7 +13,7 @@ export const initialStore=()=>{
         background: null,
       }
     ],
-    auth: false
+    authChef: false
   }
 }
 
@@ -25,10 +25,10 @@ export default function storeReducer(store, action = {}) {
         message: action.payload
       };
 
-    case 'set_auth':
+    case 'set_auth_chef':
       return {
         ...store,
-        auth: action.payload
+        authChef: action.payload
       };
       
     case 'add_task':

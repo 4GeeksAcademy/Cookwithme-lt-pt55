@@ -1,6 +1,22 @@
 import { Link } from "react-router-dom";
+import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import { useParams, useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
+
+	const navigate = useNavigate();
+
+	const { store, dispatch } = useGlobalReducer()
+
+	function logout(){
+		// limpiar token 
+		localStorage.removeItem("tokenChef")
+		// pasar auth a false
+		dispatch({ type: "set_auth_chef", payload: false })
+		// redireccioar a login
+		navigate("/login_chef")
+		
+	}
 
 	return (
 		<nav className="navbar navbar-light bg-light">
@@ -15,9 +31,12 @@ export const Navbar = () => {
 				</div>
 				<div className="ml-auto">
 					<Link to="/login_chef">
-						<button className="btn btn-primary">Login</button>
+						<button className="btn btn-success">Login as Chef</button>
 					</Link>
 				</div>
+				
+				{store.authChef ? <button className="btn btn-danger" onClick={logout}>Logout</button> : null}
+				
 				<div className="ml-auto">
 					<Link to="/chefs">
 						<button className="btn btn-primary">Chefs</button>
