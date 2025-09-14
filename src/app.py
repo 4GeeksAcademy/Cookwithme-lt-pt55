@@ -80,7 +80,7 @@ if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))
     app.run(host='0.0.0.0', port=PORT, debug=True)
 
-@app.route("/login/chef", methods=["POST"])
+@app.route("/login_chef", methods=["POST"])
 def login():
     email = request.json.get("email", None)
     password = request.json.get("password", None)

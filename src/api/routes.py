@@ -6,6 +6,11 @@ from api.models import db, User, Chef, Utensil,Ingredient,Admin_user,Question,An
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
+
 api = Blueprint('api', __name__)
 
 # Allow CORS requests to this API
@@ -469,5 +474,46 @@ def update_answer(answer_id):
 
 #     return jsonify(admin_response_body), 200
 
+## ------------------- Log in Chef -----------------------
 
+
+@api.route('/test', methods=['POST', 'GET'])
+def test():
+
+    response_body = {
+        "message": "Hello this is a test"
+    }
+
+    return jsonify(response_body), 200
+
+@api.route("/login_chef", methods=["POST"])
+def login_as_chef():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+
+    chef = Chef.query.filter_by(email = email).first()
+    if chef is None: 
+        return jsonify({"msg": "Bad email or password"}), 401
+    print(chef)
+    if password != chef.password:
+        return jsonify({"msg": "Bad email or password"}), 401
+
+    access_token = create_access_token(identity=email)
+    return jsonify(access_token=access_token)
+
+@api.route('/signup_chef', methods=['POST'])
+def signup_as_chef():
+    body = request.get_json()
+    chef = Chef.query.filter_by(email=body["email"]).first()
+    if chef:
+        return jsonify({"msg": "Chef already exist"}), 401
+
+    chef = Chef(name=body["name"],email=body["email"], password=body["password"], rating=body["rating"])
+    db.session.add(chef)
+    db.session.commit()
+    response_body = {
+        "se creo el chef ": chef.serialize()
+    }
+
+    return jsonify(response_body), 200
 
