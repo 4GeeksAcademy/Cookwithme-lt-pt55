@@ -511,9 +511,12 @@ def signup_as_chef():
     chef = Chef(name=body["name"],email=body["email"], password=body["password"], rating=body["rating"])
     db.session.add(chef)
     db.session.commit()
-    response_body = {
-        "se creo el chef ": chef.serialize()
-    }
+    # response_body = {
+    #     "se creo el chef ": chef.serialize()
+    # }
 
-    return jsonify(response_body), 200
+    access_token = create_access_token(identity=body["email"])
+    return jsonify(access_token=access_token), 200
+
+    # return jsonify(response_body), 200
 

@@ -29,11 +29,6 @@ export const Navbar = () => {
 						<button className="btn btn-primary">Check the Context in action</button>
 					</Link>
 				</div>
-				<div className="ml-auto">
-					<Link to="/login_chef">
-						<button className="btn btn-success">Login as Chef</button>
-					</Link>
-				</div>
 				
 				{store.authChef ? <button className="btn btn-danger" onClick={logout}>Logout</button> : null}
 				

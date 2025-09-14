@@ -62,12 +62,11 @@ const FormChef = () => {
                     <button type="submit" onClick={sendData} className="btn btn-primary">Submit</button>
                 </div>
                 <div className="col-6">
-                    <Link to="/signup">
-                        <button className="btn btn-warning">Sign Up</button>
+                    <Link to="/signup_chef">
+                        <button className="btn btn-warning">Signup as New Chef</button>
                     </Link>
                 </div>
             </div>
-
         </form>
     );
 }
