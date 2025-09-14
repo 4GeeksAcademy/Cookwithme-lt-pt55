@@ -37,6 +37,7 @@ import { Recipe } from "./pages/Recipe";
 import { SingleRecipe } from "./pages/SingleRecipe";
 import NewRecipe from "./pages/NewRecipe";
 import { EditRecipe } from "./pages/EditRecipe";
+import { LoginChef } from "./pages/LoginChef";
 
 
 
@@ -72,6 +73,7 @@ export const router = createBrowserRouter(
         <Route path="/chefs/:chef_id" element={ <SingleChef />} />
         <Route path= "/add_chef" element={<NewChef/>} />
         <Route path="/chefs/:chef_id/update" element={<EditChef />} />
+        <Route path= "/login_chef" element={<LoginChef />} />
 
         <Route path= "/add_admin" element={<NewAdmin/>} />
         <Route path= "/adminuser" element={<AdminList/>} />
