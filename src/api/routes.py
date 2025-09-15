@@ -464,93 +464,53 @@ def update_answer(answer_id):
 #     return jsonify(results), 200
 
 
-@api.route('/reviews/<int:review_id>', methods=['GET'])
-def get_review(review_id):
-    review = Calification.query.filter_by(id=review_id).first()
-    if review is None:
-        return {"error-msg":"enter a valid Calification"},400
-    return jsonify(review.serialize()), 200
+# @api.route('/reviews/<int:review_id>', methods=['GET'])
+# def get_review(review_id):
+#     review = Calification.query.filter_by(id=review_id).first()
+#     if review is None:
+#         return {"error-msg":"enter a valid Calification"},400
+#     return jsonify(review.serialize()), 200
 
-@api.route('/reviews/<int:review_id>', methods=['DELETE'])
-def delete_review(review_id):
-    review = Calification.query.filter_by(id=review_id).first()
-    if review is None:
-        return {"error-msg":"enter a valid Admin User"},400
-    db.session.delete(review)
-    db.session.commit()
-    stars_response_body = {
-        "message": "se elimino la calificacion "}
-    return jsonify(stars_response_body), 200
+# @api.route('/reviews/<int:review_id>', methods=['DELETE'])
+# def delete_review(review_id):
+#     review = Calification.query.filter_by(id=review_id).first()
+#     if review is None:
+#         return {"error-msg":"enter a valid Admin User"},400
+#     db.session.delete(review)
+#     db.session.commit()
+#     stars_response_body = {
+#         "message": "se elimino la calificacion "}
+#     return jsonify(stars_response_body), 200
 
-@api.route('/reviews', methods=['POST'])
-def add_review():
-    review_body = request.get_json()
-    review = Calification(stars=review_body["stars"])
-    db.session.add(review)
-    db.session.commit()
-    admin_response_body = {
-        "Se registro una nueva reseña": review.serialize()
-    }
+# @api.route('/reviews', methods=['POST'])
+# def add_review():
+#     review_body = request.get_json()
+#     review = Calification(stars=review_body["stars"])
+#     db.session.add(review)
+#     db.session.commit()
+#     admin_response_body = {
+#         "Se registro una nueva reseña": review.serialize()
+#     }
 
-    return jsonify(admin_response_body), 200
+#     return jsonify(admin_response_body), 200
 
-@api.route('/reviews/<int:review_id>', methods=['PUT'])
-def update_review(review_id):
-    review = Calification.query.filter_by(id=review_id).first()
-    if review is None:
-        return jsonify({"error-msg": "review does not exist"}), 404
+# @api.route('/reviews/<int:review_id>', methods=['PUT'])
+# def update_review(review_id):
+#     review = Calification.query.filter_by(id=review_id).first()
+#     if review is None:
+#         return jsonify({"error-msg": "review does not exist"}), 404
 
-    review_body = request.get_json()
-    review.stars = review_body.get("stars", review.stars)
-    db.session.commit()
-    admin_response_body = {
-        "message": f"Admin {review.id} updated successfully",
-        "Review": review.serialize()
-    }
+#     review_body = request.get_json()
+#     review.stars = review_body.get("stars", review.stars)
+#     db.session.commit()
+#     admin_response_body = {
+#         "message": f"Admin {review.id} updated successfully",
+#         "Review": review.serialize()
+#     }
 
-    return jsonify(admin_response_body), 200
-
+#     return jsonify(admin_response_body), 200
 
 # ------------------- Log in Chef -----------------------
-
-
-@api.route('/utensil_recipe/<int:utensil_recipe_id>', methods=['GET'])
-def get_utensil_recipe(utensil_recipe_id):
-    relation = Utensil_recipe.query.get(utensil_recipe_id)
-    if relation is None:
-        return jsonify({"error": "Relation not found"}), 404
-    return jsonify(relation.serialize()), 200
-
-
-@api.route('/utensil_recipe/<int:utensil_recipe_id>', methods=['DELETE'])
-def delete_utensil_recipe(utensil_recipe_id):
-    relation = Utensil_recipe.query.get(utensil_recipe_id)
-    if relation is None:
-        return jsonify({"error": "Relation not found"}), 404
-
-    db.session.delete(relation)
-    db.session.commit()
-    return jsonify({"message": f"Relation {utensil_recipe_id} deleted successfully"}), 200
-
-
-@api.route('/utensil_recipe/<int:utensil_recipe_id>', methods=['PUT'])
-def update_utensil_recipe(utensil_recipe_id):
-    relation = Utensil_recipe.query.get(utensil_recipe_id)
-    if relation is None:
-        return jsonify({"error": "Relation not found"}), 404
-
-    body = request.get_json()
-    recipe_id = body.get("recipe_id", relation.recipe_id)
-    utensil_id = body.get("utensil_id", relation.utensil_id)
-
-    relation.recipe_id = recipe_id
-    relation.utensil_id = utensil_id
-
-    db.session.commit()
-    return jsonify({
-        "message": f"Relation {relation.id} updated successfully",
-        "relation": relation.serialize()
-    }), 200
 
 
 @api.route('/test', methods=['GET'])
