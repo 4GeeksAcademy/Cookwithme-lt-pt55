@@ -36,10 +36,17 @@ import { EditAnswer } from "./pages/EditAnswer";
 import { Recipe } from "./pages/Recipe";
 import { SingleRecipe } from "./pages/SingleRecipe";
 import NewRecipe from "./pages/NewRecipe";
+
 import {UtensilioReceta} from "./pages/UtensilToRecipe";
 import NewUtensilToRecipe from "./pages/NewUtensilToRecipe";
 import { SingleUtensilRecipe } from "./pages/SingleUtensilRecipe";
 import { EditUtensilToRecipe } from "./pages/EditUtensilToRecipe";
+
+
+import { EditRecipe } from "./pages/EditRecipe";
+import { LoginChef } from "./pages/LoginChef";
+import { HomeChef } from "./pages/HomeChef";
+import { SignupChef } from "./pages/SignupChef";
 
 
 
@@ -79,10 +86,13 @@ export const router = createBrowserRouter(
         <Route path="/single/:theId" element={ <Single />} />  {/* Dynamic route for single items */}
         <Route path="/demo" element={<Demo />} />
 
-        <Route path= "/chef" element={<Chef />} />
-        <Route path="/chef/:chef_id" element={ <SingleChef />} />
+        <Route path= "/chefs" element={<Chef />} />
+        <Route path="/chefs/:chef_id" element={ <SingleChef />} />
         <Route path= "/add_chef" element={<NewChef/>} />
-        <Route path="/chef/:chef_id/update" element={<EditChef />} />
+        <Route path="/chefs/:chef_id/update" element={<EditChef />} />
+        <Route path= "/login_chef" element={<LoginChef />} />
+        <Route path= "/test" element={<HomeChef />} />
+        <Route path= "/signup_chef" element={<SignupChef />} />
 
         <Route path= "/add_admin" element={<NewAdmin/>} />
         <Route path= "/adminuser" element={<AdminList/>} />
@@ -103,6 +113,7 @@ export const router = createBrowserRouter(
         <Route path= "/recipes" element={<Recipe />} />
         <Route path="/recipes/:recipe_id" element={ <SingleRecipe />} />
         <Route path= "/add_recipe" element={<NewRecipe/>} />
+        <Route path="/recipes/:recipe_id/update" element={<EditRecipe />} />
 
       
       </Route>

@@ -25,6 +25,8 @@ export const SingleRecipe = props => {
 
       <h1 className="display-4">Recipe Name: {recipe.name}</h1>
       <h1 className="display-4">Recipe Description: {recipe.description}</h1>
+      <h1 className="display-4">Recipe Preparation: {recipe.preparation}</h1>
+      <h1 className="display-4">Recipe Image: {recipe.img}</h1>
     </div>
   );
 };
