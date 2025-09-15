@@ -10,6 +10,8 @@ const FormChef = () => {
 
     const { store, dispatch } = useGlobalReducer()
 
+    const [error, setError] = useState('');
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -32,22 +34,27 @@ const FormChef = () => {
             .then(response => {
                 console.log(response)
                 console.log(response.status)
-                if (response.status == 200) {
-                    //cambiar auth a true
-                    dispatch({ type: "set_auth_chef", payload: true })
+                if (response.status !== 200) {
+                    setError('Invalid email or password.');
+                    throw new Error('Login failed');
+                } else {
+                    setError('');
                 }
                 return response.json()
             })
             .then(data => {
                 console.log(data)
                 localStorage.setItem("tokenChef", data.access_token);
+                dispatch({ type: "set_auth_chef", payload: true })
                 navigate("/test");
-
-            });
+            }
+        );
+            
     }
 
     return (
         <form className="w-50 mx-auto">
+            {error && <div className="alert alert-danger" role="alert">{error}</div>}
             <div className="mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
                 <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />

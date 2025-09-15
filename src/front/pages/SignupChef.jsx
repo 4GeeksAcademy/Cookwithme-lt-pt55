@@ -5,6 +5,8 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 export const SignupChef = () => {
 
     const navigate = useNavigate();
+
+    const [error, setError] = useState('');
     const { store, dispatch } = useGlobalReducer()
 
     const [email, setEmail] = useState('')
@@ -33,22 +35,26 @@ export const SignupChef = () => {
             .then(response => {
                 console.log(response)
                 console.log(response.status)
-                if (response.status == 200) {
-                    //cambiar auth a true
-                    dispatch({ type: "set_auth_chef", payload: true })
+                if (response.status !== 200) {
+                    setError('Invalid email or password.');
+                    throw new Error('Signup failed');
+                } else {
+                    setError('');
                 }
                 return response.json()
             })
             .then(data => {
                 console.log(data)
-                localStorage.setItem("token_chef", data.access_token);
+                localStorage.setItem("tokenChef", data.access_token);
+                dispatch({ type: "set_auth_chef", payload: true })
                 navigate("/test");
-
-            });
+            }
+        );
     }
 
     return (
     <div className="container text-center mt-5">
+        {error && <div className="alert alert-danger" role="alert">{error}</div>}
         <>
         {store.authChef ? <Navigate to='/test' />
         :
