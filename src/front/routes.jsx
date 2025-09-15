@@ -38,7 +38,8 @@ import { SingleRecipe } from "./pages/SingleRecipe";
 import NewRecipe from "./pages/NewRecipe";
 import {UtensilioReceta} from "./pages/UtensilToRecipe";
 import NewUtensilToRecipe from "./pages/NewUtensilToRecipe";
-
+import { SingleUtensilRecipe } from "./pages/SingleUtensilRecipe";
+import { EditUtensilToRecipe } from "./pages/EditUtensilToRecipe";
 
 
 
@@ -70,6 +71,10 @@ export const router = createBrowserRouter(
                     {/* utensilios en recetas */}
           <Route path="/utensilio_receta" element={<UtensilioReceta />} /> 
           <Route path="/add_utensil_to_recipe" element={<NewUtensilToRecipe />} />
+          <Route path="/utensilioreceta/:utensilioreceta_id" element={<SingleUtensilRecipe />} />
+          <Route path="/utensilioreceta/:utensilioreceta_id/edit" element={<EditUtensilToRecipe />} />
+          
+
 
         <Route path="/single/:theId" element={ <Single />} />  {/* Dynamic route for single items */}
         <Route path="/demo" element={<Demo />} />

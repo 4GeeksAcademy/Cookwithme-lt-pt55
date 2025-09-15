@@ -18,19 +18,20 @@ export const UtensilioReceta = () => {
     }    
 
 
-    // function deleteUtensilioReceta(utensilioReceta_id){
+     function deleteUtensilioReceta(utensilioReceta_id){
 
-    //     const requestOptions = {
-    //         method: 'DELETE'
-    //     }
-    //     fetch(backendUrl + '/api/utensils/' + utensilio_id, requestOptions)
-    //     .then(response => response.json())
-    //     .then(data => 
-    //         {console.log(data)
-    //         getUtensilios()})
+         const requestOptions = {
+             method: 'DELETE'
+         }
+         fetch(backendUrl + '/api/utensil_recipe/' + utensilioReceta_id, requestOptions)
+         .then(response => response.json())
+         .then(data => 
+             {console.log(data)
+             getUtensiliosRecetas()})
 
-    // }    
+     }    
 
+     
 
     useEffect(() => {
         getUtensiliosRecetas()
@@ -52,15 +53,15 @@ export const UtensilioReceta = () => {
                         utensile: {utensiliosRecetas.utensil_id}
                         recipe_id: {utensiliosRecetas.recipe_id}
 
-                        {/* <Link to={"/utensilios/"+utensilio.id}>
+                         <Link to={"/utensilioreceta/"+utensiliosRecetas.id}>
                             <button className="btn btn-primary">Ver</button>
-                        </Link> */}
+                        </Link> 
 
                         {/* <Link to={"/utensilios/" + utensilio.id + "/edit"}>
                             <button className="btn btn-info">Editar</button>
                         </Link> */}
 
-                            <button className="btn btn-danger" onClick={()=>deleteUtensilio(utensiliosRecetas.id)}>Eliminar</button>
+                            <button className="btn btn-danger" onClick={()=>deleteUtensilioReceta(utensiliosRecetas.id)}>Eliminar</button>
                                     
                     </p>
                 ))}
