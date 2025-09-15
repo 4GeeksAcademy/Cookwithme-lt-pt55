@@ -437,7 +437,7 @@ def delete_calification(calification_id):
 @api.route('/calification', methods=['POST'])
 def add_calification():
      calification_body = request.get_json()
-     calification = Calification(stars=calification_body["stars"])
+     calification = Calification(stars=calification_body["stars"],user_id=calification_body["user_id"],recipe_id=calification_body["recipe_id"])
      db.session.add(calification)
      db.session.commit()
      admin_response_body = {
