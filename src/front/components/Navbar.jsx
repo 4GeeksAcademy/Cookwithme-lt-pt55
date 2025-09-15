@@ -48,6 +48,11 @@ export const Navbar = () => {
 						<button className="btn btn-primary">Answer</button>
 					</Link>
 				</div>
+				<div className="ml-auto">
+					<Link to="/califications">
+						<button className="btn btn-primary">Califications</button>
+					</Link>
+				</div>
 			</div>
 		</nav>
 	);

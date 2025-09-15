@@ -46,7 +46,7 @@ export const Recipe = props => {
                 <ul key={recipe.id}>
                     <li>Name: {recipe.name}</li>
                     <li>Description: {recipe.description}</li>
-                    <li>Img: {recipe.img}</li>
+                    <li><img src={recipe.img} alt="recipe image" className="img-fluid rounded float-start" /></li>
                     <Link to={"/recipes/" + recipe.id}>
                         <button className="btn btn-primary">See recipe</button>
                     </Link>

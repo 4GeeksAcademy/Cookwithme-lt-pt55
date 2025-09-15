@@ -16,8 +16,8 @@ export const EditCalification = () => {
         .then(response => response.json())
         .then((data) => {
         setStars(data.stars);
-        setuserId(data.user.id);
-        setrecipeId(data.recipe.id);
+        setuserId(data.user.email);
+        setrecipeId(data.recipe.name);
         });
     }, [review_id]);
 
@@ -34,7 +34,7 @@ export const EditCalification = () => {
     fetch(backendUrl + "/api/calification/" + review_id, requestOptions)
       .then(response => response.json())
       .then((data) => {
-        console.log("Admin actualizado:", data);
+        console.log("review actualizado:", data);
         navigate("/califications");
       })
   }
@@ -53,7 +53,7 @@ export const EditCalification = () => {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">Password</label>
+          <label className="form-label">Recipe</label>
           <input
             value={recipeId}
             onChange={(e) => setrecipeId(e.target.value)}
@@ -62,7 +62,7 @@ export const EditCalification = () => {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">Password</label>
+          <label className="form-label">Calification</label>
           <input
             value={stars}
             onChange={(e) => setStars(e.target.value)}
