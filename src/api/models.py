@@ -14,6 +14,8 @@ class User(db.Model):
     
     # user_califications: Mapped[List["Calification"]] = relationship(back_populates="user")
 
+    questions: Mapped[List["Question"]] = relationship(back_populates="user")
+      
     def __repr__(self):
         return '<User ' + self.email + ' >'
 
@@ -33,7 +35,7 @@ class Chef(db.Model):
 
     recipe: Mapped[List["Recipe"]] = relationship(back_populates="chef")
 
-
+    answers: Mapped[List["Answer"]] = relationship(back_populates="chef")
 
     def serialize(self):
         return {
@@ -64,7 +66,7 @@ class Ingredient(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] =  mapped_column(String(120), unique=True, nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
-    image: Mapped[str] =  mapped_column(String(120), unique=True, nullable=False)
+    image: Mapped[str] =  mapped_column(unique=True, nullable=False)
 
 
     def serialize(self):
@@ -95,23 +97,36 @@ class Question(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str] = mapped_column(nullable=False)
 
+    recipe_id: Mapped[int] = mapped_column(ForeignKey("recipe.id"), nullable=False)
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
+
+    recipe: Mapped["Recipe"] = relationship(back_populates="questions")
+    user: Mapped["User"] = relationship(back_populates="questions")
+
+    answers: Mapped[List["Answer"]] = relationship(back_populates="question")
 
     def serialize(self):
         return {
             "id": self.id,
-            "text": self.text
+            "text": self.text,
+            "recipe_id": self.recipe_id,
+            "user_id": self.user_id
             # do not serialize the password, its a security breach
         }
 
+
 class Recipe(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    description: Mapped[str] = mapped_column(String(120), unique=False, nullable=False)
-    img: Mapped[str] = mapped_column(String(120), unique=False, nullable=False)
-    name: Mapped[str] =  mapped_column(String(120), unique=False, nullable=False)
+    description: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
+    img: Mapped[str] = mapped_column(nullable=False)
+    name: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
+
     preparation: Mapped[str] = mapped_column(String(120), nullable=False)
 
     chef_id: Mapped[int] = mapped_column(ForeignKey("chef.id"))
     chef: Mapped["Chef"] = relationship(back_populates="recipe")
+
+    questions: Mapped[List["Question"]] = relationship(back_populates="recipe")
 
     # recipe_califications: Mapped[List["Calification"]] = relationship(back_populates="recipe")
 
@@ -125,16 +140,26 @@ class Recipe(db.Model):
             "name": self.name,
             "img": self.img,
             "preparation": self.preparation
-        }      
+            # do not serialize the password, its a security breach
+        }
+    
     
 class Answer(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str] = mapped_column(nullable=False)
 
+    question_id: Mapped[int] = mapped_column(ForeignKey("question.id"), nullable=False)
+    chef_id: Mapped[int] = mapped_column(ForeignKey("chef.id"), nullable=False)
+
+    question: Mapped["Question"] = relationship(back_populates="answers")
+    chef: Mapped["Chef"] = relationship(back_populates="answers")
+
     def serialize(self):
         return {
             "id": self.id,
-            "text": self.text
+            "text": self.text,
+            "question_id": self.question_id,
+            "chef_id": self.chef_id
             # do not serialize the password, its a security breach
         }
    

@@ -51,7 +51,11 @@ export const Ingrediente = () => {
                 <p key={ingrediente.id}> 
                     Nombre: {ingrediente.name}
                     Descripcion: {ingrediente.description}
-                    Imagen: {ingrediente.image}
+                    Imagen:         <img
+                                        src={ingrediente.image}
+                                        alt={ingrediente.name}
+                                        className="img-fluid mt-3"
+                                    />
 
                     <Link to={"/ingredientes/"+ingrediente.id}>
                         <button className="btn btn-primary">Ver Ingrediente</button>
