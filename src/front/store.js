@@ -12,7 +12,8 @@ export const initialStore=()=>{
         title: "Do my homework",
         background: null,
       }
-    ]
+    ],
+    authChef: false
   }
 }
 
@@ -22,6 +23,12 @@ export default function storeReducer(store, action = {}) {
       return {
         ...store,
         message: action.payload
+      };
+
+    case 'set_auth_chef':
+      return {
+        ...store,
+        authChef: action.payload
       };
       
     case 'add_task':

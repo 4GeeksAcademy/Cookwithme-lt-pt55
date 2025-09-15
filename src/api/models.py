@@ -28,7 +28,7 @@ class Chef(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(nullable=False)
-    name: Mapped[str] =  mapped_column(String(120), unique=True, nullable=False)
+    name: Mapped[str] =  mapped_column(String(120), nullable=False)
     rating: Mapped[int] = mapped_column(nullable=False)
 
     recipe: Mapped[List["Recipe"]] = relationship(back_populates="chef")
