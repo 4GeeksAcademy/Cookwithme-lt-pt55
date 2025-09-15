@@ -36,10 +36,18 @@ import { EditAnswer } from "./pages/EditAnswer";
 import { Recipe } from "./pages/Recipe";
 import { SingleRecipe } from "./pages/SingleRecipe";
 import NewRecipe from "./pages/NewRecipe";
+
+import {UtensilioReceta} from "./pages/UtensilToRecipe";
+import NewUtensilToRecipe from "./pages/NewUtensilToRecipe";
+import { SingleUtensilRecipe } from "./pages/SingleUtensilRecipe";
+import { EditUtensilToRecipe } from "./pages/EditUtensilToRecipe";
+
+
 import { EditRecipe } from "./pages/EditRecipe";
 import { LoginChef } from "./pages/LoginChef";
 import { HomeChef } from "./pages/HomeChef";
 import { SignupChef } from "./pages/SignupChef";
+
 
 
 
@@ -67,6 +75,13 @@ export const router = createBrowserRouter(
           <Route path="/add_utensilio" element={<NewUtensilio />} />
           <Route path="/utensilios/:utensilio_id/edit" element={<EditUtensilio />} />   
  
+                    {/* utensilios en recetas */}
+          <Route path="/utensilio_receta" element={<UtensilioReceta />} /> 
+          <Route path="/add_utensil_to_recipe" element={<NewUtensilToRecipe />} />
+          <Route path="/utensilioreceta/:utensilioreceta_id" element={<SingleUtensilRecipe />} />
+          <Route path="/utensilioreceta/:utensilioreceta_id/edit" element={<EditUtensilToRecipe />} />
+          
+
 
         <Route path="/single/:theId" element={ <Single />} />  {/* Dynamic route for single items */}
         <Route path="/demo" element={<Demo />} />
