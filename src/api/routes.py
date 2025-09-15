@@ -455,6 +455,13 @@ def update_answer(answer_id):
 
     return jsonify(response_body), 200
 
+
+#----------------utensilios a las recetas--------------------------
+@api.route('/utensil_recipe', methods=['POST'])
+def add_utensil_recipe():
+    body = request.get_json()
+
+
 #----Calification---------------------------------------------
 
 @api.route('/calification', methods=['GET'])
@@ -462,30 +469,6 @@ def get_all_calification():
      all_calification = Calification.query.all()
      results = list(map( lambda calification: calification.serialize(), all_calification))
      return jsonify(results), 200
-#----------------utensilios a las recetas--------------------------
-@api.route('/utensil_recipe', methods=['POST'])
-def add_utensil_recipe():
-    body = request.get_json()
-
-    recipe_id_got = body.get("recipe_id")
-    utensil_id_got = body.get("utensil_id")
-
-    if not recipe_id_got or not utensil_id_got:
-        return jsonify({"error": "recipe_id y utensil_id son requeridos"}), 400
-
-    new_utensil_recipe = Utensil_recipe(recipe_id=recipe_id_got, utensil_id=utensil_id_got)
-    db.session.add(new_utensil_recipe)
-    db.session.commit()
-
-    return jsonify(new_utensil_recipe.serialize()), 201
-
-
-
-@api.route('/utensil_recipe', methods=['GET'])
-def get_all_utensil_recipe():
-    all_relations = Utensil_recipe.query.all()
-    results = list(map(lambda relation: relation.serialize(), all_relations))
-    return jsonify(results), 200
 
 @api.route('/calification/<int:calification_id>', methods=['GET'])
 def get_calification(calification_id):
@@ -572,47 +555,9 @@ def add_favrecipes():
 
      return jsonify(admin_response_body), 200
 
+  
 
 # ------------------- Log in Chef -----------------------
-
-
-@api.route('/utensil_recipe/<int:utensil_recipe_id>', methods=['GET'])
-def get_utensil_recipe(utensil_recipe_id):
-    relation = Utensil_recipe.query.get(utensil_recipe_id)
-    if relation is None:
-        return jsonify({"error": "Relation not found"}), 404
-    return jsonify(relation.serialize()), 200
-
-
-@api.route('/utensil_recipe/<int:utensil_recipe_id>', methods=['DELETE'])
-def delete_utensil_recipe(utensil_recipe_id):
-    relation = Utensil_recipe.query.get(utensil_recipe_id)
-    if relation is None:
-        return jsonify({"error": "Relation not found"}), 404
-
-    db.session.delete(relation)
-    db.session.commit()
-    return jsonify({"message": f"Relation {utensil_recipe_id} deleted successfully"}), 200
-
-
-@api.route('/utensil_recipe/<int:utensil_recipe_id>', methods=['PUT'])
-def update_utensil_recipe(utensil_recipe_id):
-    relation = Utensil_recipe.query.get(utensil_recipe_id)
-    if relation is None:
-        return jsonify({"error": "Relation not found"}), 404
-
-    body = request.get_json()
-    recipe_id = body.get("recipe_id", relation.recipe_id)
-    utensil_id = body.get("utensil_id", relation.utensil_id)
-
-    relation.recipe_id = recipe_id
-    relation.utensil_id = utensil_id
-
-    db.session.commit()
-    return jsonify({
-        "message": f"Relation {relation.id} updated successfully",
-        "relation": relation.serialize()
-    }), 200
 
 
 @api.route('/test', methods=['GET'])
