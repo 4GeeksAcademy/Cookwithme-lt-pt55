@@ -49,7 +49,7 @@ export const Navbar = () => {
 				</div>
 				<div className="ml-auto">
 					<Link to="/utensilios">
-						<button className="btn btn-primary">Utensilios</button>
+						<button className="btn btn-danger">Utensilios</button>
 					</Link>
 				</div>
 				<div className="ml-auto">
@@ -65,6 +65,11 @@ export const Navbar = () => {
 				<div className="ml-auto">
 					<Link to="/questions">
 						<button className="btn btn-primary">Answer</button>
+					</Link>
+				</div>
+				<div className="ml-auto">
+					<Link to="/utensilio_receta">
+						<button className="btn btn-danger">Agregar utensilio a receta</button>
 					</Link>
 				</div>
 			</div>

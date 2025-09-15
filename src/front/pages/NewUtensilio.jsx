@@ -13,7 +13,6 @@ const NewUtensilio = () => {
 
     function sendData(e){
         e.preventDefault()
-        console.log('send data')
         console.log(name, description, url_img)
         const requestOptions = {
             method: 'POST',
