@@ -61,7 +61,7 @@ const NewChef = () => {
                     <input value={rating} onChange={(e) => setRating(e.target.value)} type="number" className="form-control" id="exampleInputRating" />
                 </div>
                 <button type="submit" className="btn btn-primary">Create</button>
-                <Link to="/chef">
+                <Link to="/chefs">
                     <button className="btn btn-primary">Back to chefs</button>
                 </Link>
             </form>
