@@ -1,6 +1,22 @@
 import { Link } from "react-router-dom";
+import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import { useParams, useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
+
+	const navigate = useNavigate();
+
+	const { store, dispatch } = useGlobalReducer()
+
+	function logout(){
+		// limpiar token 
+		localStorage.removeItem("tokenChef")
+		// pasar auth a false
+		dispatch({ type: "set_auth_chef", payload: false })
+		// redireccioar a login
+		navigate("/login_chef")
+		
+	}
 
 	return (
 		<nav className="navbar navbar-light bg-light">
@@ -13,8 +29,11 @@ export const Navbar = () => {
 						<button className="btn btn-primary">Check the Context in action</button>
 					</Link>
 				</div>
+				
+				{store.authChef ? <button className="btn btn-danger" onClick={logout}>Logout</button> : null}
+				
 				<div className="ml-auto">
-					<Link to="/chef">
+					<Link to="/chefs">
 						<button className="btn btn-primary">Chefs</button>
 					</Link>
 				</div>
@@ -30,7 +49,7 @@ export const Navbar = () => {
 				</div>
 				<div className="ml-auto">
 					<Link to="/utensilios">
-						<button className="btn btn-primary">Utensilios</button>
+						<button className="btn btn-danger">Utensilios</button>
 					</Link>
 				</div>
 				<div className="ml-auto">
@@ -51,6 +70,9 @@ export const Navbar = () => {
 				<div className="ml-auto">
 					<Link to="/califications">
 						<button className="btn btn-primary">Califications</button>
+					</Link>
+					<Link to="/utensilio_receta">
+						<button className="btn btn-danger">Agregar utensilio a receta</button>
 					</Link>
 				</div>
 			</div>

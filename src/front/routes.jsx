@@ -36,10 +36,21 @@ import { EditAnswer } from "./pages/EditAnswer";
 import { Recipe } from "./pages/Recipe";
 import { SingleRecipe } from "./pages/SingleRecipe";
 import NewRecipe from "./pages/NewRecipe";
+
+import {UtensilioReceta} from "./pages/UtensilToRecipe";
+import NewUtensilToRecipe from "./pages/NewUtensilToRecipe";
+import { SingleUtensilRecipe } from "./pages/SingleUtensilRecipe";
+import { EditUtensilToRecipe } from "./pages/EditUtensilToRecipe";
+
+
 import { EditRecipe } from "./pages/EditRecipe";
 import { Califications } from "./pages/Califications/Reviews";
 import NewCalification from "./pages/Califications/NewReview";
 import EditCalification from "./pages/Califications/EditReview";
+import { LoginChef } from "./pages/LoginChef";
+import { HomeChef } from "./pages/HomeChef";
+import { SignupChef } from "./pages/SignupChef";
+
 
 
 
@@ -66,10 +77,30 @@ export const router = createBrowserRouter(
       <Route path="/utensilios/:utensilio_id" element={<SingleUtensilio />} />
       <Route path="/add_utensilio" element={<NewUtensilio />} />
       <Route path="/utensilios/:utensilio_id/edit" element={<EditUtensilio />} />
+          {/* Utensilios */}
+          <Route path="/utensilios" element={<Utensilio />} />
+          <Route path="/utensilios/:utensilio_id" element={<SingleUtensilio />} />
+          <Route path="/add_utensilio" element={<NewUtensilio />} />
+          <Route path="/utensilios/:utensilio_id/edit" element={<EditUtensilio />} />   
+ 
+                    {/* utensilios en recetas */}
+          <Route path="/utensilio_receta" element={<UtensilioReceta />} /> 
+          <Route path="/add_utensil_to_recipe" element={<NewUtensilToRecipe />} />
+          <Route path="/utensilioreceta/:utensilioreceta_id" element={<SingleUtensilRecipe />} />
+          <Route path="/utensilioreceta/:utensilioreceta_id/edit" element={<EditUtensilToRecipe />} />
+          
+
 
 
       <Route path="/single/:theId" element={<Single />} />  {/* Dynamic route for single items */}
       <Route path="/demo" element={<Demo />} />
+        <Route path= "/chefs" element={<Chef />} />
+        <Route path="/chefs/:chef_id" element={ <SingleChef />} />
+        <Route path= "/add_chef" element={<NewChef/>} />
+        <Route path="/chefs/:chef_id/update" element={<EditChef />} />
+        <Route path= "/login_chef" element={<LoginChef />} />
+        <Route path= "/test" element={<HomeChef />} />
+        <Route path= "/signup_chef" element={<SignupChef />} />
 
       <Route path="/chef" element={<Chef />} />
       <Route path="/chef/:chef_id" element={<SingleChef />} />
