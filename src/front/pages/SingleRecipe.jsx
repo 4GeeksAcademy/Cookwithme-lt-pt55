@@ -14,6 +14,8 @@ export const SingleRecipe = props => {
       .then(data => setRecipe(data))
   }
 
+
+
   useEffect(() => {
     getRecipe()
   }, [])
