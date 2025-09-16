@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Chef, Utensil,Ingredient,Admin_user,Question,Answer, Recipe,Calification,Utensil_recipe, Recipe_ingredient
+from api.models import db, User, Chef, Utensil,Ingredient,Admin_user,Question,Answer, Recipe,Calification,Utensil_recipe, Recipe_ingredient,Utensil_user
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -726,3 +726,64 @@ def delete_recipe_ingredient(ri_id):
     }
     return jsonify(response_body), 200
 
+#--------utensil_user---------
+@api.route('/utensil_user', methods=['POST'])
+def add_utensil_user():
+    body = request.get_json()
+    user_id_got = body.get("user_id")
+    utensil_id_got = body.get("utensil_id")
+
+    if not user_id_got or not utensil_id_got:
+        return jsonify({"error": "user_id y utensil_id son requeridos"}), 400
+
+    new_utensil_user = Utensil_user(user_id=user_id_got, utensil_id=utensil_id_got)
+    db.session.add(new_utensil_user)
+    db.session.commit()
+
+    return jsonify(new_utensil_user.serialize()), 201
+
+
+@api.route('/utensil_user', methods=['GET'])
+def get_all_utensil_user():
+    all_relations = Utensil_user.query.all()
+    results = list(map(lambda relation: relation.serialize(), all_relations))
+    return jsonify(results), 200
+
+
+@api.route('/utensil_user/<int:utensil_user_id>', methods=['GET'])
+def get_utensil_user(utensil_user_id):
+    relation = Utensil_user.query.get(utensil_user_id)
+    if relation is None:
+        return jsonify({"error": "Relation not found"}), 404
+    return jsonify(relation.serialize()), 200
+
+
+@api.route('/utensil_user/<int:utensil_user_id>', methods=['DELETE'])
+def delete_utensil_user(utensil_user_id):
+    relation = Utensil_user.query.get(utensil_user_id)
+    if relation is None:
+        return jsonify({"error": "Relation not found"}), 404
+
+    db.session.delete(relation)
+    db.session.commit()
+    return jsonify({"message": f"Relation {utensil_user_id} deleted successfully"}), 200
+
+
+@api.route('/utensil_user/<int:utensil_user_id>', methods=['PUT'])
+def update_utensil_user(utensil_user_id):
+    relation = Utensil_user.query.get(utensil_user_id)
+    if relation is None:
+        return jsonify({"error": "Relation not found"}), 404
+
+    body = request.get_json()
+    user_id = body.get("user_id", relation.user_id)
+    utensil_id = body.get("utensil_id", relation.utensil_id)
+
+    relation.user_id = user_id
+    relation.utensil_id = utensil_id
+
+    db.session.commit()
+    return jsonify({
+        "message": f"Relation {relation.id} updated successfully",
+        "relation": relation.serialize()
+    }), 200

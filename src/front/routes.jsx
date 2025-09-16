@@ -63,9 +63,8 @@ import { SingleRecipeIngredient } from "./pages/SingleRecipeIngredient";
 import NewRecipeIngredient from "./pages/NewRecipeIngredient";
 import { EditRecipeIngredient } from "./pages/EditRecipeIngredient";
 
-
-
-
+import { UtensilToUser } from "./pages/UtensilToUser";
+import NewUtensilToUser from "./pages/NewUtensilToUser";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -149,7 +148,10 @@ export const router = createBrowserRouter(
       <Route path="/recipe_ingredients/:ri_id" element={<SingleRecipeIngredient />} />
       <Route path="/add_recipe_ingredient" element={<NewRecipeIngredient />} />
       <Route path="/recipe_ingredients/:ri_id/edit" element={<EditRecipeIngredient />} />
-
+        
+    
+      <Route path="/utensil_user" element={<UtensilToUser />} />
+      <Route path="/add_utensil_to_user" element={<NewUtensilToUser />} />
     </Route>
   )
 );

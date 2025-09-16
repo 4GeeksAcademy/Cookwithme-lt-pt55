@@ -260,5 +260,3 @@ class Utensil_user(db.Model):
             "utensil_id": self.utensil_id,
             "utensil_name": self.utensil.name
         }
-
-#-----------------Usuarios
