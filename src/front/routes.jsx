@@ -58,20 +58,20 @@ import { LoginChef } from "./pages/LoginChef";
 import { HomeChef } from "./pages/HomeChef";
 import { SignupChef } from "./pages/SignupChef";
 
-import { Ingrediente } from "./pages/Ingrediente";
-import { SingleIngrediente } from "./pages/SingleIngrediente";
-import NewIngrediente from "./pages/NewIngrediente";
-import { EditIngrediente } from "./pages/EditIngrediente";
-import { EditUtensilio } from "./pages/EditUtensilio";
-
 import { RecipeIngredient } from "./pages/RecipeIngredient";
 import { SingleRecipeIngredient } from "./pages/SingleRecipeIngredient";
 import NewRecipeIngredient from "./pages/NewRecipeIngredient";
 import { EditRecipeIngredient } from "./pages/EditRecipeIngredient";
 
+import { UtensilToUser } from "./pages/UtensilToUser";
+import NewUtensilToUser from "./pages/NewUtensilToUser";
+import { SingleUtensilToUser } from "./pages/SingleUtensilToUser";
+import { EditUtensilToUser } from "./pages/EditUtensilToUser";
 
-
-
+import { Users } from "./pages/Users";
+import NewUser from "./pages/NewUser";
+import { SingleUser } from "./pages/SingleUser";
+import { EditUser } from "./pages/EditUser";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -155,7 +155,17 @@ export const router = createBrowserRouter(
       <Route path="/recipe_ingredients/:ri_id" element={<SingleRecipeIngredient />} />
       <Route path="/add_recipe_ingredient" element={<NewRecipeIngredient />} />
       <Route path="/recipe_ingredients/:ri_id/edit" element={<EditRecipeIngredient />} />
+        
+    
+      <Route path="/utensil_user" element={<UtensilToUser />} />
+      <Route path="/add_utensil_to_user" element={<NewUtensilToUser />} />
+      <Route path="/utensiluser/:utensiluser_id" element={<SingleUtensilToUser />} />
+      <Route path="/utensiluser/:utensiluser_id/edit" element={<EditUtensilToUser />} />
 
+      <Route path="/users" element={<Users />} />
+      <Route path="users/:user_id" element={<SingleUser />} />
+      <Route path="users/:user_id/edit" element={<EditUser />} />
+      <Route path="add_user" element={<NewUser />} />
     </Route>
   )
 );

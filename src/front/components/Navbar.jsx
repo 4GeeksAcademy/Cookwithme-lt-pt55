@@ -80,6 +80,16 @@ export const Navbar = () => {
 						<button className="btn btn-danger">Agregar utensilio a receta</button>
 					</Link>
 				</div>
+				<div className="ml-auto">
+					<Link to="/utensil_user">
+						<button className="btn btn-danger">utensilio usuario</button>
+					</Link>
+				</div>
+				<div className="ml-auto">
+					<Link to="/users">
+						<button className="btn btn-danger">Agregar usuario</button>
+					</Link>
+				</div>
 			</div>
 		</nav>
 	);
