@@ -68,6 +68,11 @@ import NewUtensilToUser from "./pages/NewUtensilToUser";
 import { SingleUtensilToUser } from "./pages/SingleUtensilToUser";
 import { EditUtensilToUser } from "./pages/EditUtensilToUser";
 
+import { Users } from "./pages/Users";
+import NewUser from "./pages/NewUser";
+import { SingleUser } from "./pages/SingleUser";
+import { EditUser } from "./pages/EditUser";
+
 export const router = createBrowserRouter(
   createRoutesFromElements(
     // CreateRoutesFromElements function allows you to build route elements declaratively.
@@ -156,6 +161,11 @@ export const router = createBrowserRouter(
       <Route path="/add_utensil_to_user" element={<NewUtensilToUser />} />
       <Route path="/utensiluser/:utensiluser_id" element={<SingleUtensilToUser />} />
       <Route path="/utensiluser/:utensiluser_id/edit" element={<EditUtensilToUser />} />
+
+      <Route path="/users" element={<Users />} />
+      <Route path="users/:user_id" element={<SingleUser />} />
+      <Route path="users/:user_id/edit" element={<EditUser />} />
+      <Route path="add_user" element={<NewUser />} />
     </Route>
   )
 );
