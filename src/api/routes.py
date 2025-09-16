@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Chef, Utensil,Ingredient,Admin_user,Question,Answer, Recipe,Calification,Utensil_recipe, Recipe_ingredient,Utensil_user
+from api.models import db, User, Chef, Utensil,Ingredient,Admin_user,Question,Answer, Recipe,Calification,Utensil_recipe, Recipe_ingredient,Utensil_user, Ingredient_user
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -833,3 +833,72 @@ def update_utensil_user(utensil_user_id):
         "message": f"Relation {relation.id} updated successfully",
         "relation": relation.serialize()
     }), 200
+
+#--------Ingredient_user---------
+
+@api.route('/ingredient_users', methods=['GET'])
+def get_all_ingredient_users():
+    ingredient_users = Ingredient_user.query.all()
+    results = [iu.serialize() for iu in ingredient_users]
+    return jsonify(results), 200
+
+
+@api.route('/ingredient_users/<int:iu_id>', methods=['GET'])
+def get_ingredient_user(iu_id):
+    ingredient_user = Ingredient_user.query.filter_by(id=iu_id).first()
+    if ingredient_user is None:
+        return jsonify({"error-msg": "enter a valid ingredient_user"}), 400
+    return jsonify(ingredient_user.serialize()), 200
+
+
+@api.route('/ingredient_users', methods=['POST'])
+def add_ingredient_user():
+    body = request.get_json()
+    ingredient_id = body.get("ingredient_id")
+    user_id = body.get("user_id")
+
+    if not ingredient_id or not user_id:
+        return jsonify({"error-msg": "ingredient_id and user_id are required"}), 400
+
+    new_ingredient_user = Ingredient_user(ingredient_id=ingredient_id, user_id=user_id)
+    db.session.add(new_ingredient_user)
+    db.session.commit()
+
+    response_body = {
+        "message": "Ingredient_user created",
+        "data": new_ingredient_user.serialize()
+    }
+    return jsonify(response_body), 201
+
+
+@api.route('/ingredient_users/<int:iu_id>', methods=['PUT'])
+def update_ingredient_user(iu_id):
+    ingredient_user = Ingredient_user.query.filter_by(id=iu_id).first()
+    if ingredient_user is None:
+        return jsonify({"error-msg": "ingredient_user does not exist"}), 404
+
+    body = request.get_json()
+    ingredient_user.ingredient_id = body.get("ingredient_id", ingredient_user.ingredient_id)
+    ingredient_user.user_id = body.get("user_id", ingredient_user.user_id)
+    db.session.commit()
+
+    response_body = {
+        "message": f"Ingredient_user {ingredient_user.id} updated successfully",
+        "data": ingredient_user.serialize()
+    }
+    return jsonify(response_body), 200
+
+
+@api.route('/ingredient_users/<int:iu_id>', methods=['DELETE'])
+def delete_ingredient_user(iu_id):
+    ingredient_user = Ingredient_user.query.filter_by(id=iu_id).first()
+    if ingredient_user is None:
+        return jsonify({"error-msg": "enter a valid ingredient_user"}), 400
+
+    db.session.delete(ingredient_user)
+    db.session.commit()
+
+    response_body = {
+        "message": f"Ingredient_user {iu_id} deleted successfully"
+    }
+    return jsonify(response_body), 200
