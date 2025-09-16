@@ -33,7 +33,53 @@ def get_all_users():
     results = list(map(lambda user: user.serialize(), all_users))
     return jsonify(results), 200
 
+@api.route('/users/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        return {"error-msg": "enter a valid user"}, 400
+    return jsonify(user.serialize()), 200
 
+@api.route('/users', methods=['POST'])
+def add_user():
+    body = request.get_json()
+    user = User(username=body["username"], name=body["name"],
+                password=body["password"], email=body["email"])
+    db.session.add(user)
+    db.session.commit()
+    response_body = {
+        "se creo el usuario ": user.serialize()
+    }
+    return jsonify(response_body), 200
+
+@api.route('/users/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        return {"error-msg": "enter a valid user"}, 400
+    db.session.delete(user)
+    db.session.commit()
+    response_body = {
+        "message": "se elimino el user " + user.email
+    }
+    return jsonify(response_body), 200
+
+
+@api.route('/users/<int:user_id>', methods=['PUT'])
+def update_user(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        return {"error-msg": "user does not exist"}, 400
+
+    body = request.get_json()
+    user = User(username=body["username"], name=body["name"],
+                password=body["password"], email=body["email"])
+    db.session.commit()
+    response_body = {
+        "message": "usuario " + user.email + " successfully update"
+    }
+
+#------chef------------------
 @api.route('/chefs', methods=['GET'])
 def get_all_chef():
     all_chefs = Chef.query.all()

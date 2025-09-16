@@ -65,6 +65,8 @@ import { EditRecipeIngredient } from "./pages/EditRecipeIngredient";
 
 import { UtensilToUser } from "./pages/UtensilToUser";
 import NewUtensilToUser from "./pages/NewUtensilToUser";
+import { SingleUtensilToUser } from "./pages/SingleUtensilToUser";
+import { EditUtensilToUser } from "./pages/EditUtensilToUser";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -152,6 +154,8 @@ export const router = createBrowserRouter(
     
       <Route path="/utensil_user" element={<UtensilToUser />} />
       <Route path="/add_utensil_to_user" element={<NewUtensilToUser />} />
+      <Route path="/utensiluser/:utensiluser_id" element={<SingleUtensilToUser />} />
+      <Route path="/utensiluser/:utensiluser_id/edit" element={<EditUtensilToUser />} />
     </Route>
   )
 );

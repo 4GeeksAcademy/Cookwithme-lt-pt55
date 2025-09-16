@@ -25,7 +25,7 @@ const NewUtensilToUser = () => {
             body: JSON.stringify({ utensil_id: currentUtensil.id, user_id: currentUser.id })
         })
         .then(res => res.json())
-        .then(() => navigate("/utensil_to_user"));
+        .then(() => navigate("/utensil_user"));
     };
 
     return (
