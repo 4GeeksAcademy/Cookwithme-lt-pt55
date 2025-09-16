@@ -9,47 +9,66 @@ import { Layout } from "./pages/Layout";
 import { Home } from "./pages/Home";
 import { Single } from "./pages/Single";
 import { Demo } from "./pages/Demo";
+
 import { Chef } from "./pages/Chef";
 import { SingleChef } from "./pages/SingleChef";
+import NewChef from "./pages/NewChef";
+import { EditChef } from "./pages/EditChef";
+
 import { Ingrediente } from "./pages/Ingrediente";
 import { SingleIngrediente } from "./pages/SingleIngrediente";
 import NewIngrediente from "./pages/NewIngrediente";
-import { EditUtensilio } from "./pages/EditUtensilio";
 import { EditIngrediente } from "./pages/EditIngrediente";
+import { EditUtensilio } from "./pages/EditUtensilio";
+
 import NewUtensilio from "./pages/NewUtensilio";
 import { SingleUtensilio } from "./pages/SingleUtensilio";
 import { Utensilio } from "./pages/Utensilio";
-import NewChef from "./pages/NewChef";
+
 import NewAdmin from "./pages/Admins/NewAdmin";
 import { AdminList } from "./pages/Admins/AdminList";
 import EditAdmin from "./pages/Admins/EditAdmin";
+import { SingleAdmin } from "./pages/Admins/SingleAdmin";
+
 import { Question } from "./pages/Question";
 import { SingleQuestion } from "./pages/SingleQuestion";
 import NewQuestion from "./pages/NewQuestion";
 import { EditQuestion } from "./pages/EditQuestion";
-import { SingleAdmin } from "./pages/Admins/SingleAdmin";
-import { EditChef } from "./pages/EditChef";
+
 import { Answer } from "./pages/Answer";
 import { SingleAnswer } from "./pages/SingleAnswer";
 import NewAnswer from "./pages/NewAnswer";
 import { EditAnswer } from "./pages/EditAnswer";
+
 import { Recipe } from "./pages/Recipe";
 import { SingleRecipe } from "./pages/SingleRecipe";
 import NewRecipe from "./pages/NewRecipe";
+import { EditRecipe } from "./pages/EditRecipe";
 
 import {UtensilioReceta} from "./pages/UtensilToRecipe";
 import NewUtensilToRecipe from "./pages/NewUtensilToRecipe";
 import { SingleUtensilRecipe } from "./pages/SingleUtensilRecipe";
 import { EditUtensilToRecipe } from "./pages/EditUtensilToRecipe";
 
-
-import { EditRecipe } from "./pages/EditRecipe";
 import { Califications } from "./pages/Califications/Reviews";
 import NewCalification from "./pages/Califications/NewReview";
 import EditCalification from "./pages/Califications/EditReview";
+
 import { LoginChef } from "./pages/LoginChef";
 import { HomeChef } from "./pages/HomeChef";
 import { SignupChef } from "./pages/SignupChef";
+
+import { Ingrediente } from "./pages/Ingrediente";
+import { SingleIngrediente } from "./pages/SingleIngrediente";
+import NewIngrediente from "./pages/NewIngrediente";
+import { EditIngrediente } from "./pages/EditIngrediente";
+import { EditUtensilio } from "./pages/EditUtensilio";
+
+import { RecipeIngredient } from "./pages/RecipeIngredient";
+import { SingleRecipeIngredient } from "./pages/SingleRecipeIngredient";
+import NewRecipeIngredient from "./pages/NewRecipeIngredient";
+import { EditRecipeIngredient } from "./pages/EditRecipeIngredient";
+
 
 
 
@@ -131,6 +150,12 @@ export const router = createBrowserRouter(
       <Route path="/califications" element={<Califications />} />
       <Route path="/add_califications" element={<NewCalification />} />
       <Route path="/califications/:review_id/edit" element={<EditCalification />} />
+
+      <Route path="/recipe_ingredients" element={<RecipeIngredient />} />
+      <Route path="/recipe_ingredients/:ri_id" element={<SingleRecipeIngredient />} />
+      <Route path="/add_recipe_ingredient" element={<NewRecipeIngredient />} />
+      <Route path="/recipe_ingredients/:ri_id/edit" element={<EditRecipeIngredient />} />
+
     </Route>
   )
 );

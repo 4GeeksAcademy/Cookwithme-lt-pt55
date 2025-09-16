@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Chef, Utensil,Ingredient,Admin_user,Question,Answer, Recipe,Calification,Fav_recipe,Utensil_recipe
+from api.models import db, User, Chef, Utensil,Ingredient,Admin_user,Question,Answer, Recipe,Calification,Fav_recipe,Utensil_recipe, Recipe_ingredient
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -597,3 +597,73 @@ def signup_as_chef():
     db.session.commit()
     access_token = create_access_token(identity=body["email"])
     return jsonify(access_token=access_token), 200
+
+
+# ------------------- recipe_ingredient -----------------------
+
+@api.route('/recipe_ingredients', methods=['GET'])
+def get_all_recipe_ingredients():
+    all_records = Recipe_ingredient.query.all()
+    results = list(map(lambda ri: ri.serialize(), all_records))
+    return jsonify(results), 200
+
+
+@api.route('/recipe_ingredients/<int:ri_id>', methods=['GET'])
+def get_recipe_ingredient(ri_id):
+    record = Recipe_ingredient.query.filter_by(id=ri_id).first()
+    if record is None:
+        return {"error-msg": "enter a valid recipe_ingredient"}, 400
+    return jsonify(record.serialize()), 200
+
+
+@api.route('/recipe_ingredients', methods=['POST'])
+def add_recipe_ingredient():
+    body = request.get_json()
+    recipe_id = body.get("recipe_id")
+    ingredient_id = body.get("ingredient_id")
+
+    if not recipe_id or not ingredient_id:
+        return jsonify({"error-msg": "recipe_id and ingredient_id are required"}), 400
+
+    new_record = Recipe_ingredient(recipe_id=recipe_id, ingredient_id=ingredient_id)
+    db.session.add(new_record)
+    db.session.commit()
+    response_body = {
+        "message": "Recipe_ingredient created",
+        "data": new_record.serialize()
+    }
+    return jsonify(response_body), 201
+
+
+@api.route('/recipe_ingredients/<int:ri_id>', methods=['PUT'])
+def update_recipe_ingredient(ri_id):
+    record = Recipe_ingredient.query.filter_by(id=ri_id).first()
+    if record is None:
+        return jsonify({"error-msg": "recipe_ingredient does not exist"}), 404
+
+    body = request.get_json()
+    record.recipe_id = body.get("recipe_id", record.recipe_id)
+    record.ingredient_id = body.get("ingredient_id", record.ingredient_id)
+    db.session.commit()
+
+    response_body = {
+        "message": f"Recipe_ingredient {record.id} updated successfully",
+        "data": record.serialize()
+    }
+    return jsonify(response_body), 200
+
+
+@api.route('/recipe_ingredients/<int:ri_id>', methods=['DELETE'])
+def delete_recipe_ingredient(ri_id):
+    record = Recipe_ingredient.query.filter_by(id=ri_id).first()
+    if record is None:
+        return jsonify({"error-msg": "enter a valid recipe_ingredient"}), 400
+
+    db.session.delete(record)
+    db.session.commit()
+
+    response_body = {
+        "message": f"Recipe_ingredient {ri_id} deleted successfully"
+    }
+    return jsonify(response_body), 200
+

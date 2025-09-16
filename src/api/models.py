@@ -69,6 +69,8 @@ class Ingredient(db.Model):
     description: Mapped[str] = mapped_column(nullable=False)
     image: Mapped[str] =  mapped_column(String(120), unique=True, nullable=False)
 
+    recipe_ingredients: Mapped[List["Recipe_ingredient"]] = relationship(back_populates="ingredient")
+
 
     def serialize(self):
         return {
@@ -120,6 +122,9 @@ class Recipe(db.Model):
     chef: Mapped["Chef"] = relationship(back_populates="recipe")
 
     utensil_recipes: Mapped[List["Utensil_recipe"]] = relationship(back_populates="recipe")
+
+    recipe_ingredients: Mapped[List["Recipe_ingredient"]] = relationship(back_populates="recipe")
+
 
     def __repr__(self):
         return 'Recipe: ' + self.name 
@@ -190,6 +195,24 @@ class Utensil_recipe(db.Model):
             "recipe_name":self.recipe.name,
             "utensil_id": self.utensil_id,
             "utensil_name":self.utensil.name
+        }
+    
+
+
+class Recipe_ingredient(db.Model):
+    
+    id: Mapped[int] = mapped_column(primary_key=True)
+    recipe_id: Mapped[int] = mapped_column(ForeignKey("recipe.id"), nullable=False)
+    ingredient_id: Mapped[int] = mapped_column(ForeignKey("ingredient.id"), nullable=False)
+
+    recipe: Mapped["Recipe"] = relationship("Recipe", back_populates="recipe_ingredient")
+    ingredient: Mapped["Ingredient"] = relationship("Ingredient", back_populates="recipe_ingredient")
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "recipe_id": self.recipe_id,
+            "ingredient_id": self.ingredient_id,
         }
 
 
