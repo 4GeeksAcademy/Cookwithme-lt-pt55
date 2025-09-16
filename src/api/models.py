@@ -52,6 +52,8 @@ class Utensil(db.Model):
     description: Mapped[str] = mapped_column(nullable=False)
     url_img: Mapped[str] =  mapped_column(String(120), unique=True, nullable=False)
 
+    utensil_recipes: Mapped[List["Utensil_recipe"]] = relationship(back_populates="utensil")
+
     def serialize(self):
         return {
             "id": self.id,
@@ -117,7 +119,7 @@ class Recipe(db.Model):
     chef_id: Mapped[int] = mapped_column(ForeignKey("chef.id"))
     chef: Mapped["Chef"] = relationship(back_populates="recipe")
 
-   
+    utensil_recipes: Mapped[List["Utensil_recipe"]] = relationship(back_populates="recipe")
 
     def __repr__(self):
         return 'Recipe: ' + self.name 
@@ -175,24 +177,19 @@ class Calification(db.Model):
 class Utensil_recipe(db.Model):
     
     id: Mapped[int] = mapped_column(primary_key=True)
+    recipe_id: Mapped[int] = mapped_column(ForeignKey("recipe.id"), nullable=False)
+    utensil_id: Mapped[int] = mapped_column(ForeignKey("utensil.id"), nullable=False)
 
-class Calification(db.Model):
-    id: Mapped[int] = mapped_column(primary_key=True)
-    stars: Mapped[str] = mapped_column(String(120), nullable=False)
-    
-    recipe_id: Mapped[int] = mapped_column(Integer, ForeignKey("recipe.id"), nullable=False)
-    recipe = relationship("Recipe", back_populates="recipe_califications")
-
-    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("user.id"), nullable=False)
-    user = relationship("User", back_populates="user_califications")
+    recipe: Mapped["Recipe"] = relationship("Recipe", back_populates="utensil_recipes")
+    utensil: Mapped["Utensil"] = relationship("Utensil", back_populates="utensil_recipes")
 
     def serialize(self):
         return {
             "id": self.id,
-            "stars": self.stars,
             "recipe_id": self.recipe_id,
-            "user_id": self.user_id,
-            "user": self.user.serialize() if self.user else None,
-            "recipe": self.recipe.serialize() if self.recipe else None
+            "recipe_name":self.recipe.name,
+            "utensil_id": self.utensil_id,
+            "utensil_name":self.utensil.name
         }
+
 
