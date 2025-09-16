@@ -130,7 +130,8 @@ class Recipe(db.Model):
             "description": self.description,
             "name": self.name,
             "img": self.img,
-            "preparation": self.preparation
+            "preparation": self.preparation,
+            "chef_id": self.chef_id
         }      
     
 class Answer(db.Model):
