@@ -58,12 +58,6 @@ import { LoginChef } from "./pages/LoginChef";
 import { HomeChef } from "./pages/HomeChef";
 import { SignupChef } from "./pages/SignupChef";
 
-import { Ingrediente } from "./pages/Ingrediente";
-import { SingleIngrediente } from "./pages/SingleIngrediente";
-import NewIngrediente from "./pages/NewIngrediente";
-import { EditIngrediente } from "./pages/EditIngrediente";
-import { EditUtensilio } from "./pages/EditUtensilio";
-
 import { RecipeIngredient } from "./pages/RecipeIngredient";
 import { SingleRecipeIngredient } from "./pages/SingleRecipeIngredient";
 import NewRecipeIngredient from "./pages/NewRecipeIngredient";
