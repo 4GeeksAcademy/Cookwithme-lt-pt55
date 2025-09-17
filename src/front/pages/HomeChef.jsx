@@ -11,7 +11,14 @@ export const HomeChef = () => {
     const backendUrl = import.meta.env.VITE_BACKEND_URL
 
     function getChefRecipes() {
-        fetch(backendUrl + `/api/recipes/`)
+        
+        const token = localStorage.getItem("tokenChef")
+
+        fetch(backendUrl + `/api/chef_recipes`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 console.log(data)
