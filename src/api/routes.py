@@ -546,7 +546,7 @@ def delete_favrecipe(favrecipes_id):
 @api.route('/recipe/fav_recipes', methods=['POST'])
 def add_favrecipes():
      favrecipes_body = request.get_json()
-     favrecipes = Fav_recipe(stars=favrecipes_body["stars"])
+     favrecipes = Fav_recipe(user_id=favrecipes_body["user_id"],recipe_id=favrecipes_body["recipe_id"])
      db.session.add(favrecipes)
      db.session.commit()
      admin_response_body = {

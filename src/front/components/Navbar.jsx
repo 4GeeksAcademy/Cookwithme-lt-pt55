@@ -74,8 +74,26 @@ export const Navbar = () => {
 					<Link to="/utensilio_receta">
 						<button className="btn btn-danger">Agregar utensilio a receta</button>
 					</Link>
+		
 				</div>
-			</div>
+
+					<div className="dropdown">
+  <button className="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Fav Recipes <span className="badge text-bg-secondary"> {store.favItems.length} </span>
+  </button>
+  <ul className="dropdown-menu">
+    {store.favItems.map((favorite,index)=><li key={index} className="dropdown-item">
+      {favorite} <span > <button type="button" onClick={()=> dispatch({
+        type:'toggle_favitem',
+				payload: favorite
+      })} class="btn"> X </button> </span>
+      </li>)}
+  
+  </ul>
+</div>
+</div>
+
+			
 		</nav>
 	);
 };

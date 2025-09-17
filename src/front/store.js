@@ -13,6 +13,7 @@ export const initialStore=()=>{
         background: null,
       }
     ],
+     favItems : [],
     authChef: false
   }
 }
@@ -41,5 +42,38 @@ export default function storeReducer(store, action = {}) {
       };
     default:
       throw Error('Unknown action.');
+
+        case 'add_favorite':
+
+      return {
+        ...store,
+        favItems: action.payload
+       };
+
+      case 'toggle_favitem':
+
+      let updatedFavs =[]
+
+       if(store.favItems.includes(action.payload)){
+        updatedFavs = store.favItems.filter((favorite)=> favorite != action.payload)
+       }else{
+
+         updatedFavs =[...store.favItems,action.payload]
+       }
+
+
+      return {
+        ...store,
+        favItems: updatedFavs
+       };
+
+       case 'delete_favitem':
+
+        let dropdowndelete =[]
+
+       if(store.favItems.includes(action.payload)){
+        dropdowndelete = store.favItems.filter((favorite)=> favorite != action.payload)
+       }
+
   }    
 }

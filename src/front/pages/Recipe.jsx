@@ -1,9 +1,12 @@
 import { Link, useParams } from "react-router-dom";  // To use link for navigation and useParams to get URL parameters
 import PropTypes from "prop-types";  // To define prop types for this component
 import React, { useEffect, useState } from "react"
+import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 // Define and export the Single component which displays individual item details.
 export const Recipe = props => {
+
+    const {store, dispatch} =useGlobalReducer()
 
     const [recipe, setRecipe] = useState([])
 
@@ -20,7 +23,7 @@ export const Recipe = props => {
             method: 'DELETE'
         }
 
-        fetch(backendUrl + `/api/recipes/` + recipe_id, requestOptions)
+        fetch(backendUrl + '/api/recipes/' + recipe_id, requestOptions)
             .then(response => response.json())
             .then(data => {
                 console.log(data)
@@ -54,6 +57,10 @@ export const Recipe = props => {
                         <button className="btn btn-warning">Edit recipe</button>
                     </Link>
                     <button className="btn btn-danger" onClick={() => deleteRecipe(recipe.id)}>Delete recipe</button>
+                    <button className="btn btn-warning" onClick={() => dispatch({
+                        type: 'toggle_favitem',
+                        payload: recipe.name
+                    })}>Fav</button>
                 </ul>
             )}
         </div>
