@@ -6,7 +6,7 @@ from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
 from flask_swagger import swagger
 from api.utils import APIException, generate_sitemap
-from api.models import db, Chef
+from api.models import db, Chef,User
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
@@ -90,6 +90,21 @@ def login():
         return jsonify({"msg": "Bad email or password"}), 401
     print(chef)
     if password != chef.password:
+        return jsonify({"msg": "Bad email or password"}), 401
+
+    access_token = create_access_token(identity=email)
+    return jsonify(access_token=access_token)
+
+@app.route("/login_user", methods=["POST"])
+def loginUser():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+
+    user = User.query.filter_by(email = email).first()
+    if user is None: 
+        return jsonify({"msg": "Bad email or password"}), 401
+    print(user)
+    if password != user.password:
         return jsonify({"msg": "Bad email or password"}), 401
 
     access_token = create_access_token(identity=email)

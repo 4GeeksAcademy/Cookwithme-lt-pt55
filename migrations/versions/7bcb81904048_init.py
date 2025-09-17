@@ -1,7 +1,8 @@
-"""empty message
-Revision ID: 1fb000e8d0e9
+"""init
+
+Revision ID: 7bcb81904048
 Revises: 
-Create Date: 2025-09-11 23:13:36.487064
+Create Date: 2025-09-16 18:37:49.331471
 
 """
 from alembic import op
@@ -9,8 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-
-revision = '1fb000e8d0e9'
+revision = '7bcb81904048'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,11 +24,6 @@ def upgrade():
     sa.Column('password', sa.String(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('answer',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('text', sa.String(), nullable=False),
-    sa.PrimaryKeyConstraint('id')
-    )
     op.create_table('chef',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('email', sa.String(length=120), nullable=False),
@@ -36,8 +31,7 @@ def upgrade():
     sa.Column('name', sa.String(length=120), nullable=False),
     sa.Column('rating', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('email'),
-    sa.UniqueConstraint('name')
+    sa.UniqueConstraint('email')
     )
     op.create_table('ingredient',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -48,16 +42,12 @@ def upgrade():
     sa.UniqueConstraint('image'),
     sa.UniqueConstraint('name')
     )
-    op.create_table('question',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('text', sa.String(), nullable=False),
-    sa.PrimaryKeyConstraint('id')
-    )
     op.create_table('user',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('email', sa.String(length=120), nullable=False),
+    sa.Column('username', sa.String(length=120), nullable=False),
+    sa.Column('name', sa.String(length=120), nullable=False),
     sa.Column('password', sa.String(), nullable=False),
-    sa.Column('is_active', sa.Boolean(), nullable=False),
+    sa.Column('email', sa.String(length=120), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('utensil',
@@ -72,14 +62,20 @@ def upgrade():
     op.create_table('recipe',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('description', sa.String(length=120), nullable=False),
-    sa.Column('img', sa.String(), nullable=False),
+    sa.Column('img', sa.String(length=120), nullable=False),
     sa.Column('name', sa.String(length=120), nullable=False),
     sa.Column('preparation', sa.String(length=120), nullable=False),
     sa.Column('chef_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['chef_id'], ['chef.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('description'),
-    sa.UniqueConstraint('name')
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('utensil_user',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('utensil_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['utensil_id'], ['utensil.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('calification',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -90,18 +86,55 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_table('question',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('text', sa.String(), nullable=False),
+    sa.Column('recipe_id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['recipe_id'], ['recipe.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('recipe_ingredient',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('recipe_id', sa.Integer(), nullable=False),
+    sa.Column('ingredient_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['ingredient_id'], ['ingredient.id'], ),
+    sa.ForeignKeyConstraint(['recipe_id'], ['recipe.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('utensil_recipe',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('recipe_id', sa.Integer(), nullable=False),
+    sa.Column('utensil_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['recipe_id'], ['recipe.id'], ),
+    sa.ForeignKeyConstraint(['utensil_id'], ['utensil.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('answer',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('text', sa.String(), nullable=False),
+    sa.Column('question_id', sa.Integer(), nullable=False),
+    sa.Column('chef_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['chef_id'], ['chef.id'], ),
+    sa.ForeignKeyConstraint(['question_id'], ['question.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     # ### end Alembic commands ###
 
 
 def downgrade():
     # ### commands auto generated by Alembic - please adjust! ###
+    op.drop_table('answer')
+    op.drop_table('utensil_recipe')
+    op.drop_table('recipe_ingredient')
+    op.drop_table('question')
     op.drop_table('calification')
+    op.drop_table('utensil_user')
     op.drop_table('recipe')
     op.drop_table('utensil')
     op.drop_table('user')
-    op.drop_table('question')
     op.drop_table('ingredient')
     op.drop_table('chef')
-    op.drop_table('answer')
     op.drop_table('admin_user')
     # ### end Alembic commands ###
