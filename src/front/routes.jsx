@@ -9,50 +9,78 @@ import { Layout } from "./pages/Layout";
 import { Home } from "./pages/Home";
 import { Single } from "./pages/Single";
 import { Demo } from "./pages/Demo";
+
 import { Chef } from "./pages/Chef";
 import { SingleChef } from "./pages/SingleChef";
+import NewChef from "./pages/NewChef";
+import { EditChef } from "./pages/EditChef";
+
 import { Ingrediente } from "./pages/Ingrediente";
 import { SingleIngrediente } from "./pages/SingleIngrediente";
 import NewIngrediente from "./pages/NewIngrediente";
-import { EditUtensilio } from "./pages/EditUtensilio";
 import { EditIngrediente } from "./pages/EditIngrediente";
+import { EditUtensilio } from "./pages/EditUtensilio";
+
 import NewUtensilio from "./pages/NewUtensilio";
 import { SingleUtensilio } from "./pages/SingleUtensilio";
 import { Utensilio } from "./pages/Utensilio";
-import NewChef from "./pages/NewChef";
+
 import NewAdmin from "./pages/Admins/NewAdmin";
 import { AdminList } from "./pages/Admins/AdminList";
 import EditAdmin from "./pages/Admins/EditAdmin";
+import { SingleAdmin } from "./pages/Admins/SingleAdmin";
+
 import { Question } from "./pages/Question";
 import { SingleQuestion } from "./pages/SingleQuestion";
 import NewQuestion from "./pages/NewQuestion";
 import { EditQuestion } from "./pages/EditQuestion";
-import { SingleAdmin } from "./pages/Admins/SingleAdmin";
-import { EditChef } from "./pages/EditChef";
+
 import { Answer } from "./pages/Answer";
 import { SingleAnswer } from "./pages/SingleAnswer";
 import NewAnswer from "./pages/NewAnswer";
 import { EditAnswer } from "./pages/EditAnswer";
+
 import { Recipe } from "./pages/Recipe";
 import { SingleRecipe } from "./pages/SingleRecipe";
 import NewRecipe from "./pages/NewRecipe";
+import { EditRecipe } from "./pages/EditRecipe";
 
 import {UtensilioReceta} from "./pages/UtensilToRecipe";
 import NewUtensilToRecipe from "./pages/NewUtensilToRecipe";
 import { SingleUtensilRecipe } from "./pages/SingleUtensilRecipe";
 import { EditUtensilToRecipe } from "./pages/EditUtensilToRecipe";
 
-
-import { EditRecipe } from "./pages/EditRecipe";
 import { Califications } from "./pages/Califications/Reviews";
 import NewCalification from "./pages/Califications/NewReview";
 import EditCalification from "./pages/Califications/EditReview";
+
 import { LoginChef } from "./pages/LoginChef";
 import { HomeChef } from "./pages/HomeChef";
 import { SignupChef } from "./pages/SignupChef";
 
+import { RecipeIngredient } from "./pages/RecipeIngredient";
+import { SingleRecipeIngredient } from "./pages/SingleRecipeIngredient";
+import NewRecipeIngredient from "./pages/NewRecipeIngredient";
+import { EditRecipeIngredient } from "./pages/EditRecipeIngredient";
 
+import { UtensilToUser } from "./pages/UtensilToUser";
+import NewUtensilToUser from "./pages/NewUtensilToUser";
+import { SingleUtensilToUser } from "./pages/SingleUtensilToUser";
+import { EditUtensilToUser } from "./pages/EditUtensilToUser";
 
+import { Users } from "./pages/Users";
+import NewUser from "./pages/NewUser";
+import { SingleUser } from "./pages/SingleUser";
+import { EditUser } from "./pages/EditUser";
+
+import { LoginUser } from "./pages/LoginUser";
+import { HomeUser } from "./pages/HomeUser";
+import { SignupUser } from "./pages/SignupUser";
+
+import { IngredientUser } from "./pages/IngredientUser";
+import { SingleIngredientUser } from "./pages/SingleIngredientUser";
+import NewIngredientUser from "./pages/NewIngredientUser";
+import { EditIngredientUser } from "./pages/EditIngredientUser";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -77,11 +105,7 @@ export const router = createBrowserRouter(
       <Route path="/utensilios/:utensilio_id" element={<SingleUtensilio />} />
       <Route path="/add_utensilio" element={<NewUtensilio />} />
       <Route path="/utensilios/:utensilio_id/edit" element={<EditUtensilio />} />
-          {/* Utensilios */}
-          <Route path="/utensilios" element={<Utensilio />} />
-          <Route path="/utensilios/:utensilio_id" element={<SingleUtensilio />} />
-          <Route path="/add_utensilio" element={<NewUtensilio />} />
-          <Route path="/utensilios/:utensilio_id/edit" element={<EditUtensilio />} />   
+ 
  
                     {/* utensilios en recetas */}
           <Route path="/utensilio_receta" element={<UtensilioReceta />} /> 
@@ -101,6 +125,10 @@ export const router = createBrowserRouter(
         <Route path= "/login_chef" element={<LoginChef />} />
         <Route path= "/test" element={<HomeChef />} />
         <Route path= "/signup_chef" element={<SignupChef />} />
+
+        <Route path= "/login_user" element={<LoginUser />} />
+        <Route path= "/home_user" element={<HomeUser />} />
+        <Route path= "/signup_user" element={<SignupUser />} />
 
       <Route path="/chef" element={<Chef />} />
       <Route path="/chef/:chef_id" element={<SingleChef />} />
@@ -131,6 +159,28 @@ export const router = createBrowserRouter(
       <Route path="/califications" element={<Califications />} />
       <Route path="/add_califications" element={<NewCalification />} />
       <Route path="/califications/:review_id/edit" element={<EditCalification />} />
+
+      <Route path="/recipe_ingredients" element={<RecipeIngredient />} />
+      <Route path="/recipe_ingredients/:ri_id" element={<SingleRecipeIngredient />} />
+      <Route path="/add_recipe_ingredient" element={<NewRecipeIngredient />} />
+      <Route path="/recipe_ingredients/:ri_id/edit" element={<EditRecipeIngredient />} />
+        
+    
+      <Route path="/utensil_user" element={<UtensilToUser />} />
+      <Route path="/add_utensil_to_user" element={<NewUtensilToUser />} />
+      <Route path="/utensiluser/:utensiluser_id" element={<SingleUtensilToUser />} />
+      <Route path="/utensiluser/:utensiluser_id/edit" element={<EditUtensilToUser />} />
+
+      <Route path="/users" element={<Users />} />
+      <Route path="users/:user_id" element={<SingleUser />} />
+      <Route path="users/:user_id/edit" element={<EditUser />} />
+      <Route path="add_user" element={<NewUser />} />
+
+      <Route path="/ingredient_users" element={<IngredientUser />} />
+      <Route path="/ingredient_users/:ingredient_user_id" element={<SingleIngredientUser />} />
+      <Route path="/add_ingredient_user" element={<NewIngredientUser />} />
+      <Route path="/ingredient_users/:ingredient_user_id/edit" element={<EditIngredientUser />} />
+
     </Route>
   )
 );
