@@ -7,17 +7,15 @@ export const SingleRecipe = props => {
 
   const [recipe, setRecipe] = useState([])
 
-  const { store, dispatch } = useGlobalReducer()
-
   const backendUrl = import.meta.env.VITE_BACKEND_URL
+
+  const { store, dispatch } = useGlobalReducer()
 
   function getRecipe() {
     fetch(backendUrl + `/api/recipes/` + recipe_id,)
       .then(response => response.json())
       .then(data => setRecipe(data))
   }
-
-
 
   useEffect(() => {
     getRecipe()
@@ -32,14 +30,14 @@ export const SingleRecipe = props => {
         <h1 className="display-4">Recipe Name: {recipe.name}</h1>
         <h1 className="display-4">Recipe Description: {recipe.description}</h1>
         <h1 className="display-4">Recipe Preparation: {recipe.preparation}</h1>
-        <h1 className="display-4">Recipe Image: {recipe.img}</h1>
-        {store.authChef ? 
+        <img src={recipe.img} alt="" />
+        {store.authChef ?
           <Link to="/chef_home">
             <button className="btn btn-primary">Back to Home</button>
           </Link>
           :
           null}
-      </div> 
+      </div>
     </>
   );
 };

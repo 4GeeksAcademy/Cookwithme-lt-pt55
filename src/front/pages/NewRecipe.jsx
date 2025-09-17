@@ -24,7 +24,7 @@ const NewRecipe = () => {
                 console.log(data)
                 setChefs(data)
             }
-        )
+            )
     }
 
 
@@ -40,7 +40,7 @@ const NewRecipe = () => {
                     "name": name,
                     "description": description,
                     "preparation": preparation,
-                    "img": img,
+                    "img": "https://picsum.photos/200/300",
                     "chef_id": currentChef.id
 
                 }
@@ -83,19 +83,25 @@ const NewRecipe = () => {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">Imagen</label>
-                    <input value={img} onChange={(e) => setImg(e.target.value)} type="text" className="form-control" id="exampleInputImage" />
+                    <input 
+                        value={"https://picsum.photos/200/300"} 
+                        onChange={(e) => setImg(e.target.value)} 
+                        type="text" 
+                        className="form-control" 
+                        id="exampleInputImage" 
+                    />
                 </div>
 
-                    <div className="dropdown">
-                        <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {!currentChef ? "Select chef" : "Chef: " + currentChef.name}
-                        </button>
-                        <ul className="dropdown-menu">
+                <div className="dropdown">
+                    <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {!currentChef ? "Select chef" : "Chef: " + currentChef.name}
+                    </button>
+                    <ul className="dropdown-menu">
                         {chefs.map((chef) =>
-                            <li key={chef.id} onClick={()=>setCurrentChef(chef)}><button className="dropdown-item" type="button">{chef.name}</button></li>
+                            <li key={chef.id} onClick={() => setCurrentChef(chef)}><button className="dropdown-item" type="button">{chef.name}</button></li>
                         )}
-                        </ul>
-                    </div>
+                    </ul>
+                </div>
 
                 <button type="submit" className="btn btn-primary" onClick={sendData}>Create</button>
                 <Link to="/recipes">

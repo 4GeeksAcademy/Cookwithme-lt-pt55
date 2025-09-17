@@ -12,11 +12,7 @@ export const Recipe = props => {
     function getRecipes() {
         fetch(backendUrl + `/api/recipes/`)
             .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                setRecipe(data)
-            }
-        )
+            .then(data => setRecipe(data))
     }
 
     function deleteRecipe(recipe_id) {
