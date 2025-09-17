@@ -8,74 +8,77 @@ export const Navbar = () => {
 
 	const { store, dispatch } = useGlobalReducer()
 
-	function logout(){
+	function logout() {
 		// limpiar token 
 		localStorage.removeItem("tokenChef")
 		// pasar auth a false
 		dispatch({ type: "set_auth_chef", payload: false })
 		// redireccioar a login
 		navigate("/login_chef")
-		
+
 	}
 
 	return (
 		<nav className="navbar navbar-light bg-light">
-			<div className="container">
-				<Link to="/">
-					<span className="navbar-brand mb-0 h1">React Boilerplate</span>
-				</Link>
-				<div className="ml-auto">
-					<Link to="/demo">
-						<button className="btn btn-primary">Check the Context in action</button>
+			{store.authChef ? <button className="btn btn-danger" onClick={logout}>Logout</button>
+				:
+				<div className="container">
+					<Link to="/">
+						<span className="navbar-brand mb-0 h1">React Boilerplate</span>
 					</Link>
+					<div className="ml-auto">
+						<Link to="/demo">
+							<button className="btn btn-primary">Check the Context in action</button>
+						</Link>
+					</div>
+
+
+					<div className="ml-auto">
+						<Link to="/chefs">
+							<button className="btn btn-primary">Chefs</button>
+						</Link>
+					</div>
+					<div className="ml-auto">
+						<Link to="/recipes">
+							<button className="btn btn-primary">Recipes</button>
+						</Link>
+					</div>
+					<div className="ml-auto">
+						<Link to="/ingredientes">
+							<button className="btn btn-primary">Ingredientes</button>
+						</Link>
+					</div>
+					<div className="ml-auto">
+						<Link to="/utensilios">
+							<button className="btn btn-danger">Utensilios</button>
+						</Link>
+					</div>
+					<div className="ml-auto">
+						<Link to="/adminuser">
+							<button className="btn btn-primary">Admins</button>
+						</Link>
+					</div>
+					<div className="ml-auto">
+						<Link to="/questions">
+							<button className="btn btn-primary">Questions</button>
+						</Link>
+					</div>
+					<div className="ml-auto">
+						<Link to="/answers">
+							<button className="btn btn-primary">Answer</button>
+						</Link>
+					</div>
+					<div className="ml-auto">
+						<Link to="/califications">
+							<button className="btn btn-primary">Califications</button>
+						</Link>
+						<Link to="/utensilio_receta">
+							<button className="btn btn-danger">Agregar utensilio a receta</button>
+						</Link>
+					</div>
 				</div>
-				
-				{store.authChef ? <button className="btn btn-danger" onClick={logout}>Logout</button> : null}
-				
-				<div className="ml-auto">
-					<Link to="/chefs">
-						<button className="btn btn-primary">Chefs</button>
-					</Link>
-				</div>
-				<div className="ml-auto">
-					<Link to="/recipes">
-						<button className="btn btn-primary">Recipes</button>
-					</Link>
-				</div>
-				<div className="ml-auto">
-					<Link to="/ingredientes">
-						<button className="btn btn-primary">Ingredientes</button>
-					</Link>
-				</div>
-				<div className="ml-auto">
-					<Link to="/utensilios">
-						<button className="btn btn-danger">Utensilios</button>
-					</Link>
-				</div>
-				<div className="ml-auto">
-					<Link to="/adminuser">
-						<button className="btn btn-primary">Admins</button>
-					</Link>
-				</div>
-				<div className="ml-auto">
-					<Link to="/questions">
-						<button className="btn btn-primary">Questions</button>
-					</Link>
-				</div>
-				<div className="ml-auto">
-					<Link to="/answers">
-						<button className="btn btn-primary">Answer</button>
-					</Link>
-				</div>
-				<div className="ml-auto">
-					<Link to="/califications">
-						<button className="btn btn-primary">Califications</button>
-					</Link>
-					<Link to="/utensilio_receta">
-						<button className="btn btn-danger">Agregar utensilio a receta</button>
-					</Link>
-				</div>
-			</div>
+			}
+
 		</nav>
 	);
 };
