@@ -46,8 +46,8 @@ export const HomeChef = () => {
                         <button className="btn btn-success">Add new recipe</button>
                     </Link>
                     {chefRecipe.map((recipe) =>
-                        <>
-                            <div className="text-center mt-4" key={recipe.id}>
+                        <React.Fragment key={recipe.id}>
+                            <div className="text-center mt-4">
                                 <h1>Name: {recipe.name}</h1>
                                 <p>Description: {recipe.description}</p>
                                 <p>Preparation: {recipe.preparation}</p>
@@ -64,7 +64,7 @@ export const HomeChef = () => {
                                 </Link>
                                 <button className="btn btn-danger" onClick={() => deleteChefRecipe(recipe.id)}>Delete recipe</button>
                             </div>
-                        </>
+                        </React.Fragment>
                     )}
                 </>
                 :

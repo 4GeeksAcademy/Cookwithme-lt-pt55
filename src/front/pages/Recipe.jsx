@@ -43,7 +43,7 @@ export const Recipe = props => {
             </Link>
 
             {recipe.map((recipe) =>
-                <>
+                <React.Fragment key={recipe.id}>
                     <div className="text-center mt-4" key={recipe.id}>
                         <h1>Name: {recipe.name}</h1>
                         <p>Description: {recipe.description}</p>
@@ -61,7 +61,7 @@ export const Recipe = props => {
                         </Link>
                         <button className="btn btn-danger" onClick={() => deleteRecipe(recipe.id)}>Delete recipe</button>
                     </div>
-                </>
+                </React.Fragment>
             )}
         </div>
     );
