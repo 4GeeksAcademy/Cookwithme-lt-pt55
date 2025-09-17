@@ -842,32 +842,36 @@ def update_utensil_user(utensil_user_id):
     }), 200
 
     #----------------login user
-# @api.route("/login_user", methods=["POST"])
-# def login_as_user():
-#     email = request.json.get("email", None)
-#     password = request.json.get("password", None)
+@api.route("/login_user", methods=["POST"])
+def login_as_user():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
 
-#     user = User.query.filter_by(email=email).first()
-#     if user is None:
-#         return jsonify({"msg": "Bad email or password"}), 401
-#     print(user)
-#     if password != user.password:
-#         return jsonify({"msg": "Bad email or password"}), 401
+    user = User.query.filter_by(email=email).first() #consulta a la tabla de class
+    if user is None:
+        return jsonify({"msg": "Bad email or password"}), 401
+    print(user)
+    if password != user.password:
+        return jsonify({"msg": "Bad email or password"}), 401
 
-#     access_token = create_access_token(identity=email)
-#     return jsonify(access_token=access_token)
+    access_token = create_access_token(identity=email)
+    return jsonify(access_token=access_token)
 
 
-# @api.route('/signup_user', methods=['POST'])
-# def signup_as_user():
-#     body = request.get_json()
-#     user = User.query.filter_by(email=body["email"]).first()
-#     if user:
-#         return jsonify({"msg": "user already exist"}), 401
+@api.route('/signup_user', methods=['POST'])
+def signup_as_user():
+    body = request.get_json()
+    user = User.query.filter_by(email=body["email"]).first()
+    if user:
+        return jsonify({"msg": "user already exist"}), 401
 
-#     user = User(name=body["name"], email=body["email"],
-#                 password=body["password"], rating=body["rating"])
-#     db.session.add(user)
-#     db.session.commit()
-#     access_token = create_access_token(identity=body["email"])
-#     return jsonify(access_token=access_token), 200
+    user = User(
+        name=body["name"],
+        email=body["email"],
+        password=body["password"]
+    )
+    db.session.add(user)
+    db.session.commit()
+
+    access_token = create_access_token(identity=body["email"])
+    return jsonify(access_token=access_token), 200
