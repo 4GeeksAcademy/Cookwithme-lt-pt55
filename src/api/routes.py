@@ -290,6 +290,21 @@ def get_all_recipes():
     results = list(map(lambda recipe: recipe.serialize(), all_recipes))
     return jsonify(results), 200
 
+@api.route('/recipes', methods=['GET'])
+@jwt_required()
+def get_current_chef_recipes():
+    current_user = get_jwt_identity()
+    user = User.query.filter_by(email= current_user).first()
+    print("user: " + user)
+    if not user:
+        return jsonify({"msg": "user not found"}), 400
+    recipes = Recipe.query.filter_by(chef_id= user.id).all()
+    print("recipes: " + recipes)
+    # all_recipes = Recipe.query.all()
+    results = list(map(lambda recipe: recipe.serialize(), recipes))
+    print("results: " + results)
+    return jsonify(results), 200
+
 
 @api.route('/recipes/<int:recipe_id>', methods=['GET'])
 def get_recipe(recipe_id):
