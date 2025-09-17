@@ -43,18 +43,25 @@ export const Recipe = props => {
             </Link>
 
             {recipe.map((recipe) =>
-                <ul key={recipe.id}>
-                    <li>Name: {recipe.name}</li>
-                    <li>Description: {recipe.description}</li>
-                    <li><img src={recipe.img} alt="recipe image" className="img-fluid rounded float-start" /></li>
-                    <Link to={"/recipes/" + recipe.id}>
-                        <button className="btn btn-primary">See recipe</button>
-                    </Link>
-                    <Link to={"/recipes/" + recipe.id + "/update"}>
-                        <button className="btn btn-warning">Edit recipe</button>
-                    </Link>
-                    <button className="btn btn-danger" onClick={() => deleteRecipe(recipe.id)}>Delete recipe</button>
-                </ul>
+                <>
+                    <div className="text-center mt-4" key={recipe.id}>
+                        <h1>Name: {recipe.name}</h1>
+                        <p>Description: {recipe.description}</p>
+                        <p>Preparation: {recipe.preparation}</p>
+                        <div className="">
+                            <img src={recipe.img} alt="recipe image" className="h-25 d-inline-block" />
+                        </div>
+                    </div>
+                    <div className="text-center mt-4">
+                        <Link to={"/recipes/" + recipe.id}>
+                            <button className="btn btn-primary">See recipe</button>
+                        </Link>
+                        <Link to={"/recipes/" + recipe.id + "/update"}>
+                            <button className="btn btn-warning">Edit recipe</button>
+                        </Link>
+                        <button className="btn btn-danger" onClick={() => deleteRecipe(recipe.id)}>Delete recipe</button>
+                    </div>
+                </>
             )}
         </div>
     );

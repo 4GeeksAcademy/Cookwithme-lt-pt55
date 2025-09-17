@@ -17,7 +17,7 @@ export const HomeChef = () => {
                 console.log(data)
                 setChefRecipe(data)
             }
-        )
+            )
     }
 
     // function deleteChefRecipe(recipe_id) {
@@ -38,7 +38,7 @@ export const HomeChef = () => {
     }, [])
 
     return (
-        <div className="text-center mt-5">
+        <div className="container text-center mt-5">
             {store.authChef ?
                 <>
                     <h1 className="display-4">Hello, welcome chef!!</h1>
@@ -46,19 +46,25 @@ export const HomeChef = () => {
                         <button className="btn btn-success">Add new recipe</button>
                     </Link>
                     {chefRecipe.map((recipe) =>
-                        <ul key={recipe.id}>
-                            <li>Name: {recipe.name}</li>
-                            <li>Description: {recipe.description}</li>
-                            <li>Preparation: {recipe.preparation}</li>
-                            <li><img src={recipe.img} alt="recipe image" className="img-fluid rounded float-start" /></li>
-                            <Link to={"/recipes/" + recipe.id}>
-                                <button className="btn btn-primary">See recipe</button>
-                            </Link>
-                            <Link to={"/recipes/" + recipe.id + "/update"}>
-                                <button className="btn btn-warning">Edit recipe</button>
-                            </Link>
-                            <button className="btn btn-danger" onClick={() => deleteChefRecipe(recipe.id)}>Delete recipe</button>
-                        </ul>
+                        <>
+                            <div className="text-center mt-4" key={recipe.id}>
+                                <h1>Name: {recipe.name}</h1>
+                                <p>Description: {recipe.description}</p>
+                                <p>Preparation: {recipe.preparation}</p>
+                                <div className="">
+                                    <img src={recipe.img} alt="recipe image" className="h-25 d-inline-block" />
+                                </div>
+                            </div>
+                            <div className="text-center mt-4">
+                                <Link to={"/recipes/" + recipe.id}>
+                                    <button className="btn btn-primary">See recipe</button>
+                                </Link>
+                                <Link to={"/recipes/" + recipe.id + "/update"}>
+                                    <button className="btn btn-warning">Edit recipe</button>
+                                </Link>
+                                <button className="btn btn-danger" onClick={() => deleteChefRecipe(recipe.id)}>Delete recipe</button>
+                            </div>
+                        </>
                     )}
                 </>
                 :
