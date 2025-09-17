@@ -13,11 +13,12 @@ class User(db.Model):
     password: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(String(120), nullable=False)
 
-    
-
     questions: Mapped[List["Question"]] = relationship(back_populates="user")
     utensil_users: Mapped[List["Utensil_user"]]  = relationship(back_populates="user")    
     calification : Mapped[List["Calification"]] = relationship(back_populates="user")  
+
+    ingredient_users: Mapped[List["Ingredient_user"]] = relationship(back_populates="user")
+
     def __repr__(self):
         return '<User ' + self.email + ' >'
 
@@ -78,6 +79,8 @@ class Ingredient(db.Model):
     image: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
 
     recipe_ingredients: Mapped[List["Recipe_ingredient"]] = relationship(back_populates="ingredient")
+
+    ingredient_users: Mapped[List["Ingredient_user"]] = relationship(back_populates="ingredient")
 
     def __repr__(self):
         return f'<Ingredient {self.name}>'
@@ -259,4 +262,23 @@ class Utensil_user(db.Model):
             "user_email": self.user.email,
             "utensil_id": self.utensil_id,
             "utensil_name": self.utensil.name
+        }
+    
+class Ingredient_user(db.Model):
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    ingredient_id: Mapped[int] = mapped_column(ForeignKey("ingredient.id"), nullable=False)
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
+
+    ingredient: Mapped["Ingredient"] = relationship("Ingredient", back_populates="ingredient_users")
+    user: Mapped["User"] = relationship("User", back_populates="ingredient_users")
+
+    def __repr__(self):
+        return f'<IngredientUser ingredient_id={self.ingredient_id} user_id={self.user_id}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "ingredient_id": self.ingredient_id,
+            "user_id": self.user_id
         }
