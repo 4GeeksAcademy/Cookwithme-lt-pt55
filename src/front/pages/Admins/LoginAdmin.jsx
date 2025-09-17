@@ -13,7 +13,7 @@ export const LoginAdmin = () => {
     return (
         <div className="text-center mt-5">
             <h1 className="display-4">Welcome back Admin</h1>
-            {store.authChef ? <Navigate to='/testadm'/> : <FormAdmin/>}
+            {store.authAdmin ? <Navigate to='/testadm'/> : <FormAdmin/>}
         </div>
     );
 }; 

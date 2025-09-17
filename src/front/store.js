@@ -15,7 +15,7 @@ export const initialStore=()=>{
     ],
      favItems : [],
     authChef: false,
-    authAdmin: false
+    authAdmin: false,
   }
 }
 
