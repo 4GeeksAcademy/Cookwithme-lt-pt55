@@ -1,10 +1,13 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react";
+import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 const NewRecipe = () => {
 
     const navigate = useNavigate()
+
+    const { store, dispatch } = useGlobalReducer()
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL
 
@@ -91,7 +94,7 @@ const NewRecipe = () => {
                         id="exampleInputImage" 
                     />
                 </div>
-
+            
                 <div className="dropdown">
                     <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {!currentChef ? "Select chef" : "Chef: " + currentChef.name}
@@ -102,11 +105,16 @@ const NewRecipe = () => {
                         )}
                     </ul>
                 </div>
-
                 <button type="submit" className="btn btn-primary" onClick={sendData}>Create</button>
-                <Link to="/recipes">
-                    <button className="btn btn-primary">Back to recipes</button>
-                </Link>
+                {store.authChef ?
+                    <Link to="/chef_home">
+                        <button className="btn btn-primary">Back to home</button>
+                    </Link>
+                    :   
+                    <Link to="/recipes">
+                        <button className="btn btn-primary">Back to recipes</button>
+                    </Link>
+                }
             </form>
         </div>
     )

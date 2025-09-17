@@ -51,6 +51,7 @@ export const HomeChef = () => {
                                 <h1>Name: {recipe.name}</h1>
                                 <p>Description: {recipe.description}</p>
                                 <p>Preparation: {recipe.preparation}</p>
+                                <p>Chef id: {recipe.chef_id}</p>
                                 <div className="">
                                     <img src={recipe.img} alt="recipe image" className="h-25 d-inline-block" />
                                 </div>
@@ -62,7 +63,6 @@ export const HomeChef = () => {
                                 <Link to={"/recipes/" + recipe.id + "/update"}>
                                     <button className="btn btn-warning">Edit recipe</button>
                                 </Link>
-                                <button className="btn btn-danger" onClick={() => deleteChefRecipe(recipe.id)}>Delete recipe</button>
                             </div>
                         </React.Fragment>
                     )}

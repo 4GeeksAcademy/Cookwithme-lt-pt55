@@ -293,14 +293,13 @@ def get_all_recipes():
 @api.route('/recipes', methods=['GET'])
 @jwt_required()
 def get_current_chef_recipes():
-    current_user = get_jwt_identity()
-    user = User.query.filter_by(email= current_user).first()
-    print("user: " + user)
-    if not user:
-        return jsonify({"msg": "user not found"}), 400
-    recipes = Recipe.query.filter_by(chef_id= user.id).all()
+    current_chef = get_jwt_identity()
+    chef = Chef.query.filter_by(email= current_chef).first()
+    print("chef: " + chef)
+    if not chef:
+        return jsonify({"msg": "chef not found"}), 400
+    recipes = Recipe.query.filter_by(chef_id= chef.id).all()
     print("recipes: " + recipes)
-    # all_recipes = Recipe.query.all()
     results = list(map(lambda recipe: recipe.serialize(), recipes))
     print("results: " + results)
     return jsonify(results), 200
