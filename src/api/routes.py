@@ -630,30 +630,31 @@ def update_calification(calification_id):
 
 #----Fav_Recipes---------------------------------------------
 
+
 @api.route('/recipe/fav_recipes', methods=['GET'])
 def get_all_favrecipes():
-      all_favrecipes = Fav_recipe.query.all()
-      results = list(map( lambda favrecipes: favrecipes.serialize(), all_favrecipes))
-      return jsonify(results), 200
+     all_favrecipes = Fav_recipe.query.all()
+     results = list(map( lambda favrecipes: favrecipes.serialize(), all_favrecipes))
+     return jsonify(results), 200
 
 
 @api.route('/recipe/fav_recipes/<int:fav_recipe_id>', methods=['GET'])
 def get_favrecipes(favrecipe_id):
-      favrecipe = Fav_recipe.query.filter_by(id=favrecipe_id).first()
-      if favrecipe is None:
-          return {"error-msg":"enter a valid Calification"},400
-      return jsonify(favrecipe.serialize()), 200
+     favrecipe = Fav_recipe.query.filter_by(id=favrecipe_id).first()
+     if favrecipe is None:
+         return {"error-msg":"enter a valid Calification"},400
+     return jsonify(favrecipe.serialize()), 200
 
 @api.route('/recipe/fav_recipes/<int:fav_recipe_id>', methods=['DELETE'])
 def delete_favrecipe(favrecipes_id):
-      favrecipes = Fav_recipe.query.filter_by(id=favrecipes_id).first()
-      if favrecipes is None:
-          return {"error-msg":"enter a valid Admin User"},400
-      db.session.delete(favrecipes)
-      db.session.commit()
-      stars_response_body = {
-          "message": "se elimino la calificacion "}
-      return jsonify(stars_response_body), 200
+     favrecipes = Fav_recipe.query.filter_by(id=favrecipes_id).first()
+     if favrecipes is None:
+         return {"error-msg":"enter a valid Admin User"},400
+     db.session.delete(favrecipes)
+     db.session.commit()
+     stars_response_body = {
+         "message": "se elimino la calificacion "}
+     return jsonify(stars_response_body), 200
 
 @api.route('/recipe/fav_recipes', methods=['POST'])
 def add_favrecipes():
@@ -666,6 +667,7 @@ def add_favrecipes():
      }
 
 
+     return jsonify(admin_response_body), 200
 
   
 
