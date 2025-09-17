@@ -597,3 +597,43 @@ def signup_as_chef():
     db.session.commit()
     access_token = create_access_token(identity=body["email"])
     return jsonify(access_token=access_token), 200
+
+# ------------------- Log in Admin -----------------------
+
+
+@api.route('/testadm', methods=['GET'])
+@jwt_required()
+def test_adm():
+
+    current_admin = get_jwt_identity()
+    return jsonify(logged_in_as=current_admin), 200
+
+
+@api.route("/login_admin", methods=["POST"])
+def login_as_admin():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+
+    adminu = Admin_user.query.filter_by(email=email).first()
+    if adminu is None:
+        return jsonify({"msg": "Bad email or password"}), 401
+    print(adminu)
+    if password != adminu.password:
+        return jsonify({"msg": "Bad email or password"}), 401
+
+    access_token = create_access_token(identity=email)
+    return jsonify(access_token=access_token)
+
+
+@api.route('/signup_admin', methods=['POST'])
+def signup_as_admin():
+    body = request.get_json()
+    adminu = Admin_user.query.filter_by(email=body["email"]).first()
+    if adminu:
+        return jsonify({"msg": "Admin already exist"}), 401
+
+    adminu = Admin_user( email=body["email"], password=body["password"],)
+    db.session.add(adminu)
+    db.session.commit()
+    access_token = create_access_token(identity=body["email"])
+    return jsonify(access_token=access_token), 200

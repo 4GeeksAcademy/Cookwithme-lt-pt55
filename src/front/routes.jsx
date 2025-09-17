@@ -50,6 +50,9 @@ import EditCalification from "./pages/Califications/EditReview";
 import { LoginChef } from "./pages/LoginChef";
 import { HomeChef } from "./pages/HomeChef";
 import { SignupChef } from "./pages/SignupChef";
+import { LoginAdmin } from "./pages/Admins/LoginAdmin";
+import { SignupAdmin } from "./pages/Admins/SignupAdmin";
+import { HomeAdmin } from "./pages/HomeAdmin";
 
 
 
@@ -112,6 +115,9 @@ export const router = createBrowserRouter(
       <Route path="/edit_admin/:editAdmId" element={<EditAdmin />} />
       <Route path="/adminuser/:admin_id" element={<SingleAdmin />} />
       <Route path="/adminuser/:admin_id/edit" element={<EditAdmin />} />
+      <Route path= "/login_admin" element={<LoginAdmin />} />
+      <Route path= "/signup_admin" element={<SignupAdmin />} />
+      <Route path= "/testadm" element={<HomeAdmin />} />
 
       <Route path="/questions" element={<Question />} />
       <Route path="/questions/:question_id" element={<SingleQuestion />} />
