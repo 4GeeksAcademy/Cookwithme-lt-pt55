@@ -666,6 +666,7 @@ def add_favrecipes():
          "Se registro una nueva reseña": favrecipes.serialize()
      }
 
+
      return jsonify(admin_response_body), 200
 
   
@@ -711,8 +712,34 @@ def signup_as_chef():
     access_token = create_access_token(identity=body["email"])
     return jsonify(access_token=access_token), 200
 
+# ------------------- Log in Admin -----------------------
+
+
+@api.route('/testadm', methods=['GET'])
+@jwt_required()
+def test_adm():
+
+    current_admin = get_jwt_identity()
+    return jsonify(logged_in_as=current_admin), 200
+
+
+@api.route("/login_admin", methods=["POST"])
+def login_as_admin():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+
+    adminu = Admin_user.query.filter_by(email=email).first()
+    if adminu is None:
+        return jsonify({"msg": "Bad email or password"}), 401
+    print(adminu)
+    if password != adminu.password: 
+        return jsonify({"msg": "Bad email or password"}), 401
+
+    access_token = create_access_token(identity=email)
+    return jsonify(access_token=access_token)
 
 # ------------------- recipe_ingredient -----------------------
+
 
 @api.route('/recipe_ingredients', methods=['GET'])
 def get_all_recipe_ingredients():

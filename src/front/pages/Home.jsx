@@ -47,7 +47,14 @@ export const Home = () => {
 					<button className="btn btn-warning">Signup as New Chef</button>
 				</Link>
 			</div>
-			
+			<div className="ml-auto">
+				<Link to="/login_admin">
+					<button className="btn btn-success">Login as Admin</button>
+				</Link>
+				<Link to="/signup_admin">
+					<button className="btn btn-warning">Signup as New Admin</button>
+				</Link>
+				</div>
 		<div className="ml-auto">
 				<Link to="/login_user">
 					<button className="btn btn-danger">Login as user</button>
@@ -66,5 +73,6 @@ export const Home = () => {
 				)}
 			</div>
 		</div>
+		
 	);
 }; 

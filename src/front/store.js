@@ -14,7 +14,8 @@ export const initialStore=()=>{
       }
     ],
      favItems : [],
-    authChef: false
+    authChef: false,
+    authAdmin: false,
   }
 }
 
@@ -80,6 +81,12 @@ export default function storeReducer(store, action = {}) {
        if(store.favItems.includes(action.payload)){
         dropdowndelete = store.favItems.filter((favorite)=> favorite != action.payload)
        }
+
+       case 'set_auth_admin':
+      return {
+        ...store,
+        authAdmin: action.payload
+      };
 
   }    
 }
