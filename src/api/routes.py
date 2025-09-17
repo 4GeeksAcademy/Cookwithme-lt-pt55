@@ -866,8 +866,9 @@ def signup_as_user():
         return jsonify({"msg": "user already exist"}), 401
 
     user = User(
-        name=body["name"],
         email=body["email"],
+        username=body["username"],
+        name=body["name"],
         password=body["password"]
     )
     db.session.add(user)
@@ -875,3 +876,10 @@ def signup_as_user():
 
     access_token = create_access_token(identity=body["email"])
     return jsonify(access_token=access_token), 200
+
+@api.route('/home_user', methods=['GET'])
+@jwt_required()
+def home_user():
+
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user), 200

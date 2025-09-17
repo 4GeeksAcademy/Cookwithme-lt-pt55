@@ -13,7 +13,7 @@ export const LoginUser = () => {
     return (
         <div className="text-center mt-5">
             <h1 className="display-4">Hello user!!</h1>
-            {store.authUser ? <Navigate to='/test'/> : <FormUser />}
+            {store.authUser ? <Navigate to='/home_user'/> : <FormUser />}
         </div>
     );
 }; 

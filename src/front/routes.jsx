@@ -126,7 +126,7 @@ export const router = createBrowserRouter(
         <Route path= "/signup_chef" element={<SignupChef />} />
 
         <Route path= "/login_user" element={<LoginUser />} />
-        <Route path= "/test" element={<HomeUser />} />
+        <Route path= "/home_user" element={<HomeUser />} />
         <Route path= "/signup_user" element={<SignupUser />} />
 
       <Route path="/chef" element={<Chef />} />

@@ -9,6 +9,7 @@ export const SignupUser = () => {
     const [error, setError] = useState('');
     const { store, dispatch } = useGlobalReducer()
 
+    const [username, setUserName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [name, setName] = useState('')
@@ -24,8 +25,9 @@ export const SignupUser = () => {
             body: JSON.stringify(
                 {
                     "email": email,
-                    "password": password,
-                    "name": name
+                    "username": username,
+                    "name": name,
+                    "password": password
                 }
             )
         };
@@ -45,7 +47,7 @@ export const SignupUser = () => {
                 console.log(data)
                 localStorage.setItem("tokenUser", data.access_token);
                 dispatch({ type: "set_auth_user", payload: true })
-                navigate("/test");
+                navigate("/home_user");
             }
         );
     }
@@ -54,7 +56,7 @@ export const SignupUser = () => {
     <div className="container text-center mt-5">
         {error && <div className="alert alert-danger" role="alert">{error}</div>}
         <>
-        {store.authUser ? <Navigate to='/test' />
+        {store.authUser ? <Navigate to='/home_user' />
         :
         <>
             <h1>Register here</h1>
@@ -64,13 +66,19 @@ export const SignupUser = () => {
                     <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
                     <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                 </div>
+
                 <div className="mb-3">
-                    <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-                    <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" className="form-control" id="exampleInputPassword1" />
+                    <label htmlFor="exampleInputUsername" className="form-label">Username</label>
+                    <input value={username} onChange={(e) => setUserName(e.target.value)} type="text" className="form-control" id="exampleUsername" />
                 </div>
+
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">Name</label>
                     <input value={name} onChange={(e) => setName(e.target.value)} type="text" className="form-control" id="exampleInputName" />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
+                    <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" className="form-control" id="exampleInputPassword1" />
                 </div>
 
                 <div className="d-flex justify-content-around">

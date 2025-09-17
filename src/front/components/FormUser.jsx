@@ -43,7 +43,7 @@ const FormUser = () => {
                 console.log(data)
                 localStorage.setItem("tokenUser", data.access_token);
                 dispatch({ type: "set_auth_user", payload: true })
-                navigate("/test");
+                navigate("/home_user");
             }
         );
             
