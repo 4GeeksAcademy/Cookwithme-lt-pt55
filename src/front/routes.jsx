@@ -77,6 +77,11 @@ import { LoginUser } from "./pages/LoginUser";
 import { HomeUser } from "./pages/HomeUser";
 import { SignupUser } from "./pages/SignupUser";
 
+import { IngredientUser } from "./pages/IngredientUser";
+import { SingleIngredientUser } from "./pages/SingleIngredientUser";
+import NewIngredientUser from "./pages/NewIngredientUser";
+import { EditIngredientUser } from "./pages/EditIngredientUser";
+
 export const router = createBrowserRouter(
   createRoutesFromElements(
     // CreateRoutesFromElements function allows you to build route elements declaratively.
@@ -100,11 +105,7 @@ export const router = createBrowserRouter(
       <Route path="/utensilios/:utensilio_id" element={<SingleUtensilio />} />
       <Route path="/add_utensilio" element={<NewUtensilio />} />
       <Route path="/utensilios/:utensilio_id/edit" element={<EditUtensilio />} />
-          {/* Utensilios */}
-          <Route path="/utensilios" element={<Utensilio />} />
-          <Route path="/utensilios/:utensilio_id" element={<SingleUtensilio />} />
-          <Route path="/add_utensilio" element={<NewUtensilio />} />
-          <Route path="/utensilios/:utensilio_id/edit" element={<EditUtensilio />} />   
+ 
  
                     {/* utensilios en recetas */}
           <Route path="/utensilio_receta" element={<UtensilioReceta />} /> 
@@ -174,6 +175,12 @@ export const router = createBrowserRouter(
       <Route path="users/:user_id" element={<SingleUser />} />
       <Route path="users/:user_id/edit" element={<EditUser />} />
       <Route path="add_user" element={<NewUser />} />
+
+      <Route path="/ingredient_users" element={<IngredientUser />} />
+      <Route path="/ingredient_users/:ingredient_user_id" element={<SingleIngredientUser />} />
+      <Route path="/add_ingredient_user" element={<NewIngredientUser />} />
+      <Route path="/ingredient_users/:ingredient_user_id/edit" element={<EditIngredientUser />} />
+
     </Route>
   )
 );
