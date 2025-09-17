@@ -1,10 +1,13 @@
 import { Link, useParams } from "react-router-dom";  // To use link for navigation and useParams to get URL parameters
 import PropTypes from "prop-types";  // To define prop types for this component
 import React, { useEffect, useState } from "react"
+import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 export const SingleRecipe = props => {
 
   const [recipe, setRecipe] = useState([])
+
+  const { store, dispatch } = useGlobalReducer()
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL
 
@@ -30,10 +33,12 @@ export const SingleRecipe = props => {
         <h1 className="display-4">Recipe Description: {recipe.description}</h1>
         <h1 className="display-4">Recipe Preparation: {recipe.preparation}</h1>
         <h1 className="display-4">Recipe Image: {recipe.img}</h1>
-
-        <Link to="/chef_home">
-          <button className="btn btn-primary">Back to Home</button>
-        </Link>
+        {store.authChef ? 
+          <Link to="/chef_home">
+            <button className="btn btn-primary">Back to Home</button>
+          </Link>
+          :
+          null}
       </div> 
     </>
   );
