@@ -69,15 +69,22 @@ def delete_user(user_id):
 def update_user(user_id):
     user = User.query.filter_by(id=user_id).first()
     if user is None:
-        return {"error-msg": "user does not exist"}, 400
+        return jsonify({"error-msg": "user does not exist"}), 404
 
     body = request.get_json()
-    user = User(username=body["username"], name=body["name"],
-                password=body["password"], email=body["email"])
+
+    user.username = body.get("username", user.username)
+    user.name = body.get("name", user.name)
+    user.password = body.get("password", user.password)
+    user.email = body.get("email", user.email)
+
     db.session.commit()
+
     response_body = {
-        "message": "usuario " + user.email + " successfully update"
+        "message": f"Usuario {user.id} actualizado correctamente",
+        "user": user.serialize()
     }
+    return jsonify(response_body), 200
 
 #------chef------------------
 @api.route('/chefs', methods=['GET'])
@@ -834,6 +841,50 @@ def update_utensil_user(utensil_user_id):
         "relation": relation.serialize()
     }), 200
 
+
+    #----------------login user
+@api.route("/login_user", methods=["POST"])
+def login_as_user():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+
+    user = User.query.filter_by(email=email).first() #consulta a la tabla de class
+    if user is None:
+        return jsonify({"msg": "Bad email or password"}), 401
+    print(user)
+    if password != user.password:
+        return jsonify({"msg": "Bad email or password"}), 401
+
+    access_token = create_access_token(identity=email)
+    return jsonify(access_token=access_token)
+
+
+@api.route('/signup_user', methods=['POST'])
+def signup_as_user():
+    body = request.get_json()
+    user = User.query.filter_by(email=body["email"]).first()
+    if user:
+        return jsonify({"msg": "user already exist"}), 401
+
+    user = User(
+        email=body["email"],
+        username=body["username"],
+        name=body["name"],
+        password=body["password"]
+    )
+    db.session.add(user)
+    db.session.commit()
+
+    access_token = create_access_token(identity=body["email"])
+    return jsonify(access_token=access_token), 200
+
+@api.route('/home_user', methods=['GET'])
+@jwt_required()
+def home_user():
+
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user), 200
+
 #--------Ingredient_user---------
 
 @api.route('/ingredient_users', methods=['GET'])
@@ -902,3 +953,4 @@ def delete_ingredient_user(iu_id):
         "message": f"Ingredient_user {iu_id} deleted successfully"
     }
     return jsonify(response_body), 200
+

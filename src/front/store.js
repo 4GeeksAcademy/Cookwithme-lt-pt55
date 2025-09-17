@@ -30,6 +30,12 @@ export default function storeReducer(store, action = {}) {
         ...store,
         authChef: action.payload
       };
+
+    case 'set_auth_user':
+      return {
+        ...store,
+        authUser: action.payload
+      };
       
     case 'add_task':
 
