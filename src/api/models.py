@@ -189,6 +189,15 @@ class Answer(db.Model):
 #     recipe_id: Mapped[int] = mapped_column(Integer,ForeignKey("recipe.id"), nullable=False)
 #     recipe: Mapped["Recipe"] = relationship(back_populates="fav_recipe")
 
+    def serialize(self):
+         return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "user": self.user.serialize() if self.user else None,
+            "recipe_id": self.recipe_id,
+            "recipe": self.recipe.serialize() if self.recipe else None
+         }
+
 class Calification(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     stars: Mapped[str] = mapped_column(String(120), nullable=False)
