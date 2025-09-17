@@ -23,13 +23,19 @@ export const SingleRecipe = props => {
   const { recipe_id } = useParams()
 
   return (
-    <div className="container text-center">
+    <>
+      <div className="container text-center">
 
-      <h1 className="display-4">Recipe Name: {recipe.name}</h1>
-      <h1 className="display-4">Recipe Description: {recipe.description}</h1>
-      <h1 className="display-4">Recipe Preparation: {recipe.preparation}</h1>
-      <h1 className="display-4">Recipe Image: {recipe.img}</h1>
-    </div>
+        <h1 className="display-4">Recipe Name: {recipe.name}</h1>
+        <h1 className="display-4">Recipe Description: {recipe.description}</h1>
+        <h1 className="display-4">Recipe Preparation: {recipe.preparation}</h1>
+        <h1 className="display-4">Recipe Image: {recipe.img}</h1>
+
+        <Link to="/chef_home">
+          <button className="btn btn-primary">Back to Home</button>
+        </Link>
+      </div> 
+    </>
   );
 };
 
