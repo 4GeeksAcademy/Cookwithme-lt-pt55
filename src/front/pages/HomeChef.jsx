@@ -17,8 +17,22 @@ export const HomeChef = () => {
                 console.log(data)
                 setChefRecipe(data)
             }
-            )
+        )
     }
+
+    // function deleteChefRecipe(recipe_id) {
+    //     const requestOptions = {
+    //         method: 'DELETE'
+    //     }
+
+    //     fetch(backendUrl + `/api/recipes/` + recipe_id, requestOptions)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             console.log(data)
+    //             setChefRecipe()
+    //         })
+    // }
+
     useEffect(() => {
         getChefRecipes()
     }, [])
@@ -43,7 +57,7 @@ export const HomeChef = () => {
                             <Link to={"/recipes/" + recipe.id + "/update"}>
                                 <button className="btn btn-warning">Edit recipe</button>
                             </Link>
-                            <button className="btn btn-danger" onClick={() => deleteRecipe(recipe.id)}>Delete recipe</button>
+                            <button className="btn btn-danger" onClick={() => deleteChefRecipe(recipe.id)}>Delete recipe</button>
                         </ul>
                     )}
                 </>
