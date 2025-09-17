@@ -15,7 +15,8 @@ class User(db.Model):
 
     questions: Mapped[List["Question"]] = relationship(back_populates="user")
     utensil_users: Mapped[List["Utensil_user"]]  = relationship(back_populates="user")    
-    calification : Mapped[List["Calification"]] = relationship(back_populates="user")  
+    calification : Mapped[List["Calification"]] = relationship(back_populates="user") 
+    fav_recipe: Mapped[List["Fav_recipe"]] = relationship(back_populates="user") 
 
     ingredient_users: Mapped[List["Ingredient_user"]] = relationship(back_populates="user")
 
@@ -138,7 +139,7 @@ class Recipe(db.Model):
     preparation: Mapped[str] = mapped_column(String(120), nullable=False)
 
     calification: Mapped[List["Calification"]] = relationship(back_populates="recipe")
-    #fav_recipe: Mapped[List["Fav_recipe"]] = relationship(back_populates="recipe")
+    fav_recipe: Mapped[List["Fav_recipe"]] = relationship(back_populates="recipe")
 
     chef_id: Mapped[int] = mapped_column(ForeignKey("chef.id"))
     chef: Mapped["Chef"] = relationship(back_populates="recipe")
@@ -180,14 +181,14 @@ class Answer(db.Model):
             # do not serialize the password, its a security breach
         }
    
-# class Fav_recipe(db.Model):
-#     id: Mapped[int] = mapped_column(primary_key=True)
+class Fav_recipe(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
 
-#     user_id: Mapped[int] = mapped_column(Integer,ForeignKey("user.id"), nullable=False)
-#     user: Mapped["User"] = relationship(back_populates="fav_recipe")
+    user_id: Mapped[int] = mapped_column(Integer,ForeignKey("user.id"), nullable=False)
+    user: Mapped["User"] = relationship(back_populates="fav_recipe")
 
-#     recipe_id: Mapped[int] = mapped_column(Integer,ForeignKey("recipe.id"), nullable=False)
-#     recipe: Mapped["Recipe"] = relationship(back_populates="fav_recipe")
+    recipe_id: Mapped[int] = mapped_column(Integer,ForeignKey("recipe.id"), nullable=False)
+    recipe: Mapped["Recipe"] = relationship(back_populates="fav_recipe")
 
     def serialize(self):
          return {
