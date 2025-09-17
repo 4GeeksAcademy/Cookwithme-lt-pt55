@@ -13,7 +13,7 @@ export const LoginChef = () => {
     return (
         <div className="text-center mt-5">
             <h1 className="display-4">Hello Chef!!</h1>
-            {store.authChef ? <Navigate to='/test'/> : <FormChef />}
+            {store.authChef ? <Navigate to='/chef_home'/> : <FormChef />}
         </div>
     );
 }; 

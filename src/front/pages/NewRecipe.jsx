@@ -20,7 +20,11 @@ const NewRecipe = () => {
     function getChefs() {
         fetch(backendUrl + `/api/chefs`)
             .then(response => response.json())
-            .then(data => setChefs(data))
+            .then(data => {
+                console.log(data)
+                setChefs(data)
+            }
+        )
     }
 
 

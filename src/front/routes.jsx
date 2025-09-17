@@ -99,7 +99,7 @@ export const router = createBrowserRouter(
         <Route path= "/add_chef" element={<NewChef/>} />
         <Route path="/chefs/:chef_id/update" element={<EditChef />} />
         <Route path= "/login_chef" element={<LoginChef />} />
-        <Route path= "/test" element={<HomeChef />} />
+        <Route path= "/chef_home" element={<HomeChef />} />
         <Route path= "/signup_chef" element={<SignupChef />} />
 
       <Route path="/chef" element={<Chef />} />

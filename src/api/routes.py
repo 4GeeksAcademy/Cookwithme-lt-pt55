@@ -560,9 +560,9 @@ def add_favrecipes():
 # ------------------- Log in Chef -----------------------
 
 
-@api.route('/test', methods=['GET'])
+@api.route('/chef_home', methods=['GET'])
 @jwt_required()
-def test():
+def chef_home():
 
     current_user = get_jwt_identity()
     return jsonify(logged_in_as=current_user), 200
@@ -597,3 +597,4 @@ def signup_as_chef():
     db.session.commit()
     access_token = create_access_token(identity=body["email"])
     return jsonify(access_token=access_token), 200
+

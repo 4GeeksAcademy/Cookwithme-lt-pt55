@@ -47,7 +47,7 @@ export const SignupChef = () => {
                 console.log(data)
                 localStorage.setItem("tokenChef", data.access_token);
                 dispatch({ type: "set_auth_chef", payload: true })
-                navigate("/test");
+                navigate("/chef_home");
             }
         );
     }
@@ -56,7 +56,7 @@ export const SignupChef = () => {
     <div className="container text-center mt-5">
         {error && <div className="alert alert-danger" role="alert">{error}</div>}
         <>
-        {store.authChef ? <Navigate to='/test' />
+        {store.authChef ? <Navigate to='/chef_home' />
         :
         <>
             <h1>Register here</h1>
