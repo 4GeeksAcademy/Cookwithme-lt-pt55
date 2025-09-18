@@ -46,7 +46,7 @@ const FormChef = () => {
                 console.log(data)
                 localStorage.setItem("tokenChef", data.access_token);
                 dispatch({ type: "set_auth_chef", payload: true })
-                navigate("/test");
+                navigate("/chef_home");
             }
         );
             

@@ -1,10 +1,13 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react";
+import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 const NewRecipe = () => {
 
     const navigate = useNavigate()
+
+    const { store, dispatch } = useGlobalReducer()
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL
 
@@ -20,7 +23,11 @@ const NewRecipe = () => {
     function getChefs() {
         fetch(backendUrl + `/api/chefs`)
             .then(response => response.json())
-            .then(data => setChefs(data))
+            .then(data => {
+                console.log(data)
+                setChefs(data)
+            }
+            )
     }
 
 
@@ -36,7 +43,7 @@ const NewRecipe = () => {
                     "name": name,
                     "description": description,
                     "preparation": preparation,
-                    "img": img,
+                    "img": "https://picsum.photos/200/300",
                     "chef_id": currentChef.id
 
                 }
@@ -79,24 +86,35 @@ const NewRecipe = () => {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">Imagen</label>
-                    <input value={img} onChange={(e) => setImg(e.target.value)} type="text" className="form-control" id="exampleInputImage" />
+                    <input 
+                        value={"https://picsum.photos/200/300"} 
+                        onChange={(e) => setImg(e.target.value)} 
+                        type="text" 
+                        className="form-control" 
+                        id="exampleInputImage" 
+                    />
                 </div>
-
-                    <div className="dropdown">
-                        <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {!currentChef ? "Select chef" : "Chef: " + currentChef.name}
-                        </button>
-                        <ul className="dropdown-menu">
+            
+                <div className="dropdown">
+                    <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {!currentChef ? "Select chef" : "Chef: " + currentChef.name}
+                    </button>
+                    <ul className="dropdown-menu">
                         {chefs.map((chef) =>
-                            <li key={chef.id} onClick={()=>setCurrentChef(chef)}><button className="dropdown-item" type="button">{chef.name}</button></li>
+                            <li key={chef.id} onClick={() => setCurrentChef(chef)}><button className="dropdown-item" type="button">{chef.name}</button></li>
                         )}
-                        </ul>
-                    </div>
-
+                    </ul>
+                </div>
                 <button type="submit" className="btn btn-primary" onClick={sendData}>Create</button>
-                <Link to="/recipes">
-                    <button className="btn btn-primary">Back to recipes</button>
-                </Link>
+                {store.authChef ?
+                    <Link to="/chef_home">
+                        <button className="btn btn-primary">Back to home</button>
+                    </Link>
+                    :   
+                    <Link to="/recipes">
+                        <button className="btn btn-primary">Back to recipes</button>
+                    </Link>
+                }
             </form>
         </div>
     )

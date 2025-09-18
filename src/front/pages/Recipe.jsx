@@ -15,7 +15,9 @@ export const Recipe = props => {
     function getRecipes() {
         fetch(backendUrl + `/api/recipes/`)
             .then(response => response.json())
-            .then(data => setRecipe(data))
+            .then(data => {
+                console.log(data)
+                setRecipe(data)})
     }
 
     function deleteRecipe(recipe_id) {
@@ -46,22 +48,26 @@ export const Recipe = props => {
             </Link>
 
             {recipe.map((recipe) =>
-                <ul key={recipe.id}>
-                    <li>Name: {recipe.name}</li>
-                    <li>Description: {recipe.description}</li>
-                    <li><img src={recipe.img} alt="recipe image" className="img-fluid rounded float-start" /></li>
-                    <Link to={"/recipes/" + recipe.id}>
-                        <button className="btn btn-primary">See recipe</button>
-                    </Link>
-                    <Link to={"/recipes/" + recipe.id + "/update"}>
-                        <button className="btn btn-warning">Edit recipe</button>
-                    </Link>
-                    <button className="btn btn-danger" onClick={() => deleteRecipe(recipe.id)}>Delete recipe</button>
-                    <button className="btn btn-warning" onClick={() => dispatch({
-                        type: 'toggle_favitem',
-                        payload: recipe.name
-                    })}>Fav</button>
-                </ul>
+                <React.Fragment key={recipe.id}>
+                    <div className="text-center mt-4" key={recipe.id}>
+                        <h1>Name: {recipe.name}</h1>
+                        <p>Description: {recipe.description}</p>
+                        <p>Preparation: {recipe.preparation}</p>
+                        <p>Chef who made it: {recipe.chef.name}</p>
+                        <div className="">
+                            <img src={recipe.img} alt="recipe image" className="h-25 d-inline-block" />
+                        </div>
+                    </div>
+                    <div className="text-center mt-4">
+                        <Link to={"/recipes/" + recipe.id}>
+                            <button className="btn btn-primary">See recipe</button>
+                        </Link>
+                        <Link to={"/recipes/" + recipe.id + "/update"}>
+                            <button className="btn btn-warning">Edit recipe</button>
+                        </Link>
+                        <button className="btn btn-danger" onClick={() => deleteRecipe(recipe.id)}>Delete recipe</button>
+                    </div>
+                </React.Fragment>
             )}
         </div>
     );

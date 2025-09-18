@@ -343,6 +343,17 @@ def get_all_recipes():
     results = list(map(lambda recipe: recipe.serialize(), all_recipes))
     return jsonify(results), 200
 
+@api.route('/chef_recipes', methods=['GET'])
+@jwt_required()
+def get_current_chef_recipes():
+    current_chef = get_jwt_identity()
+    chef = Chef.query.filter_by(email= current_chef).first()
+    if not chef:
+        return jsonify({"msg": "chef not found"}), 400
+    recipes = Recipe.query.filter_by(chef_id= chef.id).all()
+    results = list(map(lambda recipe: recipe.serialize(), recipes))
+    return jsonify(results), 200
+
 
 @api.route('/recipes/<int:recipe_id>', methods=['GET'])
 def get_recipe(recipe_id):
@@ -387,8 +398,21 @@ def update_recipe(recipe_id):
         return {"error-msg": "recipe does not exist"}, 400
 
     body = request.get_json()
-    recipe = Recipe(name=body["name"], description=body["description"],
-                    preparation=body["preparation"], img=body["img"])
+    if "name" in body:
+        recipe.name = body["name"]
+        
+    if "description" in body:
+        recipe.description = body["description"]
+        
+    if "preparation" in body:
+        recipe.preparation = body["preparation"]
+
+    if "img" in body:
+        recipe.img = body["img"]
+        
+    if "chef_id" in body:
+        recipe.chef_id = body["chef_id"]
+        
     db.session.commit()
     response_body = {
         "message": "recipe " + recipe.name + " successfully update"
@@ -674,9 +698,9 @@ def add_favrecipes():
 # ------------------- Log in Chef -----------------------
 
 
-@api.route('/test', methods=['GET'])
+@api.route('/chef_home', methods=['GET'])
 @jwt_required()
-def test():
+def chef_home():
 
     current_user = get_jwt_identity()
     return jsonify(logged_in_as=current_user), 200

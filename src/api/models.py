@@ -157,11 +157,10 @@ class Recipe(db.Model):
             "description": self.description,
             "name": self.name,
             "img": self.img,
-            "preparation": self.preparation
-        }
-
-
-
+            "preparation": self.preparation,
+            "chef": self.chef.serialize()
+        }      
+    
 class Answer(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str] = mapped_column(nullable=False)
