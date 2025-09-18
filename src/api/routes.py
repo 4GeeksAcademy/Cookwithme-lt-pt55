@@ -345,8 +345,21 @@ def update_recipe(recipe_id):
         return {"error-msg": "recipe does not exist"}, 400
 
     body = request.get_json()
-    recipe = Recipe(name=body["name"], description=body["description"],
-                    preparation=body["preparation"], img=body["img"])
+    if "name" in body:
+        recipe.name = body["name"]
+        
+    if "description" in body:
+        recipe.description = body["description"]
+        
+    if "preparation" in body:
+        recipe.preparation = body["preparation"]
+
+    if "img" in body:
+        recipe.img = body["img"]
+        
+    if "chef_id" in body:
+        recipe.chef_id = body["chef_id"]
+        
     db.session.commit()
     response_body = {
         "message": "recipe " + recipe.name + " successfully update"
