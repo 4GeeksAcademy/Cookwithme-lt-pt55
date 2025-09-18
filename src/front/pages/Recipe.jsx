@@ -50,7 +50,7 @@ export const Recipe = props => {
                         <h1>Name: {recipe.name}</h1>
                         <p>Description: {recipe.description}</p>
                         <p>Preparation: {recipe.preparation}</p>
-                        <p>Chef who made it: {recipe.chef_id}</p>
+                        <p>Chef who made it: {recipe.chef.name}</p>
                         <div className="">
                             <img src={recipe.img} alt="recipe image" className="h-25 d-inline-block" />
                         </div>

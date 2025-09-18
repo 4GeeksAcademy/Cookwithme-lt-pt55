@@ -131,7 +131,7 @@ class Recipe(db.Model):
             "name": self.name,
             "img": self.img,
             "preparation": self.preparation,
-            "chef_id": self.chef_id
+            "chef": self.chef.serialize()
         }      
     
 class Answer(db.Model):
