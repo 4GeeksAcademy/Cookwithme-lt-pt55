@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Chef, Utensil,Ingredient,Admin_user,Question,Answer, Recipe,Calification,Fav_recipe,Utensil_recipe
+from api.models import db, User, Chef, Utensil,Ingredient,Admin_user,Question,Answer, Recipe,Calification,Utensil_recipe, Recipe_ingredient,Utensil_user, Ingredient_user,Fav_recipe
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -33,7 +33,60 @@ def get_all_users():
     results = list(map(lambda user: user.serialize(), all_users))
     return jsonify(results), 200
 
+@api.route('/users/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        return {"error-msg": "enter a valid user"}, 400
+    return jsonify(user.serialize()), 200
 
+@api.route('/users', methods=['POST'])
+def add_user():
+    body = request.get_json()
+    user = User(username=body["username"], name=body["name"],
+                password=body["password"], email=body["email"])
+    db.session.add(user)
+    db.session.commit()
+    response_body = {
+        "se creo el usuario ": user.serialize()
+    }
+    return jsonify(response_body), 200
+
+@api.route('/users/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        return {"error-msg": "enter a valid user"}, 400
+    db.session.delete(user)
+    db.session.commit()
+    response_body = {
+        "message": "se elimino el user " + user.email
+    }
+    return jsonify(response_body), 200
+
+
+@api.route('/users/<int:user_id>', methods=['PUT'])
+def update_user(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    if user is None:
+        return jsonify({"error-msg": "user does not exist"}), 404
+
+    body = request.get_json()
+
+    user.username = body.get("username", user.username)
+    user.name = body.get("name", user.name)
+    user.password = body.get("password", user.password)
+    user.email = body.get("email", user.email)
+
+    db.session.commit()
+
+    response_body = {
+        "message": f"Usuario {user.id} actualizado correctamente",
+        "user": user.serialize()
+    }
+    return jsonify(response_body), 200
+
+#------chef------------------
 @api.route('/chefs', methods=['GET'])
 def get_all_chef():
     all_chefs = Chef.query.all()
@@ -485,6 +538,65 @@ def update_answer(answer_id):
 def add_utensil_recipe():
     body = request.get_json()
 
+    recipe_id_got = body.get("recipe_id")
+    utensil_id_got = body.get("utensil_id")
+
+    if not recipe_id_got or not utensil_id_got:
+        return jsonify({"error": "recipe_id y utensil_id son requeridos"}), 400
+
+    new_utensil_recipe = Utensil_recipe(recipe_id=recipe_id_got, utensil_id=utensil_id_got)
+    db.session.add(new_utensil_recipe)
+    db.session.commit()
+
+    return jsonify(new_utensil_recipe.serialize()), 201
+
+
+
+@api.route('/utensil_recipe', methods=['GET'])
+def get_all_utensil_recipe():
+    all_relations = Utensil_recipe.query.all()
+    results = list(map(lambda relation: relation.serialize(), all_relations))
+    return jsonify(results), 200
+
+@api.route('/utensil_recipe/<int:utensil_recipe_id>', methods=['GET'])
+def get_utensil_recipe(utensil_recipe_id):
+    relation = Utensil_recipe.query.get(utensil_recipe_id)
+    if relation is None:
+        return jsonify({"error": "Relation not found"}), 404
+    return jsonify(relation.serialize()), 200
+
+
+@api.route('/utensil_recipe/<int:utensil_recipe_id>', methods=['DELETE'])
+def delete_utensil_recipe(utensil_recipe_id):
+    relation = Utensil_recipe.query.get(utensil_recipe_id)
+    if relation is None:
+        return jsonify({"error": "Relation not found"}), 404
+
+    db.session.delete(relation)
+    db.session.commit()
+    return jsonify({"message": f"Relation {utensil_recipe_id} deleted successfully"}), 200
+
+
+@api.route('/utensil_recipe/<int:utensil_recipe_id>', methods=['PUT'])
+def update_utensil_recipe(utensil_recipe_id):
+    relation = Utensil_recipe.query.get(utensil_recipe_id)
+    if relation is None:
+        return jsonify({"error": "Relation not found"}), 404
+
+    body = request.get_json()
+    recipe_id = body.get("recipe_id", relation.recipe_id)
+    utensil_id = body.get("utensil_id", relation.utensil_id)
+
+    relation.recipe_id = recipe_id
+    relation.utensil_id = utensil_id
+
+    db.session.commit()
+    return jsonify({
+        "message": f"Relation {relation.id} updated successfully",
+        "relation": relation.serialize()
+    }), 200
+
+
 
 #----Calification---------------------------------------------
 
@@ -542,6 +654,7 @@ def update_calification(calification_id):
 
 #----Fav_Recipes---------------------------------------------
 
+
 @api.route('/recipe/fav_recipes', methods=['GET'])
 def get_all_favrecipes():
      all_favrecipes = Fav_recipe.query.all()
@@ -570,12 +683,13 @@ def delete_favrecipe(favrecipes_id):
 @api.route('/recipe/fav_recipes', methods=['POST'])
 def add_favrecipes():
      favrecipes_body = request.get_json()
-     favrecipes = Fav_recipe(stars=favrecipes_body["stars"])
+     favrecipes = Fav_recipe(user_id=favrecipes_body["user_id"],recipe_id=favrecipes_body["recipe_id"])
      db.session.add(favrecipes)
      db.session.commit()
      admin_response_body = {
          "Se registro una nueva reseña": favrecipes.serialize()
      }
+
 
      return jsonify(admin_response_body), 200
 
@@ -621,4 +735,274 @@ def signup_as_chef():
     db.session.commit()
     access_token = create_access_token(identity=body["email"])
     return jsonify(access_token=access_token), 200
+
+# ------------------- Log in Admin -----------------------
+
+
+@api.route('/testadm', methods=['GET'])
+@jwt_required()
+def test_adm():
+
+    current_admin = get_jwt_identity()
+    return jsonify(logged_in_as=current_admin), 200
+
+
+@api.route("/login_admin", methods=["POST"])
+def login_as_admin():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+
+    adminu = Admin_user.query.filter_by(email=email).first()
+    if adminu is None:
+        return jsonify({"msg": "Bad email or password"}), 401
+    print(adminu)
+    if password != adminu.password: 
+        return jsonify({"msg": "Bad email or password"}), 401
+
+    access_token = create_access_token(identity=email)
+    return jsonify(access_token=access_token)
+
+# ------------------- recipe_ingredient -----------------------
+
+
+@api.route('/recipe_ingredients', methods=['GET'])
+def get_all_recipe_ingredients():
+    all_records = Recipe_ingredient.query.all()
+    results = list(map(lambda ri: ri.serialize(), all_records))
+    return jsonify(results), 200
+
+
+@api.route('/recipe_ingredients/<int:ri_id>', methods=['GET'])
+def get_recipe_ingredient(ri_id):
+    record = Recipe_ingredient.query.filter_by(id=ri_id).first()
+    if record is None:
+        return {"error-msg": "enter a valid recipe_ingredient"}, 400
+    return jsonify(record.serialize()), 200
+
+
+@api.route('/recipe_ingredients', methods=['POST'])
+def add_recipe_ingredient():
+    body = request.get_json()
+    recipe_id = body.get("recipe_id")
+    ingredient_id = body.get("ingredient_id")
+
+    if not recipe_id or not ingredient_id:
+        return jsonify({"error-msg": "recipe_id and ingredient_id are required"}), 400
+
+    new_record = Recipe_ingredient(recipe_id=recipe_id, ingredient_id=ingredient_id)
+    db.session.add(new_record)
+    db.session.commit()
+    response_body = {
+        "message": "Recipe_ingredient created",
+        "data": new_record.serialize()
+    }
+    return jsonify(response_body), 201
+
+
+@api.route('/recipe_ingredients/<int:ri_id>', methods=['PUT'])
+def update_recipe_ingredient(ri_id):
+    record = Recipe_ingredient.query.filter_by(id=ri_id).first()
+    if record is None:
+        return jsonify({"error-msg": "recipe_ingredient does not exist"}), 404
+
+    body = request.get_json()
+    record.recipe_id = body.get("recipe_id", record.recipe_id)
+    record.ingredient_id = body.get("ingredient_id", record.ingredient_id)
+    db.session.commit()
+
+    response_body = {
+        "message": f"Recipe_ingredient {record.id} updated successfully",
+        "data": record.serialize()
+    }
+    return jsonify(response_body), 200
+
+
+@api.route('/recipe_ingredients/<int:ri_id>', methods=['DELETE'])
+def delete_recipe_ingredient(ri_id):
+    record = Recipe_ingredient.query.filter_by(id=ri_id).first()
+    if record is None:
+        return jsonify({"error-msg": "enter a valid recipe_ingredient"}), 400
+
+    db.session.delete(record)
+    db.session.commit()
+
+    response_body = {
+        "message": f"Recipe_ingredient {ri_id} deleted successfully"
+    }
+    return jsonify(response_body), 200
+
+#--------utensil_user---------
+@api.route('/utensil_user', methods=['POST'])
+def add_utensil_user():
+    body = request.get_json()
+    user_id_got = body.get("user_id")
+    utensil_id_got = body.get("utensil_id")
+
+    if not user_id_got or not utensil_id_got:
+        return jsonify({"error": "user_id y utensil_id son requeridos"}), 400
+
+    new_utensil_user = Utensil_user(user_id=user_id_got, utensil_id=utensil_id_got)
+    db.session.add(new_utensil_user)
+    db.session.commit()
+
+    return jsonify(new_utensil_user.serialize()), 201
+
+
+@api.route('/utensil_user', methods=['GET'])
+def get_all_utensil_user():
+    all_relations = Utensil_user.query.all()
+    results = list(map(lambda relation: relation.serialize(), all_relations))
+    return jsonify(results), 200
+
+
+@api.route('/utensil_user/<int:utensil_user_id>', methods=['GET'])
+def get_utensil_user(utensil_user_id):
+    relation = Utensil_user.query.get(utensil_user_id)
+    if relation is None:
+        return jsonify({"error": "Relation not found"}), 404
+    return jsonify(relation.serialize()), 200
+
+
+@api.route('/utensil_user/<int:utensil_user_id>', methods=['DELETE'])
+def delete_utensil_user(utensil_user_id):
+    relation = Utensil_user.query.get(utensil_user_id)
+    if relation is None:
+        return jsonify({"error": "Relation not found"}), 404
+
+    db.session.delete(relation)
+    db.session.commit()
+    return jsonify({"message": f"Relation {utensil_user_id} deleted successfully"}), 200
+
+
+@api.route('/utensil_user/<int:utensil_user_id>', methods=['PUT'])
+def update_utensil_user(utensil_user_id):
+    relation = Utensil_user.query.get(utensil_user_id)
+    if relation is None:
+        return jsonify({"error": "Relation not found"}), 404
+
+    body = request.get_json()
+    user_id = body.get("user_id", relation.user_id)
+    utensil_id = body.get("utensil_id", relation.utensil_id)
+
+    relation.user_id = user_id
+    relation.utensil_id = utensil_id
+
+    db.session.commit()
+    return jsonify({
+        "message": f"Relation {relation.id} updated successfully",
+        "relation": relation.serialize()
+    }), 200
+
+
+    #----------------login user
+@api.route("/login_user", methods=["POST"])
+def login_as_user():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+
+    user = User.query.filter_by(email=email).first() #consulta a la tabla de class
+    if user is None:
+        return jsonify({"msg": "Bad email or password"}), 401
+    print(user)
+    if password != user.password:
+        return jsonify({"msg": "Bad email or password"}), 401
+
+    access_token = create_access_token(identity=email)
+    return jsonify(access_token=access_token)
+
+
+@api.route('/signup_user', methods=['POST'])
+def signup_as_user():
+    body = request.get_json()
+    user = User.query.filter_by(email=body["email"]).first()
+    if user:
+        return jsonify({"msg": "user already exist"}), 401
+
+    user = User(
+        email=body["email"],
+        username=body["username"],
+        name=body["name"],
+        password=body["password"]
+    )
+    db.session.add(user)
+    db.session.commit()
+
+    access_token = create_access_token(identity=body["email"])
+    return jsonify(access_token=access_token), 200
+
+@api.route('/home_user', methods=['GET'])
+@jwt_required()
+def home_user():
+
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user), 200
+
+#--------Ingredient_user---------
+
+@api.route('/ingredient_users', methods=['GET'])
+def get_all_ingredient_users():
+    ingredient_users = Ingredient_user.query.all()
+    results = [iu.serialize() for iu in ingredient_users]
+    return jsonify(results), 200
+
+
+@api.route('/ingredient_users/<int:iu_id>', methods=['GET'])
+def get_ingredient_user(iu_id):
+    ingredient_user = Ingredient_user.query.filter_by(id=iu_id).first()
+    if ingredient_user is None:
+        return jsonify({"error-msg": "enter a valid ingredient_user"}), 400
+    return jsonify(ingredient_user.serialize()), 200
+
+
+@api.route('/ingredient_users', methods=['POST'])
+def add_ingredient_user():
+    body = request.get_json()
+    ingredient_id = body.get("ingredient_id")
+    user_id = body.get("user_id")
+
+    if not ingredient_id or not user_id:
+        return jsonify({"error-msg": "ingredient_id and user_id are required"}), 400
+
+    new_ingredient_user = Ingredient_user(ingredient_id=ingredient_id, user_id=user_id)
+    db.session.add(new_ingredient_user)
+    db.session.commit()
+
+    response_body = {
+        "message": "Ingredient_user created",
+        "data": new_ingredient_user.serialize()
+    }
+    return jsonify(response_body), 201
+
+
+@api.route('/ingredient_users/<int:iu_id>', methods=['PUT'])
+def update_ingredient_user(iu_id):
+    ingredient_user = Ingredient_user.query.filter_by(id=iu_id).first()
+    if ingredient_user is None:
+        return jsonify({"error-msg": "ingredient_user does not exist"}), 404
+
+    body = request.get_json()
+    ingredient_user.ingredient_id = body.get("ingredient_id", ingredient_user.ingredient_id)
+    ingredient_user.user_id = body.get("user_id", ingredient_user.user_id)
+    db.session.commit()
+
+    response_body = {
+        "message": f"Ingredient_user {ingredient_user.id} updated successfully",
+        "data": ingredient_user.serialize()
+    }
+    return jsonify(response_body), 200
+
+
+@api.route('/ingredient_users/<int:iu_id>', methods=['DELETE'])
+def delete_ingredient_user(iu_id):
+    ingredient_user = Ingredient_user.query.filter_by(id=iu_id).first()
+    if ingredient_user is None:
+        return jsonify({"error-msg": "enter a valid ingredient_user"}), 400
+
+    db.session.delete(ingredient_user)
+    db.session.commit()
+
+    response_body = {
+        "message": f"Ingredient_user {iu_id} deleted successfully"
+    }
+    return jsonify(response_body), 200
 
