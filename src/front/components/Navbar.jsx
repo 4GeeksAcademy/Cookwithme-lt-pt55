@@ -20,7 +20,14 @@ export const Navbar = () => {
 
 	return (
 		<nav className="navbar navbar-light bg-light">
-			{store.authChef ? <button className="btn btn-danger" onClick={logout}>Logout</button>
+			{store.authChef ?
+				<>
+					<button className="btn btn-danger" onClick={logout}>Logout</button>
+					<Link to="/chef_profile">
+						<button className="btn btn-primary">Check Profile</button>
+					</Link>
+
+				</>
 				:
 				<>
 					<div className="container">
