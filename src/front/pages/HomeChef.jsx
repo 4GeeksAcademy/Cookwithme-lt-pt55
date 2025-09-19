@@ -11,7 +11,7 @@ export const HomeChef = () => {
     const backendUrl = import.meta.env.VITE_BACKEND_URL
 
     function getChefRecipes() {
-        
+
         const token = localStorage.getItem("tokenChef")
 
         fetch(backendUrl + `/api/chef_recipes`, {
@@ -48,6 +48,7 @@ export const HomeChef = () => {
         getChefRecipes()
     }, [])
 
+
     return (
         <div className="container text-center mt-5">
             {store.authChef ?
@@ -56,29 +57,37 @@ export const HomeChef = () => {
                     <Link to="/new_chef_recipe">
                         <button className="btn btn-success">Add new recipe</button>
                     </Link>
-                    {chefRecipe.map((recipe) =>
-                        <React.Fragment key={recipe.id}>
-                            <div className="text-center mt-4">
-                                <h1>Name: {recipe.name}</h1>
-                                <p>Description: {recipe.description}</p>
-                                <p>Preparation: {recipe.preparation}</p>
-                                <div className="">
-                                    <img src={recipe.img} alt="recipe image" className="h-25 d-inline-block" />
+
+                    {chefRecipe.length != 0 ? 
+                    <>
+                        {chefRecipe.map((recipe) =>
+                            <React.Fragment key={recipe.id}>
+                                <div className="text-center mt-4">
+                                    <h1>Name: {recipe.name}</h1>
+                                    <p>Description: {recipe.description}</p>
+                                    <p>Preparation: {recipe.preparation}</p>
+                                    <div className="">
+                                        <img src={recipe.img} alt="recipe image" className="h-25 d-inline-block" />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="text-center mt-4">
-                                <Link to={"/recipes/" + recipe.id}>
-                                    <button className="btn btn-primary">See recipe</button>
-                                </Link>
-                                <Link to={"/recipes/" + recipe.id + "/update"}>
-                                    <button className="btn btn-warning">Edit recipe</button>
-                                </Link>
-                                <button className="btn btn-danger" onClick={() => deleteRecipe(recipe.id)}>Delete recipe</button>
-                            </div>
-                        </React.Fragment>
-                    )}
+                                <div className="text-center mt-4">
+                                    <Link to={"/recipes/" + recipe.id}>
+                                        <button className="btn btn-primary">See recipe</button>
+                                    </Link>
+                                    <Link to={"/recipes/" + recipe.id + "/update"}>
+                                        <button className="btn btn-warning">Edit recipe</button>
+                                    </Link>
+                                    <button className="btn btn-danger" onClick={() => deleteRecipe(recipe.id)}>Delete recipe</button>
+                                </div>
+                            </React.Fragment>
+                        )}
+                    </>
+                :
+                <h1>No recipes, add more. </h1>}
+
                 </>
                 :
+                
                 <Navigate to='/login_chef' />
             }
         </div>
