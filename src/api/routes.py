@@ -793,6 +793,41 @@ def delete_chef_recipe(recipe_id):
 
     return jsonify(response_body), 200
 
+@api.route('/chef_recipes/<int:recipe_id>', methods=['PUT'])
+@jwt_required()
+def update_current_chef_recipe(recipe_id):
+    current_chef_id = get_jwt_identity()
+    chef= Chef.query.filter_by(email=current_chef_id).first()
+    print(chef, "este es el chef")
+    chef_id = chef.id
+    print(chef_id, "este es el chef id")
+    recipe = Recipe.query.filter_by(id=recipe_id).first()
+    if recipe is None:
+        return {"error-msg": "recipe does not exist"}, 400
+
+    body = request.get_json()
+    if "name" in body:
+        recipe.name = body["name"]
+
+    if "description" in body:
+        recipe.description = body["description"]
+
+    if "preparation" in body:
+        recipe.preparation = body["preparation"]
+
+    if "img" in body:
+        recipe.img = body["img"]
+
+    if "chef_id" in body:
+        recipe.chef_id = chef_id
+
+    db.session.commit()
+    response_body = {
+        "message": "recipe " + recipe.name + " successfully update"
+    }
+
+    return jsonify(response_body), 200
+
 
 # ------------------- Log in Admin -----------------------
 
