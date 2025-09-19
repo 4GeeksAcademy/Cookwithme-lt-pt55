@@ -27,18 +27,18 @@ export const HomeChef = () => {
             )
     }
 
-    // function deleteChefRecipe(recipe_id) {
-    //     const requestOptions = {
-    //         method: 'DELETE'
-    //     }
+    function deleteRecipe(recipe_id) {
+        const requestOptions = {
+            method: 'DELETE'
+        }
 
-    //     fetch(backendUrl + `/api/recipes/` + recipe_id, requestOptions)
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             console.log(data)
-    //             setChefRecipe()
-    //         })
-    // }
+        fetch(backendUrl + `/api/chef_recipes/` + recipe_id, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                setChefRecipe()
+            })
+    }
 
     useEffect(() => {
         getChefRecipes()
@@ -58,7 +58,6 @@ export const HomeChef = () => {
                                 <h1>Name: {recipe.name}</h1>
                                 <p>Description: {recipe.description}</p>
                                 <p>Preparation: {recipe.preparation}</p>
-                                <p>Chef id: {recipe.chef_id}</p>
                                 <div className="">
                                     <img src={recipe.img} alt="recipe image" className="h-25 d-inline-block" />
                                 </div>
@@ -70,6 +69,7 @@ export const HomeChef = () => {
                                 <Link to={"/recipes/" + recipe.id + "/update"}>
                                     <button className="btn btn-warning">Edit recipe</button>
                                 </Link>
+                                <button className="btn btn-danger" onClick={() => deleteRecipe(recipe.id)}>Delete recipe</button>
                             </div>
                         </React.Fragment>
                     )}

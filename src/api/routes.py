@@ -755,15 +755,18 @@ def get_current_chef_recipes():
 @jwt_required()
 def add_current_chef_recipe():
     current_chef_id = get_jwt_identity()
-    chef_id= Chef.query.filter_by(id=current_chef_id).first()
+    chef= Chef.query.filter_by(email=current_chef_id).first()
+    print(chef, "este es el chef")
+    chef_id = chef.id
+    print(chef_id, "este es el chef id")
     body = request.get_json()
-    print(body)
+    
     recipe = Recipe(
         name=body["name"],
         description=body["description"],
         img=body["img"],
         preparation=body["preparation"],
-        chef_id=current_chef_id
+        chef_id=chef_id
 
     )
 
@@ -771,6 +774,19 @@ def add_current_chef_recipe():
     db.session.commit()
     response_body = {
         "se creo el recipe ": recipe.serialize()
+    }
+
+    return jsonify(response_body), 200
+
+@api.route('/chef_recipes/<int:recipe_id>', methods=['DELETE'])
+def delete_chef_recipe(recipe_id):
+    chef_recipe = Recipe.query.filter_by(id=recipe_id).first()
+    if chef_recipe is None:
+        return {"error-msg": "enter a valid recipe"}, 400
+    db.session.delete(chef_recipe)
+    db.session.commit()
+    response_body = {
+        "message": "se elimino el recipe " + chef_recipe.name
     }
 
     return jsonify(response_body), 200
