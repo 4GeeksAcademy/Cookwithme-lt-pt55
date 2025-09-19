@@ -708,6 +708,15 @@ def chef_home():
     return jsonify(logged_in_as=current_user), 200
 
 
+@api.route('/chef_recipes/<int:recipe_id>', methods=['GET'])
+@jwt_required()
+def get_single_chef_recipe(recipe_id):
+    recipe = Recipe.query.filter_by(id=recipe_id).first()
+    if recipe is None:
+        return {"error-msg": "enter a valid recipe"}, 400
+    return jsonify(recipe.serialize()), 200
+
+
 @api.route("/login_chef", methods=["POST"])
 def login_as_chef():
     email = request.json.get("email", None)
@@ -755,12 +764,12 @@ def get_current_chef_recipes():
 @jwt_required()
 def add_current_chef_recipe():
     current_chef_id = get_jwt_identity()
-    chef= Chef.query.filter_by(email=current_chef_id).first()
+    chef = Chef.query.filter_by(email=current_chef_id).first()
     print(chef, "este es el chef")
     chef_id = chef.id
     print(chef_id, "este es el chef id")
     body = request.get_json()
-    
+
     recipe = Recipe(
         name=body["name"],
         description=body["description"],
@@ -778,6 +787,7 @@ def add_current_chef_recipe():
 
     return jsonify(response_body), 200
 
+
 @api.route('/chef_recipes/<int:recipe_id>', methods=['DELETE'])
 @jwt_required()
 def delete_chef_recipe(recipe_id):
@@ -793,11 +803,12 @@ def delete_chef_recipe(recipe_id):
 
     return jsonify(response_body), 200
 
+
 @api.route('/chef_recipes/<int:recipe_id>', methods=['PUT'])
 @jwt_required()
 def update_current_chef_recipe(recipe_id):
     current_chef_id = get_jwt_identity()
-    chef= Chef.query.filter_by(email=current_chef_id).first()
+    chef = Chef.query.filter_by(email=current_chef_id).first()
     print(chef, "este es el chef")
     chef_id = chef.id
     print(chef_id, "este es el chef id")
