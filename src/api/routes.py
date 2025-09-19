@@ -354,6 +354,21 @@ def get_current_chef_recipes():
     results = list(map(lambda recipe: recipe.serialize(), recipes))
     return jsonify(results), 200
 
+@api.route('/chef_recipes', methods=['POST'])
+@jwt_required()
+def add_current_chef_recipe():
+    body = request.get_json()
+    recipe = Recipe(name=body["name"], description=body["description"],
+                    img=body["img"], preparation=body["preparation"], chef_id=body["chef_id"])
+    db.session.add(recipe)
+    db.session.commit()
+    response_body = {
+        "se creo el recipe ": recipe.serialize()
+    }
+
+    return jsonify(response_body), 200
+
+
 
 @api.route('/recipes/<int:recipe_id>', methods=['GET'])
 def get_recipe(recipe_id):
