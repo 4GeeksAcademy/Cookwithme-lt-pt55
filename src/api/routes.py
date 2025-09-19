@@ -779,8 +779,10 @@ def add_current_chef_recipe():
     return jsonify(response_body), 200
 
 @api.route('/chef_recipes/<int:recipe_id>', methods=['DELETE'])
+@jwt_required()
 def delete_chef_recipe(recipe_id):
     chef_recipe = Recipe.query.filter_by(id=recipe_id).first()
+    print(chef_recipe, "id del recipe")
     if chef_recipe is None:
         return {"error-msg": "enter a valid recipe"}, 400
     db.session.delete(chef_recipe)

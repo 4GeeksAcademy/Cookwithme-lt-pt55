@@ -28,15 +28,19 @@ export const HomeChef = () => {
     }
 
     function deleteRecipe(recipe_id) {
+        const token = localStorage.getItem("tokenChef")
         const requestOptions = {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
         }
 
         fetch(backendUrl + `/api/chef_recipes/` + recipe_id, requestOptions)
             .then(response => response.json())
             .then(data => {
                 console.log(data)
-                setChefRecipe()
+                getChefRecipes()
             })
     }
 
