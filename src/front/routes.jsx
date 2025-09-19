@@ -178,6 +178,11 @@ export const router = createBrowserRouter(
       <Route path="/add_ingredient_user" element={<NewIngredientUser />} />
       <Route path="/ingredient_users/:ingredient_user_id/edit" element={<EditIngredientUser />} />
 
+      <Route path= "/login_user" element={<LoginUser />} />
+      <Route path= "/home_user" element={<HomeUser />} />
+      <Route path= "/signup_user" element={<SignupUser />} />
+
+
     </Route>
   )
 );
