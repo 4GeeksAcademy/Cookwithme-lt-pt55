@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Chef, Utensil,Ingredient,Admin_user,Question,Answer, Recipe,Calification,Utensil_recipe, Recipe_ingredient,Utensil_user, Ingredient_user,Fav_recipe
+from api.models import db, User, Chef, Utensil, Ingredient, Admin_user, Question, Answer, Recipe, Calification, Utensil_recipe, Recipe_ingredient, Utensil_user, Ingredient_user, Fav_recipe
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 
@@ -33,12 +33,14 @@ def get_all_users():
     results = list(map(lambda user: user.serialize(), all_users))
     return jsonify(results), 200
 
+
 @api.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     user = User.query.filter_by(id=user_id).first()
     if user is None:
         return {"error-msg": "enter a valid user"}, 400
     return jsonify(user.serialize()), 200
+
 
 @api.route('/users', methods=['POST'])
 def add_user():
@@ -51,6 +53,7 @@ def add_user():
         "se creo el usuario ": user.serialize()
     }
     return jsonify(response_body), 200
+
 
 @api.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
@@ -86,7 +89,9 @@ def update_user(user_id):
     }
     return jsonify(response_body), 200
 
-#------chef------------------
+# ------chef------------------
+
+
 @api.route('/chefs', methods=['GET'])
 def get_all_chef():
     all_chefs = Chef.query.all()
@@ -343,32 +348,6 @@ def get_all_recipes():
     results = list(map(lambda recipe: recipe.serialize(), all_recipes))
     return jsonify(results), 200
 
-@api.route('/chef_recipes', methods=['GET'])
-@jwt_required()
-def get_current_chef_recipes():
-    current_chef = get_jwt_identity()
-    chef = Chef.query.filter_by(email= current_chef).first()
-    if not chef:
-        return jsonify({"msg": "chef not found"}), 400
-    recipes = Recipe.query.filter_by(chef_id= chef.id).all()
-    results = list(map(lambda recipe: recipe.serialize(), recipes))
-    return jsonify(results), 200
-
-@api.route('/chef_recipes', methods=['POST'])
-@jwt_required()
-def add_current_chef_recipe():
-    body = request.get_json()
-    recipe = Recipe(name=body["name"], description=body["description"],
-                    img=body["img"], preparation=body["preparation"], chef_id=body["chef_id"])
-    db.session.add(recipe)
-    db.session.commit()
-    response_body = {
-        "se creo el recipe ": recipe.serialize()
-    }
-
-    return jsonify(response_body), 200
-
-
 
 @api.route('/recipes/<int:recipe_id>', methods=['GET'])
 def get_recipe(recipe_id):
@@ -415,19 +394,19 @@ def update_recipe(recipe_id):
     body = request.get_json()
     if "name" in body:
         recipe.name = body["name"]
-        
+
     if "description" in body:
         recipe.description = body["description"]
-        
+
     if "preparation" in body:
         recipe.preparation = body["preparation"]
 
     if "img" in body:
         recipe.img = body["img"]
-        
+
     if "chef_id" in body:
         recipe.chef_id = body["chef_id"]
-        
+
     db.session.commit()
     response_body = {
         "message": "recipe " + recipe.name + " successfully update"
@@ -548,7 +527,7 @@ def update_answer(answer_id):
     return jsonify(response_body), 200
 
 
-#----------------utensilios a las recetas--------------------------
+# ----------------utensilios a las recetas--------------------------
 @api.route('/utensil_recipe', methods=['POST'])
 def add_utensil_recipe():
     body = request.get_json()
@@ -559,12 +538,12 @@ def add_utensil_recipe():
     if not recipe_id_got or not utensil_id_got:
         return jsonify({"error": "recipe_id y utensil_id son requeridos"}), 400
 
-    new_utensil_recipe = Utensil_recipe(recipe_id=recipe_id_got, utensil_id=utensil_id_got)
+    new_utensil_recipe = Utensil_recipe(
+        recipe_id=recipe_id_got, utensil_id=utensil_id_got)
     db.session.add(new_utensil_recipe)
     db.session.commit()
 
     return jsonify(new_utensil_recipe.serialize()), 201
-
 
 
 @api.route('/utensil_recipe', methods=['GET'])
@@ -572,6 +551,7 @@ def get_all_utensil_recipe():
     all_relations = Utensil_recipe.query.all()
     results = list(map(lambda relation: relation.serialize(), all_relations))
     return jsonify(results), 200
+
 
 @api.route('/utensil_recipe/<int:utensil_recipe_id>', methods=['GET'])
 def get_utensil_recipe(utensil_recipe_id):
@@ -612,103 +592,110 @@ def update_utensil_recipe(utensil_recipe_id):
     }), 200
 
 
-
-#----Calification---------------------------------------------
+# ----Calification---------------------------------------------
 
 @api.route('/calification', methods=['GET'])
 def get_all_calification():
-     all_calification = Calification.query.all()
-     results = list(map( lambda calification: calification.serialize(), all_calification))
-     return jsonify(results), 200
+    all_calification = Calification.query.all()
+    results = list(
+        map(lambda calification: calification.serialize(), all_calification))
+    return jsonify(results), 200
+
 
 @api.route('/calification/<int:calification_id>', methods=['GET'])
 def get_calification(calification_id):
-     calification = Calification.query.filter_by(id=calification_id).first()
-     if calification is None:
-         return {"error-msg":"enter a valid Calification"},400
-     return jsonify(calification.serialize()), 200
+    calification = Calification.query.filter_by(id=calification_id).first()
+    if calification is None:
+        return {"error-msg": "enter a valid Calification"}, 400
+    return jsonify(calification.serialize()), 200
+
 
 @api.route('/calification/<int:calification_id>', methods=['DELETE'])
 def delete_calification(calification_id):
-     calification = Calification.query.filter_by(id=calification_id).first()
-     if calification is None:
-         return {"error-msg":"enter a valid Admin User"},400
-     db.session.delete(calification)
-     db.session.commit()
-     stars_response_body = {
-         "message": "se elimino la calificacion "}
-     return jsonify(stars_response_body), 200
+    calification = Calification.query.filter_by(id=calification_id).first()
+    if calification is None:
+        return {"error-msg": "enter a valid Admin User"}, 400
+    db.session.delete(calification)
+    db.session.commit()
+    stars_response_body = {
+        "message": "se elimino la calificacion "}
+    return jsonify(stars_response_body), 200
+
 
 @api.route('/calification', methods=['POST'])
 def add_calification():
-     calification_body = request.get_json()
-     calification = Calification(stars=calification_body["stars"],user_id=calification_body["user_id"],recipe_id=calification_body["recipe_id"])
-     db.session.add(calification)
-     db.session.commit()
-     admin_response_body = {
-         "Se registro una nueva reseña": calification.serialize()
-     }
+    calification_body = request.get_json()
+    calification = Calification(
+        stars=calification_body["stars"], user_id=calification_body["user_id"], recipe_id=calification_body["recipe_id"])
+    db.session.add(calification)
+    db.session.commit()
+    admin_response_body = {
+        "Se registro una nueva reseña": calification.serialize()
+    }
 
-     return jsonify(admin_response_body), 200
+    return jsonify(admin_response_body), 200
+
 
 @api.route('/calification/<int:calification_id>', methods=['PUT'])
 def update_calification(calification_id):
-     calification = Calification.query.filter_by(id=calification_id).first()
-     if calification is None:
-         return jsonify({"error-msg": "review does not exist"}), 404
-    
-     review_body = request.get_json()
-     calification.stars = review_body.get("stars", calification.stars)
-     db.session.commit()
-     calification_response_body = {
-         "message": f"Admin {calification.id} updated successfully",
-         "calification": calification.serialize()
-     }
+    calification = Calification.query.filter_by(id=calification_id).first()
+    if calification is None:
+        return jsonify({"error-msg": "review does not exist"}), 404
 
-     return jsonify(calification_response_body), 200
+    review_body = request.get_json()
+    calification.stars = review_body.get("stars", calification.stars)
+    db.session.commit()
+    calification_response_body = {
+        "message": f"Admin {calification.id} updated successfully",
+        "calification": calification.serialize()
+    }
 
-#----Fav_Recipes---------------------------------------------
+    return jsonify(calification_response_body), 200
+
+# ----Fav_Recipes---------------------------------------------
 
 
 @api.route('/recipe/fav_recipes', methods=['GET'])
 def get_all_favrecipes():
-     all_favrecipes = Fav_recipe.query.all()
-     results = list(map( lambda favrecipes: favrecipes.serialize(), all_favrecipes))
-     return jsonify(results), 200
+    all_favrecipes = Fav_recipe.query.all()
+    results = list(
+        map(lambda favrecipes: favrecipes.serialize(), all_favrecipes))
+    return jsonify(results), 200
 
 
 @api.route('/recipe/fav_recipes/<int:fav_recipe_id>', methods=['GET'])
 def get_favrecipes(favrecipe_id):
-     favrecipe = Fav_recipe.query.filter_by(id=favrecipe_id).first()
-     if favrecipe is None:
-         return {"error-msg":"enter a valid Calification"},400
-     return jsonify(favrecipe.serialize()), 200
+    favrecipe = Fav_recipe.query.filter_by(id=favrecipe_id).first()
+    if favrecipe is None:
+        return {"error-msg": "enter a valid Calification"}, 400
+    return jsonify(favrecipe.serialize()), 200
+
 
 @api.route('/recipe/fav_recipes/<int:fav_recipe_id>', methods=['DELETE'])
 def delete_favrecipe(favrecipes_id):
-     favrecipes = Fav_recipe.query.filter_by(id=favrecipes_id).first()
-     if favrecipes is None:
-         return {"error-msg":"enter a valid Admin User"},400
-     db.session.delete(favrecipes)
-     db.session.commit()
-     stars_response_body = {
-         "message": "se elimino la calificacion "}
-     return jsonify(stars_response_body), 200
+    favrecipes = Fav_recipe.query.filter_by(id=favrecipes_id).first()
+    if favrecipes is None:
+        return {"error-msg": "enter a valid Admin User"}, 400
+    db.session.delete(favrecipes)
+    db.session.commit()
+    stars_response_body = {
+        "message": "se elimino la calificacion "}
+    return jsonify(stars_response_body), 200
+
 
 @api.route('/recipe/fav_recipes', methods=['POST'])
 def add_favrecipes():
-     favrecipes_body = request.get_json()
-     favrecipes = Fav_recipe(user_id=favrecipes_body["user_id"],recipe_id=favrecipes_body["recipe_id"])
-     db.session.add(favrecipes)
-     db.session.commit()
-     admin_response_body = {
-         "Se registro una nueva reseña": favrecipes.serialize()
-     }
+    favrecipes_body = request.get_json()
+    favrecipes = Fav_recipe(
+        user_id=favrecipes_body["user_id"], recipe_id=favrecipes_body["recipe_id"])
+    db.session.add(favrecipes)
+    db.session.commit()
+    admin_response_body = {
+        "Se registro una nueva reseña": favrecipes.serialize()
+    }
 
+    return jsonify(admin_response_body), 200
 
-     return jsonify(admin_response_body), 200
-
-  
 
 # ------------------- Log in Chef -----------------------
 
@@ -751,6 +738,44 @@ def signup_as_chef():
     access_token = create_access_token(identity=body["email"])
     return jsonify(access_token=access_token), 200
 
+
+@api.route('/chef_recipes', methods=['GET'])
+@jwt_required()
+def get_current_chef_recipes():
+    current_chef = get_jwt_identity()
+    chef = Chef.query.filter_by(email=current_chef).first()
+    if not chef:
+        return jsonify({"msg": "chef not found"}), 400
+    recipes = Recipe.query.filter_by(chef_id=chef.id).all()
+    results = list(map(lambda recipe: recipe.serialize(), recipes))
+    return jsonify(results), 200
+
+
+@api.route('/chef_recipes', methods=['POST'])
+@jwt_required()
+def add_current_chef_recipe():
+    current_chef_id = get_jwt_identity()
+    chef_id= Chef.query.filter_by(id=current_chef_id).first()
+    body = request.get_json()
+    print(body)
+    recipe = Recipe(
+        name=body["name"],
+        description=body["description"],
+        img=body["img"],
+        preparation=body["preparation"],
+        chef_id=current_chef_id
+
+    )
+
+    db.session.add(recipe)
+    db.session.commit()
+    response_body = {
+        "se creo el recipe ": recipe.serialize()
+    }
+
+    return jsonify(response_body), 200
+
+
 # ------------------- Log in Admin -----------------------
 
 
@@ -771,7 +796,7 @@ def login_as_admin():
     if adminu is None:
         return jsonify({"msg": "Bad email or password"}), 401
     print(adminu)
-    if password != adminu.password: 
+    if password != adminu.password:
         return jsonify({"msg": "Bad email or password"}), 401
 
     access_token = create_access_token(identity=email)
@@ -804,7 +829,8 @@ def add_recipe_ingredient():
     if not recipe_id or not ingredient_id:
         return jsonify({"error-msg": "recipe_id and ingredient_id are required"}), 400
 
-    new_record = Recipe_ingredient(recipe_id=recipe_id, ingredient_id=ingredient_id)
+    new_record = Recipe_ingredient(
+        recipe_id=recipe_id, ingredient_id=ingredient_id)
     db.session.add(new_record)
     db.session.commit()
     response_body = {
@@ -846,7 +872,9 @@ def delete_recipe_ingredient(ri_id):
     }
     return jsonify(response_body), 200
 
-#--------utensil_user---------
+# --------utensil_user---------
+
+
 @api.route('/utensil_user', methods=['POST'])
 def add_utensil_user():
     body = request.get_json()
@@ -856,7 +884,8 @@ def add_utensil_user():
     if not user_id_got or not utensil_id_got:
         return jsonify({"error": "user_id y utensil_id son requeridos"}), 400
 
-    new_utensil_user = Utensil_user(user_id=user_id_got, utensil_id=utensil_id_got)
+    new_utensil_user = Utensil_user(
+        user_id=user_id_got, utensil_id=utensil_id_got)
     db.session.add(new_utensil_user)
     db.session.commit()
 
@@ -908,14 +937,16 @@ def update_utensil_user(utensil_user_id):
         "relation": relation.serialize()
     }), 200
 
+    # ----------------login user
 
-    #----------------login user
+
 @api.route("/login_user", methods=["POST"])
 def login_as_user():
     email = request.json.get("email", None)
     password = request.json.get("password", None)
 
-    user = User.query.filter_by(email=email).first() #consulta a la tabla de class
+    # consulta a la tabla de class
+    user = User.query.filter_by(email=email).first()
     if user is None:
         return jsonify({"msg": "Bad email or password"}), 401
     print(user)
@@ -945,6 +976,7 @@ def signup_as_user():
     access_token = create_access_token(identity=body["email"])
     return jsonify(access_token=access_token), 200
 
+
 @api.route('/home_user', methods=['GET'])
 @jwt_required()
 def home_user():
@@ -952,7 +984,8 @@ def home_user():
     current_user = get_jwt_identity()
     return jsonify(logged_in_as=current_user), 200
 
-#--------Ingredient_user---------
+# --------Ingredient_user---------
+
 
 @api.route('/ingredient_users', methods=['GET'])
 def get_all_ingredient_users():
@@ -978,7 +1011,8 @@ def add_ingredient_user():
     if not ingredient_id or not user_id:
         return jsonify({"error-msg": "ingredient_id and user_id are required"}), 400
 
-    new_ingredient_user = Ingredient_user(ingredient_id=ingredient_id, user_id=user_id)
+    new_ingredient_user = Ingredient_user(
+        ingredient_id=ingredient_id, user_id=user_id)
     db.session.add(new_ingredient_user)
     db.session.commit()
 
@@ -996,7 +1030,8 @@ def update_ingredient_user(iu_id):
         return jsonify({"error-msg": "ingredient_user does not exist"}), 404
 
     body = request.get_json()
-    ingredient_user.ingredient_id = body.get("ingredient_id", ingredient_user.ingredient_id)
+    ingredient_user.ingredient_id = body.get(
+        "ingredient_id", ingredient_user.ingredient_id)
     ingredient_user.user_id = body.get("user_id", ingredient_user.user_id)
     db.session.commit()
 
@@ -1020,4 +1055,3 @@ def delete_ingredient_user(iu_id):
         "message": f"Ingredient_user {iu_id} deleted successfully"
     }
     return jsonify(response_body), 200
-

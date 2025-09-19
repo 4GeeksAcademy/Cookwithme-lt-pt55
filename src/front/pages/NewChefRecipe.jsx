@@ -14,12 +14,16 @@ const NewChefRecipe = () => {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [preparation, setPreparation] = useState('')
-    const [img, setImg] = useState('')
+    const [img, setImg] = useState("https://picsum.photos/200/300")
 
     function sendData(e) {
-        e.preventDefault()
+        e.preventDefault();
         console.log('send data')
         const token = localStorage.getItem("tokenChef")
+        if (!token) {
+            alert("Not authenticated");
+            return navigate("/login_chef");
+        }
 
         const requestOptions = {
             method: 'POST',
@@ -32,8 +36,7 @@ const NewChefRecipe = () => {
                     "name": name,
                     "description": description,
                     "preparation": preparation,
-                    "img": "https://picsum.photos/200/300",
-                    "chef_id": token.id
+                    "img": img
                 }
             )
         }
@@ -52,45 +55,40 @@ const NewChefRecipe = () => {
             })
     }
 
+    if (!store.authChef) return <Navigate to="/login_chef" />;
+
     return (
         <div>
-            {store.authChef ?
-                <>
+            <h1>Create a new recipe</h1>
+            <form className="w-50 mx-auto" onSubmit={sendData}>
+                <div className="mb-3">
+                    <label htmlFor="exampleInputEmail1" className="form-label">Name</label>
+                    <input value={name} onChange={(e) => setName(e.target.value)} type="text" className="form-control" id="exampleInputName" />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="exampleInputPassword1" className="form-label">Description</label>
+                    <input value={description} onChange={(e) => setDescription(e.target.value)} type="text" className="form-control" id="exampleInputsetDescription" />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="exampleInputPassword1" className="form-label">Preparation</label>
+                    <input value={preparation} onChange={(e) => setPreparation(e.target.value)} type="text" className="form-control" id="exampleInputPreparation" />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="exampleInputPassword1" className="form-label">Imagen</label>
+                    <input
+                        value={"https://picsum.photos/200/300"}
+                        onChange={(e) => setImg(e.target.value)}
+                        type="text"
+                        className="form-control"
+                        id="exampleInputImage"
+                    />
+                </div>
+                <button type="submit" className="btn btn-primary">Create</button>
 
-                    <h1>Create a new recipe</h1>
-                    <form className="w-50 mx-auto" onSubmit={sendData}>
-                        <div className="mb-3">
-                            <label htmlFor="exampleInputEmail1" className="form-label">Name</label>
-                            <input value={name} onChange={(e) => setName(e.target.value)} type="text" className="form-control" id="exampleInputName" />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="exampleInputPassword1" className="form-label">Description</label>
-                            <input value={description} onChange={(e) => setDescription(e.target.value)} type="text" className="form-control" id="exampleInputsetDescription" />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="exampleInputPassword1" className="form-label">Preparation</label>
-                            <input value={preparation} onChange={(e) => setPreparation(e.target.value)} type="text" className="form-control" id="exampleInputPreparation" />
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="exampleInputPassword1" className="form-label">Imagen</label>
-                            <input
-                                value={"https://picsum.photos/200/300"}
-                                onChange={(e) => setImg(e.target.value)}
-                                type="text"
-                                className="form-control"
-                                id="exampleInputImage"
-                            />
-                        </div>
-                        <button type="submit" className="btn btn-primary">Create</button>
-
-                        <Link to="/chef_home">
-                            <button className="btn btn-primary">Back to home</button>
-                        </Link>
-                    </form>
-                </>
-                :
-                <Navigate to='/login_chef' />
-            }
+                <Link to="/chef_home">
+                    <button className="btn btn-primary">Back to home</button>
+                </Link>
+            </form>
         </div>
     )
 }
