@@ -49,7 +49,7 @@ export const HomeChef = () => {
             {store.authChef ?
                 <>
                     <h1 className="display-4">Hello, welcome chef!!</h1>
-                    <Link to="/add_recipe">
+                    <Link to="/new_chef_recipe">
                         <button className="btn btn-success">Add new recipe</button>
                     </Link>
                     {chefRecipe.map((recipe) =>
