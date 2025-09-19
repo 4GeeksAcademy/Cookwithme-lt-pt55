@@ -74,7 +74,7 @@ export const HomeChef = () => {
                                     <Link to={"/recipes/" + recipe.id}>
                                         <button className="btn btn-primary">See recipe</button>
                                     </Link>
-                                    <Link to={"/recipes/" + recipe.id + "/update"}>
+                                    <Link to={"/chef_recipes/" + recipe.id + "/update"}>
                                         <button className="btn btn-warning">Edit recipe</button>
                                     </Link>
                                     <button className="btn btn-danger" onClick={() => deleteRecipe(recipe.id)}>Delete recipe</button>
