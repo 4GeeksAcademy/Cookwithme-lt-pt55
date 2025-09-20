@@ -1,8 +1,21 @@
 import React from "react";
+import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import { ChefInfo } from "../components/ChefInfo";
+
 
 const ChefProfile = () => {
+
+    const { store, dispatch } = useGlobalReducer()
+
     return(
-        <h1>Welcome to your profile</h1>
+        <div>
+            {store.authChef ? 
+            <ChefInfo/>
+            : 
+            <h1>Tienes que autenticarte</h1>
+            }
+        </div>
+        
     )
 }
 

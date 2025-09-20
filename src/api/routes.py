@@ -106,6 +106,15 @@ def get_chef(chef_id):
         return {"error-msg": "enter a valid chef"}, 400
     return jsonify(chef.serialize()), 200
 
+@api.route('/chef_info', methods=['GET'])
+@jwt_required()
+def get_current_chef_info():
+    current_chef_id = get_jwt_identity()
+    chef = Chef.query.filter_by(email=current_chef_id).first()
+    if chef is None:
+        return {"error-msg": "enter a valid chef"}, 400
+    return jsonify(chef.serialize()), 200
+
 
 @api.route('/chefs/<int:chef_id>', methods=['DELETE'])
 def delete_chef(chef_id):
