@@ -14,8 +14,10 @@ export const initialStore=()=>{
       }
     ],
      favItems : [],
+    charFav:[],
     authChef: false,
     authAdmin: false,
+    authUser: null,
   }
 }
 
@@ -47,6 +49,18 @@ export default function storeReducer(store, action = {}) {
         ...store,
         todos: store.todos.map((todo) => (todo.id === id ? { ...todo, background: color } : todo))
       };
+
+    case 'toggle_charfav': {
+      let updatedFavs = [];
+      if(store.charFav.includes(action.payload)) {
+        updatedFavs = store.charFav.filter(item => item !== action.payload);
+      } else {
+        updatedFavs = [...store.charFav, action.payload];
+      }
+      return { ...store, charFav: updatedFavs };
+    }
+
+
     default:
       throw Error('Unknown action.');
 
@@ -56,6 +70,7 @@ export default function storeReducer(store, action = {}) {
         ...store,
         favItems: action.payload
        };
+      
 
       case 'toggle_favitem':
 
