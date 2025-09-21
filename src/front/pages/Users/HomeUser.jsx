@@ -1,19 +1,18 @@
 import React, { useEffect } from "react"
 import useGlobalReducer from "../../hooks/useGlobalReducer.jsx";
-import FormAdmin from "../../components/FormAdmin.jsx";
 import { Navigate } from "react-router-dom";
 
-export const LoginAdmin = () => {
+export const HomeUser = () => {
 
     const { store, dispatch } = useGlobalReducer()
 
-    useEffect(() => {
-    }, [])
-
     return (
         <div className="text-center mt-5">
-            <h1 className="display-4">Welcome back Admin</h1>
-            {store.authAdmin ? <Navigate to='/home_admin'/> : <FormAdmin/>}
+            {store.authUser ? 
+                <h1 className="display-4">Hello, welcome User!!</h1>
+                :
+                <Navigate to='/login_user'/>
+            }
         </div>
     );
 }; 
