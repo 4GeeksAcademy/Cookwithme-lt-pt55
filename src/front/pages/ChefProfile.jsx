@@ -1,10 +1,41 @@
 import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-import { Link, useParams } from "react-router-dom"; 
-import UploadChefImage from "../components/UploadChefImage.jsx";
-
+import { Link, useParams } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css"
 
 const ChefProfile = () => {
+
+    const [urlImg, setUrlImg] = useState("")
+
+    const changeUploadImage = async (e) => {
+        const file = e.target.files[0];
+
+        const formData = new FormData()
+
+        formData.append('file', file)
+        formData.append('upload_preset', 'chef_image')
+        formData.append('cloud_name', 'dwi8lacfr')
+
+        try {
+            const response = await fetch("https://api.cloudinary.com/v1_1/dwi8lacfr/image/upload", {
+                method: 'POST',
+                body: formData
+            })
+
+            const data = await response.json()
+            console.log(data)
+
+            if (data.secure_url) {
+                setUrlImg(data.secure_url)
+            } else {
+                setError("Failed to upload the image please try again")
+            }
+
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
 
     const [chef, setChef] = useState([])
 
@@ -42,13 +73,14 @@ const ChefProfile = () => {
                                 <h2>{chef.name}</h2>
                                 <p>Email: {chef.email}</p>
                                 <p>Rating: {chef.rating}</p>
-                                {/* Add more chef details here */}
-
-                                <h1>Chef Image</h1>
-                                <img src={"https://picsum.photos/200/300"} alt="chef_image" />
-
-                                <UploadChefImage/>
-
+                                <div>
+                                    <input type="file" accept="image/*" onChange={changeUploadImage} />
+                                    {urlImg && (
+                                        <div>
+                                            <img src={urlImg} alt="" />
+                                        </div>
+                                    )}
+                                </div>
                             </>
                         ) : (
                             <p>Loading chef info...</p>
