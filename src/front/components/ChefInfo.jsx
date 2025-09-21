@@ -1,8 +1,8 @@
-import { Link, useParams } from "react-router-dom";  // To use link for navigation and useParams to get URL parameters
-import PropTypes from "prop-types";  // To define prop types for this component
+import { Link, useParams } from "react-router-dom"; 
+import PropTypes from "prop-types";  
 import React, { useEffect, useState } from "react"
 
-// Define and export the Single component which displays individual item details.
+// Define and export the Single component which displays individual chef details.
 export const ChefInfo = props => {
 
     const [chef, setChef] = useState([])
@@ -11,7 +11,6 @@ export const ChefInfo = props => {
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-    // Fetch data only when chef_id is not undefined
     useEffect(() => {
         getChefInfo()
     }, []);
@@ -29,8 +28,6 @@ export const ChefInfo = props => {
             )
     }
 
-
-
     return (
         <div className="container text-center">
             {chef && chef.name ? (
@@ -39,6 +36,11 @@ export const ChefInfo = props => {
                     <p>Email: {chef.email}</p>
                     <p>Rating: {chef.rating}</p>
                     {/* Add more chef details here */}
+
+                    <h1>Image</h1>
+                    <img src={"https://picsum.photos/200/300"} alt="chef_image" />
+                    <button type="button" class="btn btn-primary">Change profile image</button>
+
                 </>
             ) : (
                 <p>Loading chef info...</p>

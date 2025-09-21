@@ -10,8 +10,12 @@ const ChefProfile = () => {
     return(
         <div>
             {store.authChef ? 
+            <>
             <ChefInfo/>
-            : 
+            
+            
+            </>            
+            :
             <h1>Tienes que autenticarte</h1>
             }
         </div>
