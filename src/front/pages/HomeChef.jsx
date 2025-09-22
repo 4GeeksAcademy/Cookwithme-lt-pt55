@@ -68,7 +68,7 @@ export const HomeChef = () => {
                                     <button className="btn btn-primary">See recipe</button>
                                 </Link>
                                 <Link to={"/recipes/" + recipe.id + "/update"}>
-                                    <button className="btn btn-warning">Edit recipe</button>
+                                    <button className="btn btn-warning">Edit r de laecipe</button>
                                 </Link>
                             </div>
                         </React.Fragment>

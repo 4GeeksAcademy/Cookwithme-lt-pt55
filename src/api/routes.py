@@ -663,15 +663,15 @@ def get_all_favrecipes():
 
 
 @api.route('/recipe/fav_recipes/<int:fav_recipe_id>', methods=['GET'])
-def get_favrecipes(favrecipe_id):
-     favrecipe = Fav_recipe.query.filter_by(id=favrecipe_id).first()
+def get_favrecipes(fav_recipe_id):
+     favrecipe = Fav_recipe.query.filter_by(id=fav_recipe_id).first()
      if favrecipe is None:
          return {"error-msg":"enter a valid Calification"},400
      return jsonify(favrecipe.serialize()), 200
 
 @api.route('/recipe/fav_recipes/<int:fav_recipe_id>', methods=['DELETE'])
-def delete_favrecipe(favrecipes_id):
-     favrecipes = Fav_recipe.query.filter_by(id=favrecipes_id).first()
+def delete_favrecipe(fav_recipes_id):
+     favrecipes = Fav_recipe.query.filter_by(id=fav_recipes_id).first()
      if favrecipes is None:
          return {"error-msg":"enter a valid Admin User"},400
      db.session.delete(favrecipes)
@@ -908,7 +908,10 @@ def login_as_user():
         return jsonify({"msg": "Bad email or password"}), 401
 
     access_token = create_access_token(identity=email)
-    return jsonify(access_token=access_token)
+    return jsonify({
+        "access_token": access_token,
+        "user": user.serialize()  
+    }), 200
 
 
 @api.route('/signup_user', methods=['POST'])
@@ -1006,3 +1009,64 @@ def delete_ingredient_user(iu_id):
     }
     return jsonify(response_body), 200
 
+# ---- Favoritos de recetas por usuario ----
+
+# Obtener todos los favoritos del usuario logueado
+@api.route('/user/fav_recipes', methods=['GET'])
+@jwt_required()
+def get_user_favrecipes():
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    favs = Fav_recipe.query.filter_by(user_id=user.id).all()
+    results = [fav.serialize() for fav in favs]
+
+    return jsonify(results), 200
+
+
+# Agregar receta a favoritos (del usuario logueado)
+@api.route('/user/fav_recipes', methods=['POST'])
+@jwt_required()
+def add_user_favrecipe():
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    body = request.get_json()
+    recipe_id = body.get("recipe_id")
+
+    if not recipe_id:
+        return jsonify({"error": "recipe_id is required"}), 400
+
+    # Validar que no esté repetido
+    existing_fav = Fav_recipe.query.filter_by(user_id=user.id, recipe_id=recipe_id).first()
+    if existing_fav:
+        return jsonify({"msg": "Recipe already in favorites"}), 400
+
+    fav = Fav_recipe(user_id=user.id, recipe_id=recipe_id)
+    db.session.add(fav)
+    db.session.commit()
+
+    return jsonify(fav.serialize()), 201
+
+
+# Eliminar receta de favoritos del usuario logueado
+@api.route('/user/fav_recipes/<int:recipe_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user_favrecipe(recipe_id):
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    fav = Fav_recipe.query.filter_by(user_id=user.id, recipe_id=recipe_id).first()
+    if not fav:
+        return jsonify({"error": "Favorite not found"}), 404
+
+    db.session.delete(fav)
+    db.session.commit()
+
+    return jsonify({"msg": f"Recipe {recipe_id} removed from favorites"}), 200
