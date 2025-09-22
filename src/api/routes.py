@@ -843,7 +843,7 @@ def update_current_chef_recipe(recipe_id):
 # ------------------- Log in Admin -----------------------
 
 
-@api.route('/testadm', methods=['GET'])
+@api.route('/home_admin', methods=['GET'])
 @jwt_required()
 def test_adm():
 
@@ -865,6 +865,19 @@ def login_as_admin():
 
     access_token = create_access_token(identity=email)
     return jsonify(access_token=access_token)
+
+@api.route('/signup_admin', methods=['POST'])
+def signup_as_admin():
+    adminu_body = request.get_json()
+    adminu = Admin_user.query.filter_by(email=adminu_body ["email"]).first()
+    if adminu:
+        return jsonify({"msg": "Admin already exist"}), 401
+
+    adminu = Admin_user( email=adminu_body["email"],password=adminu_body["password"],)
+    db.session.add(adminu)
+    db.session.commit()
+    access_token = create_access_token(identity=adminu_body["email"])
+    return jsonify(access_token=access_token), 200
 
 # ------------------- recipe_ingredient -----------------------
 

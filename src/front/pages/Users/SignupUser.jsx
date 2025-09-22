@@ -2,15 +2,17 @@ import React, { useState } from "react";
 import useGlobalReducer from "../../hooks/useGlobalReducer.jsx";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 
-export const SignupAdmin = () => {
+export const SignupUser = () => {
 
     const navigate = useNavigate();
 
     const [error, setError] = useState('');
     const { store, dispatch } = useGlobalReducer()
 
+    const [username, setUserName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [name, setName] = useState('')
 
     function sendData(e) {
         e.preventDefault()
@@ -23,12 +25,13 @@ export const SignupAdmin = () => {
             body: JSON.stringify(
                 {
                     "email": email,
-                    "password": password,
-                    
+                    "username": username,
+                    "name": name,
+                    "password": password
                 }
             )
         };
-        fetch(import.meta.env.VITE_BACKEND_URL + '/api/signup_admin', requestOptions)
+        fetch(import.meta.env.VITE_BACKEND_URL + `api/signup_user`, requestOptions)
             .then(response => {
                 console.log(response)
                 console.log(response.status)
@@ -42,9 +45,9 @@ export const SignupAdmin = () => {
             })
             .then(data => {
                 console.log(data)
-                localStorage.setItem("tokenAdmin", data.access_token);
-                dispatch({ type: "set_auth_admin", payload: true })
-                navigate("/home_admin");
+                localStorage.setItem("tokenUser", data.access_token);
+                dispatch({ type: "set_auth_user", payload: true })
+                navigate("/home_user");
             }
         );
     }
@@ -53,7 +56,7 @@ export const SignupAdmin = () => {
     <div className="container text-center mt-5">
         {error && <div className="alert alert-danger" role="alert">{error}</div>}
         <>
-        {store.authAdmin ? <Navigate to='/home_admin' />
+        {store.authUser ? <Navigate to='/home_user' />
         :
         <>
             <h1>Register here</h1>
@@ -63,14 +66,25 @@ export const SignupAdmin = () => {
                     <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
                     <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                 </div>
+
+                <div className="mb-3">
+                    <label htmlFor="exampleInputUsername" className="form-label">Username</label>
+                    <input value={username} onChange={(e) => setUserName(e.target.value)} type="text" className="form-control" id="exampleUsername" />
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="exampleInputPassword1" className="form-label">Name</label>
+                    <input value={name} onChange={(e) => setName(e.target.value)} type="text" className="form-control" id="exampleInputName" />
+                </div>
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
                     <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" className="form-control" id="exampleInputPassword1" />
                 </div>
+
                 <div className="d-flex justify-content-around">
                     <button type="submit" onClick={sendData} className="btn btn-primary">Submit</button>
-                    <Link to="/login_admin">
-                        <button className="btn btn-success">Log In as Admin</button>
+                    <Link to="/login_user">
+                        <button className="btn btn-success">Log In as user</button>
                     </Link>
                 </div>
                 
