@@ -43,6 +43,7 @@ const ChefProfile = () => {
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
+
     useEffect(() => {
         getChefInfo()
     }, []);
