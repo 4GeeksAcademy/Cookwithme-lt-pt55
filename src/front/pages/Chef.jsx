@@ -42,6 +42,8 @@ export const Chef = () => {
                     <li>Name: {chef.name}</li>
                     <li>Email: {chef.email}</li>
                     <li>Rating: {chef.rating}</li>
+                    <li><img src={chef.image_url} alt="" /></li>
+                    
                     <Link to={"/chefs/" + chef.id}>
                         <button className="btn btn-primary">See chef</button>
                     </Link>
