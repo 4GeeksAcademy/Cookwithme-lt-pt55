@@ -151,7 +151,40 @@ def update_chef(chef_id):
         return {"error-msg": "chef does not exist"}, 400
 
     body = request.get_json()
-    chef = Chef(name=body["name"], email=body["email"], rating=body["rating"])
+    if "name" in body:
+        chef.name = body["name"]
+    if "email" in body:
+        chef.email = body["email"]
+    if "rating" in body:
+        chef.rating = body["rating"]
+    if "image_url" in body:
+        chef.image_url = body["image_url"]
+        
+    db.session.commit()
+    response_body = {
+        "message": "chef " + chef.name + " successfully update"
+    }
+
+    return jsonify(response_body), 200
+
+@api.route('/chefs', methods=['PUT'])
+@jwt_required()
+def update_current_chef():
+    current_chef_email = get_jwt_identity()
+    chef = Chef.query.filter_by(email=current_chef_email).first()
+    if chef is None:
+        return {"error-msg": "chef does not exist"}, 400
+
+    body = request.get_json()
+    if "name" in body:
+        chef.name = body["name"]
+    if "email" in body:
+        chef.email = body["email"]
+    if "rating" in body:
+        chef.rating = body["rating"]
+    if "image_url" in body:
+        chef.image_url = body["image_url"]
+        
     db.session.commit()
     response_body = {
         "message": "chef " + chef.name + " successfully update"

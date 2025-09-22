@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"
 
 const ChefProfile = () => {
+
+    const navigate = useNavigate();
 
     const [urlImg, setUrlImg] = useState("")
 
@@ -43,7 +45,27 @@ const ChefProfile = () => {
         }
     }
 
+  function updateData(e) {
+    e.preventDefault();
 
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("tokenChef")
+      },
+      body: JSON.stringify({ image_url: urlImg }),
+    };
+
+    fetch(backendUrl + `/api/chefs`, requestOptions)
+      .then(response => response.json())
+      .then((data) => {
+        console.log("Chef actualizado:", data);
+        setUrlImg(null)
+        getChefInfo()
+      if (!store.authChef)
+        return navigate("/login_chef")
+      })
+  }
 
     useEffect(() => {
         getChefInfo()
@@ -76,9 +98,7 @@ const ChefProfile = () => {
                                 <p>Email: {chef.email}</p>
                                 <p>Rating: {chef.rating}</p>
                                 <img src={chef.image_url} alt="" />
-                                <Link to={"/chefs/" + chef.id + "/update"}>
-                                    <button className="btn btn-warning">Edit profile</button>
-                                </Link>
+
                                 <div>
                                     <input type="file" accept="image/*" onChange={changeUploadImage} />
                                     {urlImg && (
@@ -87,6 +107,7 @@ const ChefProfile = () => {
                                         </div>
                                     )}
                                 </div>
+                                <button onClick={updateData}>Save Data</button>
                             </>
                         ) : (
                             <p>Loading chef info...</p>
