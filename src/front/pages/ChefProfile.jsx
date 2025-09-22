@@ -45,7 +45,7 @@ const ChefProfile = () => {
         }
     }
 
-  function updateData(e) {
+  function updateImage(e) {
     e.preventDefault();
 
     const requestOptions = {
@@ -107,7 +107,7 @@ const ChefProfile = () => {
                                         </div>
                                     )}
                                 </div>
-                                <button onClick={updateData}>Save Data</button>
+                                <button onClick={updateImage}>Save Image</button>
                             </>
                         ) : (
                             <p>Loading chef info...</p>

@@ -39,9 +39,8 @@ export const EditChef = () => {
       .then(response => response.json())
       .then((data) => {
         console.log("Chef actualizado:", data);
-      if (!store.authChef)
-        return navigate("/chef")
-      else navigate("/chef_profile")
+        if (!store.authChef)
+          return navigate("/login_chef")
       })
   }
 
@@ -49,76 +48,35 @@ export const EditChef = () => {
     <div className="container">
       <h1 className="display-4">Editar Chef</h1>
       <form className="w-50 mx-auto" onSubmit={updateData}>
-        {!store.authChef ?
-          <>
-            <div className="mb-3">
-              <label className="form-label">Nombre</label>
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                type="text"
-                className="form-control"
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Email</label>
-              <input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="text"
-                className="form-control"
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Rating</label>
-              <input
-                value={rating}
-                onChange={(e) => setRating(e.target.value)}
-                type="text"
-                className="form-control"
-              />
-            </div>
-          </>
-          :
-          <>
-            <div className="mb-3">
-              <label className="form-label">Nombre</label>
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                type="text"
-                className="form-control"
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Email</label>
-              <input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="text"
-                className="form-control"
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Rating</label>
-              <input
-                value={rating}
-                onChange={(e) => setRating(e.target.value)}
-                type="text"
-                className="form-control"
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Profile Image</label>
-              <input
-                value={urlImg}
-                onChange={(e) => setUrlImg(e.target.value)}
-                type="text"
-                className="form-control"
-              />
-            </div>
-          </>
-        }
+
+        <div className="mb-3">
+          <label className="form-label">Nombre</label>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            type="text"
+            className="form-control"
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Email</label>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            className="form-control"
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Rating</label>
+          <input
+            value={rating}
+            onChange={(e) => setRating(e.target.value)}
+            type="text"
+            className="form-control"
+          />
+        </div>
+
         <button type="submit" className="btn btn-primary">
           Guardar Cambios
         </button>
