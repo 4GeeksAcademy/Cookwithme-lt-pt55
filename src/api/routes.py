@@ -757,6 +757,24 @@ def signup_as_chef():
     return jsonify(access_token=access_token), 200
 
 
+# @api.route('/chef_profile/image', methods=['POST'])
+# @jwt_required()
+# def chef_image():
+#     current_chef_id = get_jwt_identity()
+#     chef = Chef.query.filter_by(email=current_chef_id).first()
+#     print(chef)
+#     body = request.get_json()
+#     image_url = Chef(image_url=body["image_url"])
+#     print(image_url)
+#     db.session.add(image_url)
+#     db.session.commit()
+#     response_body = {
+#         "se agrego la imagen ": image_url.serialize()
+#     }
+
+#     return jsonify(response_body), 200
+
+
 @api.route('/chef_recipes', methods=['GET'])
 @jwt_required()
 def get_current_chef_recipes():

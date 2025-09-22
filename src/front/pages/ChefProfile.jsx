@@ -7,6 +7,12 @@ const ChefProfile = () => {
 
     const [urlImg, setUrlImg] = useState("")
 
+    const [chef, setChef] = useState([])
+
+    const { chef_id } = useParams() || {};
+
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
     const changeUploadImage = async (e) => {
         const file = e.target.files[0];
 
@@ -37,11 +43,6 @@ const ChefProfile = () => {
         }
     }
 
-    const [chef, setChef] = useState([])
-
-    const { chef_id } = useParams() || {};
-
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 
     useEffect(() => {
@@ -74,6 +75,10 @@ const ChefProfile = () => {
                                 <h2>{chef.name}</h2>
                                 <p>Email: {chef.email}</p>
                                 <p>Rating: {chef.rating}</p>
+                                <img src={chef.image_url} alt="" />
+                                <Link to={"/chefs/" + chef.id + "/update"}>
+                                    <button className="btn btn-warning">Edit profile</button>
+                                </Link>
                                 <div>
                                     <input type="file" accept="image/*" onChange={changeUploadImage} />
                                     {urlImg && (

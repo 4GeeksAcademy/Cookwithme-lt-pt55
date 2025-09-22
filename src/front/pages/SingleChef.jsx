@@ -28,6 +28,7 @@ export const SingleChef = props => {
       <h1 className="display-4">Chef Name: {chef.name}</h1>
       <h1 className="display-4">Chef Email: {chef.email}</h1>
       <h1 className="display-4">Chef Stars: {chef.rating}</h1>
+      <h1 className="display-4">Chef Stars: {chef.image_url}</h1>
     </div>
   );
 };

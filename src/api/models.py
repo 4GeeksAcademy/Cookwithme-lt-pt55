@@ -38,7 +38,7 @@ class Chef(db.Model):
     password: Mapped[str] = mapped_column(nullable=False)
     name: Mapped[str] =  mapped_column(String(120), nullable=False)
     rating: Mapped[int] = mapped_column(nullable=False)
-    image_url: Mapped[str] = mapped_column(unique=False, nullable=False)
+    image_url: Mapped[str] = mapped_column(nullable=False)
 
     recipe: Mapped[List["Recipe"]] = relationship(back_populates="chef")
     answers: Mapped[List["Answer"]] = relationship(back_populates="chef")
@@ -50,7 +50,8 @@ class Chef(db.Model):
             "id": self.id,
             "email": self.email,
             "name": self.name,
-            "rating": self.rating
+            "rating": self.rating,
+            "image_url": self.image_url
             # do not serialize the password, its a security breach
         }
     
