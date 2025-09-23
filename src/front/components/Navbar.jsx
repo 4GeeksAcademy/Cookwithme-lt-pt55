@@ -36,6 +36,9 @@ export const Navbar = () => {
             <button className="btn btn-danger" onClick={logout}>
               Logout
             </button>
+            <Link to="/available_recipes">
+            <button className="btn btn-primary">Recetas disponible</button>
+          </Link>  
           </div>
 
           {store.authUser && userFavs.length > 0 && (

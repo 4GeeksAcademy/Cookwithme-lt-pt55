@@ -1070,3 +1070,30 @@ def delete_user_favrecipe(recipe_id):
     db.session.commit()
 
     return jsonify({"msg": f"Recipe {recipe_id} removed from favorites"}), 200
+
+# -----se crea para ver los resultado de recetas disponibles segun ingredientes y utensilios
+
+@api.route('/user/available_recipes', methods=['GET'])
+@jwt_required()
+def get_available_recipes():
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    # IDs de ingredientes y utensilios que tiene el usuario
+    user_ingredients = {iu.ingredient_id for iu in Ingredient_user.query.filter_by(user_id=user.id)}
+    user_utensils = {uu.utensil_id for uu in Utensil_user.query.filter_by(user_id=user.id)}
+
+    available_recipes = []
+
+    for recipe in Recipe.query.all():
+        recipe_ingredients = {ri.ingredient_id for ri in Recipe_ingredient.query.filter_by(recipe_id=recipe.id)}
+        recipe_utensils = {ur.utensil_id for ur in Utensil_recipe.query.filter_by(recipe_id=recipe.id)}
+
+        # Verificar que el usuario tenga todos los ingredientes y utensilios necesarios
+        if recipe_ingredients.issubset(user_ingredients) and recipe_utensils.issubset(user_utensils):
+            available_recipes.append(recipe.serialize())
+
+    return jsonify(available_recipes), 200
+

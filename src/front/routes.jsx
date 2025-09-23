@@ -85,6 +85,8 @@ import { SingleIngredientUser } from "./pages/SingleIngredientUser";
 import NewIngredientUser from "./pages/NewIngredientUser";
 import { EditIngredientUser } from "./pages/EditIngredientUser";
 
+import { AvailableRecipes } from "./pages/AvailableRecipe.jsx";
+
 export const router = createBrowserRouter(
   createRoutesFromElements(
     // CreateRoutesFromElements function allows you to build route elements declaratively.
@@ -182,6 +184,7 @@ export const router = createBrowserRouter(
       <Route path= "/home_user" element={<HomeUser />} />
       <Route path= "/signup_user" element={<SignupUser />} />
 
+     <Route path="/available_recipes" element={<AvailableRecipes />} />
 
     </Route>
   )
