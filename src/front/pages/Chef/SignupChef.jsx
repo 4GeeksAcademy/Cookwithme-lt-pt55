@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import useGlobalReducer from "../../hooks/useGlobalReducer.jsx";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 
-export const SignupAdmin = () => {
+export const SignupChef = () => {
 
     const navigate = useNavigate();
 
@@ -11,6 +11,8 @@ export const SignupAdmin = () => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [name, setName] = useState('')
+    const [rating, setRating] = useState('')
 
     function sendData(e) {
         e.preventDefault()
@@ -24,11 +26,12 @@ export const SignupAdmin = () => {
                 {
                     "email": email,
                     "password": password,
-                    
+                    "name": name,
+                    "rating": rating
                 }
             )
         };
-        fetch(import.meta.env.VITE_BACKEND_URL + '/api/signup_admin', requestOptions)
+        fetch(import.meta.env.VITE_BACKEND_URL + `/api/signup_chef`, requestOptions)
             .then(response => {
                 console.log(response)
                 console.log(response.status)
@@ -42,9 +45,9 @@ export const SignupAdmin = () => {
             })
             .then(data => {
                 console.log(data)
-                localStorage.setItem("tokenAdmin", data.access_token);
-                dispatch({ type: "set_auth_admin", payload: true })
-                navigate("/home_admin");
+                localStorage.setItem("tokenChef", data.access_token);
+                dispatch({ type: "set_auth_chef", payload: true })
+                navigate("/chef_home");
             }
         );
     }
@@ -53,7 +56,7 @@ export const SignupAdmin = () => {
     <div className="container text-center mt-5">
         {error && <div className="alert alert-danger" role="alert">{error}</div>}
         <>
-        {store.authAdmin ? <Navigate to='/home_admin' />
+        {store.authChef ? <Navigate to='/chef_home' />
         :
         <>
             <h1>Register here</h1>
@@ -67,10 +70,18 @@ export const SignupAdmin = () => {
                     <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
                     <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" className="form-control" id="exampleInputPassword1" />
                 </div>
+                <div className="mb-3">
+                    <label htmlFor="exampleInputPassword1" className="form-label">Name</label>
+                    <input value={name} onChange={(e) => setName(e.target.value)} type="text" className="form-control" id="exampleInputName" />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="exampleInputPassword1" className="form-label">Rating</label>
+                    <input value={rating} onChange={(e) => setRating(e.target.value)} type="number" className="form-control" id="exampleInputRating" />
+                </div>
                 <div className="d-flex justify-content-around">
                     <button type="submit" onClick={sendData} className="btn btn-primary">Submit</button>
-                    <Link to="/login_admin">
-                        <button className="btn btn-success">Log In as Admin</button>
+                    <Link to="/login_chef">
+                        <button className="btn btn-success">Log In as Chef</button>
                     </Link>
                 </div>
                 
