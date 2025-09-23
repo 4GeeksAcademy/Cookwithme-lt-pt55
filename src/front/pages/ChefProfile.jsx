@@ -45,27 +45,28 @@ const ChefProfile = () => {
         }
     }
 
-  function updateImage(e) {
-    e.preventDefault();
+    function updateImage(e) {
+        e.preventDefault();
 
-    const requestOptions = {
-      method: "PUT",
-      headers: { "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem("tokenChef")
-      },
-      body: JSON.stringify({ image_url: urlImg }),
-    };
+        const requestOptions = {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("tokenChef")
+            },
+            body: JSON.stringify({ image_url: urlImg }),
+        };
 
-    fetch(backendUrl + `/api/chefs`, requestOptions)
-      .then(response => response.json())
-      .then((data) => {
-        console.log("Chef actualizado:", data);
-        setUrlImg(null)
-        getChefInfo()
-      if (!store.authChef)
-        return navigate("/login_chef")
-      })
-  }
+        fetch(backendUrl + `/api/chefs`, requestOptions)
+            .then(response => response.json())
+            .then((data) => {
+                console.log("Chef actualizado:", data);
+                setUrlImg(null)
+                getChefInfo()
+                if (!store.authChef)
+                    return navigate("/login_chef")
+            })
+    }
 
     useEffect(() => {
         getChefInfo()
@@ -99,6 +100,7 @@ const ChefProfile = () => {
                                 <p>Rating: {chef.rating}</p>
                                 <img src={chef.image_url} alt="" />
 
+
                                 <div>
                                     <input type="file" accept="image/*" onChange={changeUploadImage} />
                                     {urlImg && (
@@ -108,6 +110,9 @@ const ChefProfile = () => {
                                     )}
                                 </div>
                                 <button onClick={updateImage}>Save Image</button>
+                                <Link to={"/chefs/" + chef.id + "/update"}>
+                                    <button className="btn btn-warning">Edit personal info</button>
+                                </Link>
                             </>
                         ) : (
                             <p>Loading chef info...</p>

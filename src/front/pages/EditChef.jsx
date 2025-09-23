@@ -41,6 +41,7 @@ export const EditChef = () => {
         console.log("Chef actualizado:", data);
         if (!store.authChef)
           return navigate("/login_chef")
+        else navigate("/chef_profile")
       })
   }
 
