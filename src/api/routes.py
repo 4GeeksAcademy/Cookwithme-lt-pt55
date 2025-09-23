@@ -106,6 +106,15 @@ def get_chef(chef_id):
         return {"error-msg": "enter a valid chef"}, 400
     return jsonify(chef.serialize()), 200
 
+@api.route('/chef_info', methods=['GET'])
+@jwt_required()
+def get_current_chef_info():
+    current_chef_id = get_jwt_identity()
+    chef = Chef.query.filter_by(email=current_chef_id).first()
+    if chef is None:
+        return {"error-msg": "enter a valid chef"}, 400
+    return jsonify(chef.serialize()), 200
+
 
 @api.route('/chefs/<int:chef_id>', methods=['DELETE'])
 def delete_chef(chef_id):
@@ -142,7 +151,40 @@ def update_chef(chef_id):
         return {"error-msg": "chef does not exist"}, 400
 
     body = request.get_json()
-    chef = Chef(name=body["name"], email=body["email"], rating=body["rating"])
+    if "name" in body:
+        chef.name = body["name"]
+    if "email" in body:
+        chef.email = body["email"]
+    if "rating" in body:
+        chef.rating = body["rating"]
+    if "image_url" in body:
+        chef.image_url = body["image_url"]
+        
+    db.session.commit()
+    response_body = {
+        "message": "chef " + chef.name + " successfully update"
+    }
+
+    return jsonify(response_body), 200
+
+@api.route('/chefs', methods=['PUT'])
+@jwt_required()
+def update_current_chef():
+    current_chef_email = get_jwt_identity()
+    chef = Chef.query.filter_by(email=current_chef_email).first()
+    if chef is None:
+        return {"error-msg": "chef does not exist"}, 400
+
+    body = request.get_json()
+    if "name" in body:
+        chef.name = body["name"]
+    if "email" in body:
+        chef.email = body["email"]
+    if "rating" in body:
+        chef.rating = body["rating"]
+    if "image_url" in body:
+        chef.image_url = body["image_url"]
+        
     db.session.commit()
     response_body = {
         "message": "chef " + chef.name + " successfully update"
@@ -746,6 +788,24 @@ def signup_as_chef():
     db.session.commit()
     access_token = create_access_token(identity=body["email"])
     return jsonify(access_token=access_token), 200
+
+
+# @api.route('/chef_profile/image', methods=['POST'])
+# @jwt_required()
+# def chef_image():
+#     current_chef_id = get_jwt_identity()
+#     chef = Chef.query.filter_by(email=current_chef_id).first()
+#     print(chef)
+#     body = request.get_json()
+#     image_url = Chef(image_url=body["image_url"])
+#     print(image_url)
+#     db.session.add(image_url)
+#     db.session.commit()
+#     response_body = {
+#         "se agrego la imagen ": image_url.serialize()
+#     }
+
+#     return jsonify(response_body), 200
 
 
 @api.route('/chef_recipes', methods=['GET'])
