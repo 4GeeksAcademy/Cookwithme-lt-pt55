@@ -12,6 +12,7 @@ class User(db.Model):
     name: Mapped[str] = mapped_column(String(120), nullable=False)
     password: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(String(120), nullable=False)
+    image_url: Mapped[str] = mapped_column(nullable=True)
 
     questions: Mapped[List["Question"]] = relationship(back_populates="user")
     utensil_users: Mapped[List["Utensil_user"]]  = relationship(back_populates="user")    
@@ -29,6 +30,7 @@ class User(db.Model):
             "username" : self.username,
             "name": self.name,
             "email": self.email,
+            "image_url": self.image_url
             # do not serialize the password, its a security breach
         }
 
