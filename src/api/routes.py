@@ -778,34 +778,32 @@ def login_as_chef():
 @api.route('/signup_chef', methods=['POST'])
 def signup_as_chef():
     body = request.get_json()
-    chef = Chef.query.filter_by(email=body["email"]).first()
+
+    name = body.get("name")
+    email = body.get("email")
+    password = body.get("password")
+    rating = body.get("rating")
+
+    if not all([name, email, password, rating]):
+        return jsonify({"msg": "Missing required fields"}), 400
+
+
+    chef = Chef.query.filter_by(email=email).first()
     if chef:
         return jsonify({"msg": "Chef already exist"}), 401
+    
 
-    chef = Chef(name=body["name"], email=body["email"],
-                password=body["password"], rating=body["rating"])
-    db.session.add(chef)
+    new_chef = Chef(
+        name=name,
+        email=email,
+        password=password,
+        rating=rating
+    )
+
+    db.session.add(new_chef)
     db.session.commit()
-    access_token = create_access_token(identity=body["email"])
+    access_token = create_access_token(identity=new_chef.email)
     return jsonify(access_token=access_token), 200
-
-
-# @api.route('/chef_profile/image', methods=['POST'])
-# @jwt_required()
-# def chef_image():
-#     current_chef_id = get_jwt_identity()
-#     chef = Chef.query.filter_by(email=current_chef_id).first()
-#     print(chef)
-#     body = request.get_json()
-#     image_url = Chef(image_url=body["image_url"])
-#     print(image_url)
-#     db.session.add(image_url)
-#     db.session.commit()
-#     response_body = {
-#         "se agrego la imagen ": image_url.serialize()
-#     }
-
-#     return jsonify(response_body), 200
 
 
 @api.route('/chef_recipes', methods=['GET'])
