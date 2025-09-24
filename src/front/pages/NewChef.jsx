@@ -12,7 +12,8 @@ const NewChef = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [rating, setRating] = useState('')
-    
+    const [image_url, setImageUrl] = useState('')
+
 
     function sendData(e) {
         e.preventDefault()
@@ -20,13 +21,14 @@ const NewChef = () => {
         console.log(name, email, password)
         const requestOptions = {
             method: 'POST',
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(
                 {
                     "email": email,
                     "name": name,
                     "password": password,
                     "rating": rating,
+                    "image_url": image_url
 
                 }
             )
@@ -59,6 +61,10 @@ const NewChef = () => {
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">Rating</label>
                     <input value={rating} onChange={(e) => setRating(e.target.value)} type="number" className="form-control" id="exampleInputRating" />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="exampleInputEmail1" className="form-label">Chef Image</label>
+                    <input value={image_url} onChange={(e) => setImageUrl(e.target.value)} type="img" className="form-control" id="exampleInputImage" />
                 </div>
                 <button type="submit" className="btn btn-primary">Create</button>
                 <Link to="/chefs">
