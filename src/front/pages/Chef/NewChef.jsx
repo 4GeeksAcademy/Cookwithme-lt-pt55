@@ -1,7 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react";
-import { none } from "@cloudinary/url-gen/qualifiers/progressive";
 
 const NewChef = () => {
 
@@ -13,8 +12,8 @@ const NewChef = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [rating, setRating] = useState('')
-    const [image_url, setImageUrl] = useState('')
-
+    const [image_url, setImage_Url] = useState('')
+    
 
     function sendData(e) {
         e.preventDefault()
@@ -22,7 +21,7 @@ const NewChef = () => {
         console.log(name, email, password)
         const requestOptions = {
             method: 'POST',
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify(
                 {
                     "email": email,
@@ -64,8 +63,8 @@ const NewChef = () => {
                     <input value={rating} onChange={(e) => setRating(e.target.value)} type="number" className="form-control" id="exampleInputRating" />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="exampleInputEmail1" className="form-label">Chef Image</label>
-                    <input value={image_url} onChange={(e) => setImageUrl(e.target.value)} type="img" className="form-control" id="exampleInputImage" />
+                    <label htmlFor="exampleInputPassword1" className="form-label">Image</label>
+                    <input value={image_url} onChange={(e) => setImage_Url(e.target.value)} type="text" className="form-control" id="exampleInputImg" />
                 </div>
                 <button type="submit" className="btn btn-primary">Create</button>
                 <Link to="/chefs">
