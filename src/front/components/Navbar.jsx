@@ -36,8 +36,8 @@ export const Navbar = () => {
             <button className="btn btn-danger" onClick={logout}>
               Logout
             </button>
-            <Link to="/available_recipes">
-            <button className="btn btn-primary">Recetas disponible</button>
+            <Link to="/select_ingr&utensil">
+            <button className="btn btn-primary">Buscar recetas por componentes</button>
           </Link>  
           </div>
 

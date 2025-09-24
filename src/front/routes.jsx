@@ -86,6 +86,9 @@ import NewIngredientUser from "./pages/NewIngredientUser";
 import { EditIngredientUser } from "./pages/EditIngredientUser";
 
 import { AvailableRecipes } from "./pages/AvailableRecipe.jsx";
+import { SelectIngredients } from "./pages/SelectIngredUtensil.jsx";
+import { Results } from "./pages/ResultRecipe.jsx";
+
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -185,6 +188,8 @@ export const router = createBrowserRouter(
       <Route path= "/signup_user" element={<SignupUser />} />
 
      <Route path="/available_recipes" element={<AvailableRecipes />} />
+     <Route path="/select_ingr&utensil" element={<SelectIngredients />} />   
+     <Route path="/results" element={<Results />} />
 
     </Route>
   )
