@@ -159,6 +159,8 @@ class Recipe(db.Model):
             "img": self.img,
             "preparation": self.preparation,
             "chef": self.chef.serialize()
+            # "ingredients": [ri.ingredient.serialize() for ri in self.recipe_ingredients],
+            # "utensils": [ru.utensil.serialize() for ru in self.utensil_recipes]
         }      
     
 class Answer(db.Model):

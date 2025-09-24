@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useGlobalReducer from "../hooks/useGlobalReducer.jsx"; // tu hook para el store
 
-export const SelectIngredients = ({ userId, token }) => {
+export const SelectIngredients = () => {
+  const { store } = useGlobalReducer();  // extraemos el store
+  const userId = store.authUser?.id;
+  const navigate = useNavigate();
+
   const [ingredients, setIngredients] = useState([]);
   const [utensils, setUtensils] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
@@ -12,7 +17,6 @@ export const SelectIngredients = ({ userId, token }) => {
   const [showUtensils, setShowUtensils] = useState(false);
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(backendUrl + "/api/ingredients")
@@ -37,6 +41,8 @@ export const SelectIngredients = ({ userId, token }) => {
   };
 
   const handleSubmit = async () => {
+    if (!userId) return alert("Usuario no definido");
+
     try {
       for (const ingredientId of selectedIngredients) {
         await fetch(backendUrl + "/api/ingredient_users", {
@@ -58,6 +64,7 @@ export const SelectIngredients = ({ userId, token }) => {
     }
   };
 
+  // filtros dentro del componente
   const filteredIngredients = ingredients.filter(i =>
     i.name.toLowerCase().includes(ingredientInput.toLowerCase())
   );
