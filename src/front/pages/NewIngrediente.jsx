@@ -134,4 +134,4 @@ const NewIngrediente = () => {
     );
 };
 
-export default NewIngrediente;git commit -m 'cambio nombre merge'
+export default NewIngrediente; 

@@ -15,10 +15,20 @@ const NewRecipe = () => {
     const [description, setDescription] = useState('')
     const [preparation, setPreparation] = useState('')
     const [img, setImg] = useState('')
+    
+    const [suggestions, setSuggestions] = useState([])
 
     const [chefs, setChefs] = useState([])
 
     const [currentChef, setCurrentChef] = useState(null)
+
+    function handleSelectSuggestion(meal) {
+        setName(meal.strMeal);
+        setDescription(`${meal.strCategory} (${meal.strArea})`);
+        setPreparation(meal.strInstructions);
+        setImg(meal.strMealThumb);
+        setSuggestions([]);
+    }
 
     function getChefs() {
         fetch(backendUrl + `/api/chefs`)
@@ -29,6 +39,35 @@ const NewRecipe = () => {
             }
             )
     }
+
+    useEffect(() => {
+        const fetchRecipes = async () => {
+            if (name.trim().length > 1) {
+                try {
+                    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`);
+                    const data = await response.json();
+                    if (data.meals) {
+                        setSuggestions(data.meals);
+                    } else {
+                        setSuggestions([]);
+                    }
+                } catch (error) {
+                    console.error("Error fetching recipes:", error);
+                    setSuggestions([]);
+                }
+            } else {
+                setSuggestions([]);
+            }
+        };
+
+        const timerId = setTimeout(() => {
+            fetchRecipes();
+        }, 300);
+
+        return () => {
+            clearTimeout(timerId);
+        };
+    }, [name]);
 
 
     function sendData(e) {
@@ -43,7 +82,7 @@ const NewRecipe = () => {
                     "name": name,
                     "description": description,
                     "preparation": preparation,
-                    "img": "https://picsum.photos/200/300",
+                    "img": img,
                     "chef_id": currentChef.id
 
                 }
@@ -75,6 +114,20 @@ const NewRecipe = () => {
                 <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">Name</label>
                     <input value={name} onChange={(e) => setName(e.target.value)} type="text" className="form-control" id="exampleInputName" />
+
+                    {suggestions.length > 0 && (
+                        <ul className="list-group mt-2">
+                            {suggestions.slice(0, 5).map(meal => (
+                                <li key={meal.idMeal} 
+                                    className="list-group-item d-flex align-items-center" 
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() => handleSelectSuggestion(meal)}>
+                                    <img src={meal.strMealThumb} alt={meal.strMeal} width="40" className="me-2" />
+                                    {meal.strMeal}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">Description</label>
@@ -82,17 +135,18 @@ const NewRecipe = () => {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">Preparation</label>
-                    <input value={preparation} onChange={(e) => setPreparation(e.target.value)} type="text" className="form-control" id="exampleInputPreparation" />
+                    <textarea value={preparation} onChange={(e) => setPreparation(e.target.value)} type="text" className="form-control" rows="5" id="exampleInputPreparation" />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">Imagen</label>
                     <input 
-                        value={"https://picsum.photos/200/300"} 
+                        value={img} 
                         onChange={(e) => setImg(e.target.value)} 
                         type="text" 
                         className="form-control" 
                         id="exampleInputImage" 
                     />
+                    {img && <img src={img} alt={name} width="200" style={{ marginTop: "10px" }} />}
                 </div>
             
                 <div className="dropdown">
