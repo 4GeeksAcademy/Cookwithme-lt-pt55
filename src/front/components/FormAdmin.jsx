@@ -47,7 +47,7 @@ const FormAdmin = () => {
                 console.log(data)
                 localStorage.setItem("tokenAdmin", data.access_token);
                 dispatch({ type: "set_auth_admin", payload: true })
-                navigate("/home_admin");
+                navigate("/testadm");
             }
         );
             

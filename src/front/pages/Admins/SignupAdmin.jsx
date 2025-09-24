@@ -44,7 +44,7 @@ export const SignupAdmin = () => {
                 console.log(data)
                 localStorage.setItem("tokenAdmin", data.access_token);
                 dispatch({ type: "set_auth_admin", payload: true })
-                navigate("/home_admin");
+                navigate("/testadm");
             }
         );
     }
@@ -53,7 +53,7 @@ export const SignupAdmin = () => {
     <div className="container text-center mt-5">
         {error && <div className="alert alert-danger" role="alert">{error}</div>}
         <>
-        {store.authAdmin ? <Navigate to='/home_admin' />
+        {store.authAdmin ? <Navigate to='/testadm' />
         :
         <>
             <h1>Register here</h1>

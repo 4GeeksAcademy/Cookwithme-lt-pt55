@@ -1,7 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom"
 import { useState } from "react";
-import { none } from "@cloudinary/url-gen/qualifiers/progressive";
 
 const NewChef = () => {
 
