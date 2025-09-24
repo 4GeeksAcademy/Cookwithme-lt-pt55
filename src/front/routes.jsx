@@ -10,82 +10,83 @@ import { Home } from "./pages/Home";
 import { Single } from "./pages/Single";
 import { Demo } from "./pages/Demo";
 
-import { Chef } from "./pages/Chef/Chef";
-import { SingleChef } from "./pages/Chef/SingleChef";
-import NewChef from "./pages/Chef/NewChef";
-import { EditChef } from "./pages/Chef/EditChef";
+import { Chef } from "./pages/Chef";
+import { SingleChef } from "./pages/SingleChef";
+import NewChef from "./pages/NewChef";
+import { EditChef } from "./pages/EditChef";
 
-import { Ingrediente } from "./pages/Ingredient/Ingrediente";
-import { SingleIngrediente } from "./pages/Ingredient/SingleIngrediente";
-import NewIngrediente from "./pages/Ingredient/NewIngrediente";
-import { EditIngrediente } from "./pages/Ingredient/EditIngrediente";
+import { Ingrediente } from "./pages/Ingrediente";
+import { SingleIngrediente } from "./pages/SingleIngrediente";
+import NewIngrediente from "./pages/NewIngrediente";
+import { EditIngrediente } from "./pages/EditIngrediente";
+import { EditUtensilio } from "./pages/EditUtensilio";
 
-import { EditUtensilio } from "./pages/Utensil/EditUtensilio";
-import NewUtensilio from "./pages/Utensil/NewUtensilio";
-import { SingleUtensilio } from "./pages/Utensil/SingleUtensilio";
-import { Utensilio } from "./pages/Utensil/Utensilio";
+import NewUtensilio from "./pages/NewUtensilio";
+import { SingleUtensilio } from "./pages/SingleUtensilio";
+import { Utensilio } from "./pages/Utensilio";
 
 import NewAdmin from "./pages/Admins/NewAdmin";
 import { AdminList } from "./pages/Admins/AdminList";
 import EditAdmin from "./pages/Admins/EditAdmin";
 import { SingleAdmin } from "./pages/Admins/SingleAdmin";
 
-import { Question } from "./pages/QandA/Question";
-import { SingleQuestion } from "./pages/QandA/SingleQuestion";
-import NewQuestion from "./pages/QandA/NewQuestion";
-import { EditQuestion } from "./pages/QandA/EditQuestion";
+import { Question } from "./pages/Question";
+import { SingleQuestion } from "./pages/SingleQuestion";
+import NewQuestion from "./pages/NewQuestion";
+import { EditQuestion } from "./pages/EditQuestion";
 
-import { Answer } from "./pages/QandA/Answer";
-import { SingleAnswer } from "./pages/QandA/SingleAnswer";
-import NewAnswer from "./pages/QandA/NewAnswer";
-import { EditAnswer } from "./pages/QandA/EditAnswer";
+import { Answer } from "./pages/Answer";
+import { SingleAnswer } from "./pages/SingleAnswer";
+import NewAnswer from "./pages/NewAnswer";
+import { EditAnswer } from "./pages/EditAnswer";
 
-import { Recipe } from "./pages/REcipe/Recipe";
-import { SingleRecipe } from "./pages/REcipe/SingleRecipe";
-import NewRecipe from "./pages/REcipe/NewRecipe";
-import { EditRecipe } from "./pages/REcipe/EditRecipe";
+import { Recipe } from "./pages/Recipe";
+import { SingleRecipe } from "./pages/SingleRecipe";
+import NewRecipe from "./pages/NewRecipe";
+import { EditRecipe } from "./pages/EditRecipe";
 
-import {UtensilioReceta} from "./pages/Utensil/UtensilToRecipe";
-import NewUtensilToRecipe from "./pages/Utensil/NewUtensilToRecipe";
-import { SingleUtensilRecipe } from "./pages/Utensil/SingleUtensilRecipe";
-import { EditUtensilToRecipe } from "./pages/Utensil/EditUtensilToRecipe";
+import {UtensilioReceta} from "./pages/UtensilToRecipe";
+import NewUtensilToRecipe from "./pages/NewUtensilToRecipe";
+import { SingleUtensilRecipe } from "./pages/SingleUtensilRecipe";
+import { EditUtensilToRecipe } from "./pages/EditUtensilToRecipe";
 
 import { Califications } from "./pages/Califications/Reviews";
 import NewCalification from "./pages/Califications/NewReview";
 import EditCalification from "./pages/Califications/EditReview";
 
-import { LoginChef } from "./pages/Chef/LoginChef";
-import { HomeChef } from "./pages/Chef/HomeChef";
-import { SignupChef } from "./pages/Chef/SignupChef";
-
+import { LoginChef } from "./pages/LoginChef";
+import { HomeChef } from "./pages/HomeChef";
+import { SignupChef } from "./pages/SignupChef";
 import { LoginAdmin } from "./pages/Admins/LoginAdmin";
 import { SignupAdmin } from "./pages/Admins/SignupAdmin";
-import { HomeAdmin } from "./pages/Admins/HomeAdmin";
+import { HomeAdmin } from "./pages/HomeAdmin";
 
-import { RecipeIngredient } from "./pages/REcipe/RecipeIngredient";
-import { SingleRecipeIngredient } from "./pages/REcipe/SingleRecipeIngredient";
-import NewRecipeIngredient from "./pages/REcipe/NewRecipeIngredient";
-import { EditRecipeIngredient } from "./pages/REcipe/EditRecipeIngredient";
+import { RecipeIngredient } from "./pages/RecipeIngredient";
+import { SingleRecipeIngredient } from "./pages/SingleRecipeIngredient";
+import NewRecipeIngredient from "./pages/NewRecipeIngredient";
+import { EditRecipeIngredient } from "./pages/EditRecipeIngredient";
 
-import { UtensilToUser } from "./pages/Users/UtensilToUser";
-import NewUtensilToUser from "./pages/Users/NewUtensilToUser";
-import { SingleUtensilToUser } from "./pages/Users/SingleUtensilToUser";
-import { EditUtensilToUser } from "./pages/Users/EditUtensilToUser";
-import { Users } from "./pages/Users/Users";
-import NewUser from "./pages/Users/NewUser";
-import { SingleUser } from "./pages/Users/SingleUser";
-import { EditUser } from "./pages/Users/EditUser";
-import { IngredientUser } from "./pages/Users/IngredientUser";
-import { SingleIngredientUser } from "./pages/Users/SingleIngredientUser";
-import NewIngredientUser from "./pages/Users/NewIngredientUser";
-import { EditIngredientUser } from "./pages/Users/EditIngredientUser";
-import { LoginUser } from "./pages/Users/LoginUser";
-import { HomeUser } from "./pages/Users/HomeUser";
-import { SignupUser } from "./pages/Users/SignupUser";
+import { UtensilToUser } from "./pages/UtensilToUser";
+import NewUtensilToUser from "./pages/NewUtensilToUser";
+import { SingleUtensilToUser } from "./pages/SingleUtensilToUser";
+import { EditUtensilToUser } from "./pages/EditUtensilToUser";
+
+import { Users } from "./pages/Users";
+import NewUser from "./pages/NewUser";
+import { SingleUser } from "./pages/SingleUser";
+import { EditUser } from "./pages/EditUser";
+
+import { LoginUser } from "./pages/LoginUser";
+import { HomeUser } from "./pages/HomeUser";
+import { SignupUser } from "./pages/SignupUser";
+
+import { IngredientUser } from "./pages/IngredientUser";
+import { SingleIngredientUser } from "./pages/SingleIngredientUser";
+import NewIngredientUser from "./pages/NewIngredientUser";
+import { EditIngredientUser } from "./pages/EditIngredientUser";
 import NewChefRecipe from "./pages/NewChefRecipe";
 import EditChefRecipe from "./pages/EditChefRecipe";
 import ChefProfile from "./pages/ChefProfile";
-
 
 
 export const router = createBrowserRouter(
@@ -100,7 +101,7 @@ export const router = createBrowserRouter(
     <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>} >
 
       {/* Nested Routes: Defines sub-routes within the BaseHome component. */}
-      <Route path="/" element={<Home/>} />
+      <Route path="/" element={<Home />} />
       <Route path="/ingredientes" element={<Ingrediente />} />
       <Route path="/ingredientes/:ingrediente_id" element={<SingleIngrediente />} />
       <Route path="/add_ingrediente" element={<NewIngrediente />} />
@@ -143,7 +144,7 @@ export const router = createBrowserRouter(
       <Route path="/adminuser/:admin_id/edit" element={<EditAdmin />} />
       <Route path= "/login_admin" element={<LoginAdmin />} />
       <Route path= "/signup_admin" element={<SignupAdmin />} />
-      <Route path= "/home_admin" element={<HomeAdmin />} />
+      <Route path= "/testadm" element={<HomeAdmin />} />
 
       <Route path="/questions" element={<Question />} />
       <Route path="/questions/:question_id" element={<SingleQuestion />} />
@@ -179,9 +180,6 @@ export const router = createBrowserRouter(
       <Route path="users/:user_id" element={<SingleUser />} />
       <Route path="users/:user_id/edit" element={<EditUser />} />
       <Route path="add_user" element={<NewUser />} />
-      <Route path= "/login_user" element={<LoginUser />} />
-      <Route path= "/home_user" element={<HomeUser />} />
-      <Route path= "/signup_user" element={<SignupUser/>} />
 
       <Route path="/ingredient_users" element={<IngredientUser />} />
       <Route path="/ingredient_users/:ingredient_user_id" element={<SingleIngredientUser />} />

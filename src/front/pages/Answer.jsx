@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
-import useGlobalReducer from "../../hooks/useGlobalReducer.jsx";
+import rigoImageUrl from "../assets/img/rigo-baby.jpg";
+import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { Link } from "react-router-dom";
 
 export const Answer = () => {
