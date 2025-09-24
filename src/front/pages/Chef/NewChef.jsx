@@ -12,6 +12,7 @@ const NewChef = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [rating, setRating] = useState('')
+    const [image_url, setImage_Url] = useState('')
     
 
     function sendData(e) {
@@ -27,6 +28,7 @@ const NewChef = () => {
                     "name": name,
                     "password": password,
                     "rating": rating,
+                    "image_url": image_url
 
                 }
             )
@@ -59,6 +61,10 @@ const NewChef = () => {
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">Rating</label>
                     <input value={rating} onChange={(e) => setRating(e.target.value)} type="number" className="form-control" id="exampleInputRating" />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="exampleInputPassword1" className="form-label">Image</label>
+                    <input value={image_url} onChange={(e) => setImage_Url(e.target.value)} type="text" className="form-control" id="exampleInputImg" />
                 </div>
                 <button type="submit" className="btn btn-primary">Create</button>
                 <Link to="/chefs">

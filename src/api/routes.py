@@ -134,7 +134,7 @@ def delete_chef(chef_id):
 def add_chef():
     body = request.get_json()
     chef = Chef(name=body["name"], email=body["email"],
-                rating=body["rating"], password=body["password"])
+                rating=body["rating"], password=body["password"], image_url=body["image_url"])
     db.session.add(chef)
     db.session.commit()
     response_body = {
