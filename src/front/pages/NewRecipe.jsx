@@ -149,7 +149,7 @@ const NewRecipe = () => {
                     {img && <img src={img} alt={name} width="200" style={{ marginTop: "10px" }} />}
                 </div>
             
-                {/* <div className="dropdown">
+                <div className="dropdown">
                     <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {!currentChef ? "Select chef" : "Chef: " + currentChef.name}
                     </button>
@@ -158,9 +158,9 @@ const NewRecipe = () => {
                             <li key={chef.id} onClick={() => setCurrentChef(chef)}><button className="dropdown-item" type="button">{chef.name}</button></li>
                         )}
                     </ul>
-                </div> */}
+                </div>
                 <button type="submit" className="btn btn-primary" onClick={sendData}>Create</button>
-                {/* {store.authChef ?
+                {store.authChef ?
                     <Link to="/chef_home">
                         <button className="btn btn-primary">Back to home</button>
                     </Link>
@@ -168,7 +168,7 @@ const NewRecipe = () => {
                     <Link to="/recipes">
                         <button className="btn btn-primary">Back to recipes</button>
                     </Link>
-                } */}
+                }
             </form>
         </div>
     )
