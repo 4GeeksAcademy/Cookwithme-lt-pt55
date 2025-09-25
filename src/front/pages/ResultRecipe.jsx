@@ -1,38 +1,48 @@
 import React, { useEffect, useState } from "react";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 
-export const Results = ({ token }) => {
+export const Results = () => {
+  console.log("🚀 Entré a Results.jsx");
+  const { store } = useGlobalReducer();
+  const token = store.authUser?.token; 
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
-    if (!token) return setError("No token provided");
+    if (!token) {
+      console.log("⏳ Esperando token...");
+      return; 
+    }
 
-    const fetchRecipes = async () => {
-      try {
-        const res = await fetch(backendUrl + "user/available_recipes", {
-          headers: {
-            Authorization: `Bearer ${token}`, // <-- enviar JWT
-          },
-        });
 
-        if (!res.ok) {
-          const errorData = await res.json();
-          throw new Error(errorData.error || "Error fetching recipes");
-        }
+  console.log("✅ Token detectado:", token);
 
-        const data = await res.json();
-        setResults(data);
-      } catch (err) {
-        console.error("Error fetching recipes:", err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
+  const fetchRecipes = async () => {
+    try {
+      console.log("🔄 Fetch a:", backendUrl + "/api/user/available_recipes");
+      const res = await fetch(backendUrl + "/api/user/available_recipes", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Error fetching recipes");
       }
-    };
 
-    fetchRecipes();
+      const data = await res.json();
+      console.log("📦 Recetas recibidas:", data);
+      setResults(data);
+    } catch (err) {
+      console.error("Error fetching recipes:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchRecipes();
   }, [token, backendUrl]);
 
   if (loading) return <p className="mt-5">Cargando recetas...</p>;

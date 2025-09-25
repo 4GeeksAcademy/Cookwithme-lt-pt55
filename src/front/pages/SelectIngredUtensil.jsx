@@ -40,29 +40,35 @@ export const SelectIngredients = () => {
     );
   };
 
-  const handleSubmit = async () => {
-    if (!userId) return alert("Usuario no definido");
+const handleSubmit = async () => {
+  if (!userId) return alert("Usuario no definido");
 
-    try {
-      for (const ingredientId of selectedIngredients) {
-        await fetch(backendUrl + "/api/ingredient_users", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ user_id: userId, ingredient_id: ingredientId }),
-        });
-      }
-      for (const utensilId of selectedUtensils) {
-        await fetch(backendUrl + "/api/utensil_user", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ user_id: userId, utensil_id: utensilId }),
-        });
-      }
-      navigate("/results");
-    } catch (err) {
-      console.error(err);
+  try {
+    const response = await fetch(backendUrl + "/api/ingredient_users_bulk", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${store.authUser.token}`
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        ingredient_ids: selectedIngredients,
+        utensil_ids: selectedUtensils
+      })
+    });
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.error || "Error al guardar ingredientes y utensilios");
     }
-  };
+
+    await response.json(); // opcional
+    navigate("/results");   // navegar solo cuando todo se guarda
+  } catch (err) {
+    console.error(err);
+    alert("Error al guardar tus selecciones: " + err.message);
+  }
+};
 
   // filtros dentro del componente
   const filteredIngredients = ingredients.filter(i =>

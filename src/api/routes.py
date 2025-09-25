@@ -1072,7 +1072,6 @@ def delete_user_favrecipe(recipe_id):
     return jsonify({"msg": f"Recipe {recipe_id} removed from favorites"}), 200
 
 # -----se crea para ver los resultado de recetas disponibles segun ingredientes y utensilios
-
 @api.route('/user/available_recipes', methods=['GET'])
 @jwt_required()
 def get_available_recipes():
@@ -1081,19 +1080,47 @@ def get_available_recipes():
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    # IDs de ingredientes y utensilios que tiene el usuario
-    user_ingredients = {iu.ingredient_id for iu in Ingredient_user.query.filter_by(user_id=user.id)}
-    user_utensils = {uu.utensil_id for uu in Utensil_user.query.filter_by(user_id=user.id)}
+    # Ingredientes y utensilios del usuario
+    selected_ingredient_ids = [iu.ingredient_id for iu in Ingredient_user.query.filter_by(user_id=user.id)]
+    selected_utensil_ids = [uu.utensil_id for uu in Utensil_user.query.filter_by(user_id=user.id)]
 
     available_recipes = []
 
     for recipe in Recipe.query.all():
-        recipe_ingredients = {ri.ingredient_id for ri in Recipe_ingredient.query.filter_by(recipe_id=recipe.id)}
-        recipe_utensils = {ur.utensil_id for ur in Utensil_recipe.query.filter_by(recipe_id=recipe.id)}
+        recipe_ingredient_ids = [ri.ingredient_id for ri in Recipe_ingredient.query.filter_by(recipe_id=recipe.id)]
+        recipe_utensil_ids = [ur.utensil_id for ur in Utensil_recipe.query.filter_by(recipe_id=recipe.id)]
 
-        # Verificar que el usuario tenga todos los ingredientes y utensilios necesarios
-        if recipe_ingredients.issubset(user_ingredients) and recipe_utensils.issubset(user_utensils):
+        # Solo si la receta contiene todos los ingredientes seleccionados y utensilios seleccionados
+        if set(selected_ingredient_ids).issubset(recipe_ingredient_ids) and set(selected_utensil_ids).issubset(recipe_utensil_ids):
             available_recipes.append(recipe.serialize())
 
     return jsonify(available_recipes), 200
 
+# --------------
+@api.route('/ingredient_users_bulk', methods=['POST'])
+@jwt_required()
+def ingredient_users_bulk():
+    user_id = request.json.get("user_id")
+    ingredient_ids = request.json.get("ingredient_ids", [])
+    utensil_ids = request.json.get("utensil_ids", [])
+
+    if not user_id:
+        return jsonify({"error": "user_id required"}), 400
+
+    # Limpiar selecciones previas
+    Ingredient_user.query.filter_by(user_id=user_id).delete()
+    Utensil_user.query.filter_by(user_id=user_id).delete()
+    db.session.commit()
+
+    # Agregar nuevas selecciones de ingredientes
+    for ing_id in ingredient_ids:
+        iu = Ingredient_user(user_id=user_id, ingredient_id=ing_id)
+        db.session.add(iu)
+
+    # Agregar nuevas selecciones de utensilios
+    for ut_id in utensil_ids:
+        uu = Utensil_user(user_id=user_id, utensil_id=ut_id)
+        db.session.add(uu)
+
+    db.session.commit()
+    return jsonify({"msg": "Selections updated"}), 201
