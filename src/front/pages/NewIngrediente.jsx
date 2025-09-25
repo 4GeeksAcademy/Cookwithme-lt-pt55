@@ -5,6 +5,8 @@ const NewIngrediente = () => {
 
     const navigate = useNavigate();
 
+    const [urlImg, setUrlImg] = useState("")
+
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState('');
@@ -39,6 +41,37 @@ const NewIngrediente = () => {
         return reverseTranslations[normalizedText] || text;
     };
 
+    const UploadIngredientImage = async (e) => {
+        const file = e.target.files[0];
+
+        const formData = new FormData()
+
+        formData.append('file', file)
+        formData.append('upload_preset', 'ingredient_image')
+        formData.append('cloud_name', 'dwi8lacfr')
+
+        try {
+            const response = await fetch("https://api.cloudinary.com/v1_1/dwi8lacfr/image/upload", {
+                method: 'POST',
+                body: formData
+            })
+
+            const data = await response.json()
+            console.log(data)
+
+            if (data.secure_url) {
+                setUrlImg(data.secure_url)
+                setImage("");
+            } else {
+                console.error("Failed to upload the image, please try again");
+            }
+
+        }
+        catch (error) {
+            console.error("Error uploading image:", error)
+        }
+    }
+
     useEffect(() => {
         const fetchAllIngredients = async () => {
             try {
@@ -52,7 +85,7 @@ const NewIngrediente = () => {
             }
         };
         fetchAllIngredients();
-    }, []); 
+    }, []);
 
     useEffect(() => {
         if (name.trim().length > 1) {
@@ -77,19 +110,26 @@ const NewIngrediente = () => {
         const spanishName = translateToSpanish(meal.strMeal);
         setName(spanishName);
         setDescription(meal.strDescription);
-        setImage(meal.strMealThumb); 
+        setImage(meal.strMealThumb);
         setSuggestions([]);
     }
 
-    function sendData(e){
+    function sendData(e) {
         e.preventDefault();
+
+        const finalImageURL = urlImg || image;
+        if (!finalImageURL) {
+            alert("Please provide an image for the ingredient.");
+            return;
+        }
+
         const requestOptions = {
             method: 'POST',
-            headers:{"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 "name": name,
                 "description": description,
-                "image": image
+                "image": finalImageURL 
             })
         };
         fetch(backendUrl + '/api/ingredients/', requestOptions)
@@ -106,13 +146,13 @@ const NewIngrediente = () => {
             <form className="w-50 mx-auto" onSubmit={sendData}>
                 <div className="mb-3">
                     <label className="form-label">Nombre</label>
-                    <input value={name} onChange={(e) => setName(e.target.value)} type="text" className="form-control"/>
+                    <input value={name} onChange={(e) => setName(e.target.value)} type="text" className="form-control" />
                     {suggestions.length > 0 && (
                         <ul className="list-group mt-2">
                             {suggestions.map(meal => (
-                                <li key={meal.idMeal} className="list-group-item d-flex align-items-center" style={{cursor:"pointer"}}
-                                onClick={() => handleSelectSuggestion(meal)}>
-                                    <img src={meal.strMealThumb} alt={meal.strMeal} width="40" className="me-2"/>
+                                <li key={meal.idMeal} className="list-group-item d-flex align-items-center" style={{ cursor: "pointer" }}
+                                    onClick={() => handleSelectSuggestion(meal)}>
+                                    <img src={meal.strMealThumb} alt={meal.strMeal} width="40" className="me-2" />
                                     {translateToSpanish(meal.strMeal)}
                                 </li>
                             ))}
@@ -121,12 +161,21 @@ const NewIngrediente = () => {
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Descripción</label>
-                    <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="form-control" rows="5"/>
+                    <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="form-control" rows="5" />
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Imagen</label>
-                    <input value={image} type="text" className="form-control" onChange={(e) => setImage(e.target.value)} readOnly/>
-                    {image && <img src={image} alt={name} width="200" style={{marginTop:"10px"}}/>}
+                    <input value={urlImg || image} type="text" className="form-control"/>
+                    {(urlImg || image) && <img src={urlImg || image} alt={name} width="200" style={{ marginTop: "10px" }} />}
+                    
+                </div>
+                <div>
+                    <input type="file" accept="image/*" onChange={UploadIngredientImage} />
+                    {urlImg && (
+                        <div>
+                            <img src={urlImg} alt="" />
+                        </div>
+                    )}
                 </div>
                 <button type="submit" className="btn btn-primary">Crear</button>
             </form>
