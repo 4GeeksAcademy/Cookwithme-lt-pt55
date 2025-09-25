@@ -7,7 +7,7 @@ const NewUtensilio = () => {
 
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
-    const [url_img, setUrl_img] = useState('')
+    const [url_img, setUrlImg] = useState('')
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL
 
@@ -18,7 +18,6 @@ const NewUtensilio = () => {
             method: 'POST',
             headers:{"Content-Type": "application/json"},
             body: JSON.stringify(
-
                 {
                 "name": name,
                 "description": description,
@@ -47,7 +46,7 @@ const NewUtensilio = () => {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">url de img</label>
-                    <input value={url_img} onChange={(e)=>setUrl_img(e.target.value)} type="text" className="form-control" id="exampleInputEmail1"/>
+                    <input value={url_img} onChange={(e)=>setUrlImg(e.target.value)} type="text" className="form-control" id="exampleInputUtensilImage"/>
                 </div>
                 <button type="submit" className="btn btn-primary">Crear</button>
             </form>

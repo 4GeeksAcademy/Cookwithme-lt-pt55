@@ -6,30 +6,35 @@ import { Link } from "react-router-dom";
 export const Utensilio = () => {
 
 
-    const[utensilios, setUtensilios] = useState([])
+    const [utensilios, setUtensilios] = useState([])
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL
 
-    function getUtensilios(){
+    function getUtensilios() {
         fetch(backendUrl + '/api/utensils')
-        .then(response => response.json())
-        .then(data => setUtensilios(data))
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                setUtensilios(data)
+            }
+        )
 
-    }    
+    }
 
 
-    function deleteUtensilio(utensilio_id){
+    function deleteUtensilio(utensilio_id) {
 
         const requestOptions = {
             method: 'DELETE'
         }
         fetch(backendUrl + '/api/utensils/' + utensilio_id, requestOptions)
-        .then(response => response.json())
-        .then(data => 
-            {console.log(data)
-            getUtensilios()})
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                getUtensilios()
+            })
 
-    }    
+    }
 
 
     useEffect(() => {
@@ -41,19 +46,21 @@ export const Utensilio = () => {
         <div className="text-center mt-5">
             <h1 className="display-4">Utensilios</h1>
 
-                <div className="ml-auto">
-                    <Link to="/add_utensilio">
-                        <button className="btn btn-success my-3">Crear Utensilio</button>
-                    </Link>
-                </div>
+            <div className="ml-auto">
+                <Link to="/add_utensilio">
+                    <button className="btn btn-success my-3">Crear Utensilio</button>
+                </Link>
+            </div>
 
-           { utensilios.map((utensilio) => (
-                <p key={utensilio.id}> 
-                    Nombre: {utensilio.name}
-                    Descripcion: {utensilio.description}
-                    Url_img: {utensilio.Url_img}
+            {utensilios.map((utensilio) => (
+                <React.Fragment key={utensilio.id}>
+                    <p>Nombre: {utensilio.name}</p>
+                    <p>Descripcion: {utensilio.description}</p>
+                    <div className="">
+                        <img src={utensilio.Url_img} alt="recipe image" className="h-25 d-inline-block" />
+                    </div>
 
-                    <Link to={"/utensilios/"+utensilio.id}>
+                    <Link to={"/utensilios/" + utensilio.id}>
                         <button className="btn btn-primary">Ver</button>
                     </Link>
 
@@ -61,11 +68,11 @@ export const Utensilio = () => {
                         <button className="btn btn-info">Editar</button>
                     </Link>
 
-                        <button className="btn btn-danger" onClick={()=>deleteUtensilio(utensilio.id)}>Eliminar</button>
-                                  
-                </p>
+                    <button className="btn btn-danger" onClick={() => deleteUtensilio(utensilio.id)}>Eliminar</button>
+
+                </React.Fragment>
             ))}
-            
+
         </div>
     );
 }; 
