@@ -57,7 +57,7 @@ export const Utensilio = () => {
                     <p>Nombre: {utensilio.name}</p>
                     <p>Descripcion: {utensilio.description}</p>
                     <div className="">
-                        <img src={utensilio.Url_img} alt="recipe image" className="h-25 d-inline-block" />
+                        <img src={utensilio.url_img} alt="recipe image" className="h-25 d-inline-block" />
                     </div>
 
                     <Link to={"/utensilios/" + utensilio.id}>

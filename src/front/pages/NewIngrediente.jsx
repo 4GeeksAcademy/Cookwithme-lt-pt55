@@ -47,7 +47,7 @@ const NewIngrediente = () => {
         const formData = new FormData()
 
         formData.append('file', file)
-        formData.append('upload_preset', 'ingredient_image')
+        formData.append('upload_preset', 'ingredient_and_utensil_image')
         formData.append('cloud_name', 'dwi8lacfr')
 
         try {
