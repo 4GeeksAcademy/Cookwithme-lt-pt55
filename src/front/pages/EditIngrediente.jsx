@@ -11,32 +11,78 @@ export const EditIngrediente = () => {
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-    useEffect(() => {
+  const [urlImg, setUrlImg] = useState("")
+
+  const changeUploadedImage = async (e) => {
+    const file = e.target.files[0];
+
+    setImage("");
+
+    const formData = new FormData()
+
+    formData.append('file', file)
+    formData.append('upload_preset', 'ingredient_and_utensil_image')
+    formData.append('cloud_name', 'dwi8lacfr')
+
+    try {
+      const response = await fetch("https://api.cloudinary.com/v1_1/dwi8lacfr/image/upload", {
+        method: 'POST',
+        body: formData
+      })
+
+      const data = await response.json()
+      console.log(data)
+
+      if (data.secure_url) {
+        setUrlImg(data.secure_url)
+
+      } else {
+        console.error("Failed to upload the image, please try again");
+      }
+
+    }
+    catch (error) {
+      console.error("Error uploading image:", error)
+    }
+  }
+
+  useEffect(() => {
     fetch(backendUrl + "/api/ingredients/" + ingrediente_id)
-        .then(response => response.json())
-        .then((data) => {
+      .then(response => response.json())
+      .then((data) => {
         setName(data.name);
         setDescription(data.description);
         setImage(data.image);
-        });
-    }, [ingrediente_id]);
+        setUrlImg("");
+      });
+  }, [ingrediente_id, backendUrl]);
 
-  
+
   function updateData(e) {
     e.preventDefault();
+
+    const finalImageUrl = urlImg || image
 
     const requestOptions = {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, description, image }),
+      body: JSON.stringify({ name, description, image: finalImageUrl }),
     };
 
     fetch(backendUrl + '/api/ingredients/' + ingrediente_id, requestOptions)
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then((data) => {
         console.log("Ingrediente actualizado:", data);
         navigate("/ingredientes");
       })
+      .catch((error) => {
+        console.error("Error updating ingredient:", error);
+      });
   }
 
   return (
@@ -61,14 +107,18 @@ export const EditIngrediente = () => {
             className="form-control"
           />
         </div>
-        <div className="mb-3">
-          <label className="form-label">Imagen</label>
-          <input
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-            type="text"
-            className="form-control"
-          />
+
+        <div>
+          <input type="file" accept="image/*" onChange={changeUploadedImage} />
+          {(urlImg || image) && (
+            <div>
+              <img 
+              src={urlImg || image} 
+              alt="Ingrediente Imagen" 
+              style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+              />
+            </div>
+          )}
         </div>
         <button type="submit" className="btn btn-primary">
           Guardar Cambios

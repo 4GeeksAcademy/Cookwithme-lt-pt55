@@ -10,6 +10,21 @@ export const HomeChef = () => {
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL
 
+    const [chef, setChef] = useState([])
+
+    function getChefInfo() {
+        const token = localStorage.getItem("tokenChef")
+        fetch(backendUrl + `/api/chef_info`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                setChef(data)
+            }
+            )
+    }
+
     function getChefRecipes() {
 
         const token = localStorage.getItem("tokenChef")
@@ -45,6 +60,7 @@ export const HomeChef = () => {
     }
 
     useEffect(() => {
+        getChefInfo()
         getChefRecipes()
     }, [])
 
@@ -53,12 +69,13 @@ export const HomeChef = () => {
         <div className="container text-center mt-5">
             {store.authChef ?
                 <>
+
+                    <h1 className="display-4">Hello, welcome {chef.name}!!</h1>
                     {chefRecipe.length != 0 ?
                         <>
                             {chefRecipe.map((recipe) =>
                                 <React.Fragment key={recipe.id}>
                                     <div className="text-center mt-4">
-                                        <h1 className="display-4">Hello, welcome chef {recipe.chef.name}!!</h1>
                                         <Link to="/new_chef_recipe">
                                             <button className="btn btn-success">Add new recipe</button>
                                         </Link>
@@ -83,6 +100,9 @@ export const HomeChef = () => {
                         </>
                         :
                         <h1>No recipes, add more. </h1>}
+                        <Link to="/new_chef_recipe">
+                            <button className="btn btn-success">Add new recipe</button>
+                        </Link>
 
                 </>
                 :
