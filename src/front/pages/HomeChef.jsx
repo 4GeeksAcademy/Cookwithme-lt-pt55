@@ -53,7 +53,6 @@ export const HomeChef = () => {
         <div className="container text-center mt-5">
             {store.authChef ?
                 <>
-
                     {chefRecipe.length != 0 ?
                         <>
                             {chefRecipe.map((recipe) =>

@@ -90,6 +90,11 @@ import EditChefRecipe from "./pages/EditChefRecipe";
 import ChefProfile from "./pages/ChefProfile";
 
 
+import { AvailableRecipes } from "./pages/AvailableRecipe.jsx";
+import { SelectIngredients } from "./pages/SelectIngredUtensil.jsx";
+import { Results } from "./pages/ResultRecipe.jsx";
+
+
 export const router = createBrowserRouter(
   createRoutesFromElements(
     // CreateRoutesFromElements function allows you to build route elements declaratively.
@@ -190,6 +195,14 @@ export const router = createBrowserRouter(
       <Route path="/ingredient_users/:ingredient_user_id" element={<SingleIngredientUser />} />
       <Route path="/add_ingredient_user" element={<NewIngredientUser />} />
       <Route path="/ingredient_users/:ingredient_user_id/edit" element={<EditIngredientUser />} />
+
+      <Route path= "/login_user" element={<LoginUser />} />
+      <Route path= "/home_user" element={<HomeUser />} />
+      <Route path= "/signup_user" element={<SignupUser />} />
+
+     <Route path="/available_recipes" element={<AvailableRecipes />} />
+     <Route path="/select_ingr&utensil" element={<SelectIngredients />} />   
+     <Route path="/results" element={<Results />} />
 
     </Route>
   )
