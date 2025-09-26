@@ -784,6 +784,7 @@ def signup_as_chef():
 
     chef = Chef(name=body["name"], email=body["email"],
                 password=body["password"], rating=body["rating"])
+    
     db.session.add(chef)
     db.session.commit()
     access_token = create_access_token(identity=body["email"])
