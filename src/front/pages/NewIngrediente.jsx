@@ -125,7 +125,7 @@ const NewIngrediente = () => {
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Imagen</label>
-                    <input value={image} type="text" className="form-control" onChange={(e) => setImage(e.target.value)} readOnly/>
+                    <input value={image} type="text" className="form-control" onChange={(e) => setImage(e.target.value)}/>
                     {image && <img src={image} alt={name} width="200" style={{marginTop:"10px"}}/>}
                 </div>
                 <button type="submit" className="btn btn-primary">Crear</button>
@@ -134,4 +134,4 @@ const NewIngrediente = () => {
     );
 };
 
-export default NewIngrediente;git commit -m 'cambio nombre merge'
+export default NewIngrediente; 
