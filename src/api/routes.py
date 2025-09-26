@@ -106,6 +106,7 @@ def get_chef(chef_id):
         return {"error-msg": "enter a valid chef"}, 400
     return jsonify(chef.serialize()), 200
 
+
 @api.route('/chef_info', methods=['GET'])
 @jwt_required()
 def get_current_chef_info():
@@ -159,13 +160,14 @@ def update_chef(chef_id):
         chef.rating = body["rating"]
     if "image_url" in body:
         chef.image_url = body["image_url"]
-        
+
     db.session.commit()
     response_body = {
         "message": "chef " + chef.name + " successfully update"
     }
 
     return jsonify(response_body), 200
+
 
 @api.route('/chefs', methods=['PUT'])
 @jwt_required()
@@ -184,7 +186,7 @@ def update_current_chef():
         chef.rating = body["rating"]
     if "image_url" in body:
         chef.image_url = body["image_url"]
-        
+
     db.session.commit()
     response_body = {
         "message": "chef " + chef.name + " successfully update"
@@ -784,7 +786,7 @@ def signup_as_chef():
 
     chef = Chef(name=body["name"], email=body["email"],
                 password=body["password"], rating=body["rating"])
-    
+
     db.session.add(chef)
     db.session.commit()
     access_token = create_access_token(identity=body["email"])
