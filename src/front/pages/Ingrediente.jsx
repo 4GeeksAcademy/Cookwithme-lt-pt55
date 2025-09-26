@@ -13,7 +13,10 @@ export const Ingrediente = () => {
     function getIngredientes(){
         fetch(backendUrl + '/api/ingredients')
         .then(response => response.json())
-        .then(data => setIngredientes(data))
+        .then(data => {
+            console.log(data)
+            setIngredientes(data)
+        })
 
     }    
 
