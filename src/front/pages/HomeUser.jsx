@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import { Navigate } from "react-router-dom";
+
 
 export const HomeUser = () => {
   const { store, dispatch } = useGlobalReducer();
@@ -12,6 +14,7 @@ export const HomeUser = () => {
       .then(res => res.json())
       .then(data => setRecipes(data));
   }, []);
+
 
     console.log("AuthUser:", store.authUser);
     console.log("UsersFavs:", store.usersFavs);
