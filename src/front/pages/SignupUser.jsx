@@ -31,7 +31,7 @@ export const SignupUser = () => {
                 }
             )
         };
-        fetch(import.meta.env.VITE_BACKEND_URL + `api/signup_user`, requestOptions)
+        fetch(import.meta.env.VITE_BACKEND_URL + `/api/signup_user`, requestOptions)
             .then(response => {
                 console.log(response)
                 console.log(response.status)
