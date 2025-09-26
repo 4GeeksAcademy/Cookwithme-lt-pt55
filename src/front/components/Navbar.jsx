@@ -6,27 +6,26 @@ export const Navbar = () => {
   const navigate = useNavigate();
   const { store, dispatch } = useGlobalReducer();
 
-  // Función de logout genérica
+  // Logout unificado
   function logout() {
     if (store.authChef) {
       localStorage.removeItem("tokenChef");
       dispatch({ type: "set_auth_chef", payload: false });
-      navigate("/login_chef");
-    } else if (store.authUser) {
+      navigate("/"); // o /login_chef si quieres
+    }
+    if (store.authUser) {
       localStorage.removeItem("tokenUser");
-      dispatch({ type: "set_auth_user", payload: null });
-      navigate("/login_user");
-    } else if (store.authAdmin) {
+      dispatch({ type: "set_auth_user", payload: false });
+      navigate("/"); // o /login_user
+    }
+    if (store.authAdmin) {
       localStorage.removeItem("tokenAdmin");
       dispatch({ type: "set_auth_admin", payload: false });
-      navigate("/login_admin");
+      navigate("/"); // o /login_admin
     }
   }
 
-  // Favoritos del usuario logueado
-  const userFavs = store.authUser
-    ? store.usersFavs[store.authUser.id] || []
-    : [];
+  const userFavs = store.authUser ? store.usersFavs[store.authUser.id] || [] : [];
 
   return (
     <nav className="navbar navbar-light bg-light">
@@ -38,7 +37,7 @@ export const Navbar = () => {
             </button>
           )}
 
-          {/* Vista para USER */}
+          {/* Botones según rol */}
           {store.authUser && (
             <Link to="/select_ingr&utensil">
               <button className="btn btn-primary">
@@ -47,10 +46,15 @@ export const Navbar = () => {
             </Link>
           )}
 
-          {/* Vista para CHEF */}
           {store.authChef && (
             <Link to="/chef_profile">
               <button className="btn btn-primary">Perfil Chef</button>
+            </Link>
+          )}
+
+          {store.authAdmin && (
+            <Link to="/adminuser">
+              <button className="btn btn-primary">Admins</button>
             </Link>
           )}
         </div>
@@ -64,22 +68,16 @@ export const Navbar = () => {
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              Mis Favoritos{" "}
-              <span className="badge text-bg-secondary">{userFavs.length}</span>
+              Mis Favoritos <span className="badge text-bg-secondary">{userFavs.length}</span>
             </button>
             <ul className="dropdown-menu">
               {userFavs.map((fav, index) => (
-                <li
-                  key={index}
-                  className="dropdown-item d-flex justify-content-between align-items-center"
-                >
+                <li key={index} className="dropdown-item d-flex justify-content-between align-items-center">
                   {fav}
                   <button
                     type="button"
                     className="btn btn-sm btn-danger"
-                    onClick={() =>
-                      dispatch({ type: "toggle_fav_user", payload: fav })
-                    }
+                    onClick={() => dispatch({ type: "toggle_fav_user", payload: fav })}
                   >
                     X
                   </button>
@@ -89,7 +87,7 @@ export const Navbar = () => {
           </div>
         )}
 
-        {/* Todos los demás botones (para admin o chef) */}
+        {/* Otros botones (combina lógica de develop y tu rama) */}
         <div className="ml-auto mt-3">
           <Link to="/demo">
             <button className="btn btn-primary">Check the Context</button>
@@ -106,9 +104,6 @@ export const Navbar = () => {
           <Link to="/utensilios">
             <button className="btn btn-danger">Utensilios</button>
           </Link>
-          <Link to="/adminuser">
-            <button className="btn btn-primary">Admins</button>
-          </Link>
           <Link to="/questions">
             <button className="btn btn-primary">Questions</button>
           </Link>
@@ -119,46 +114,7 @@ export const Navbar = () => {
             <button className="btn btn-primary">Califications</button>
           </Link>
           <Link to="/utensilio_receta">
-            <button className="btn btn-danger">
-              Agregar utensilio a receta
-            </button>
-          </Link>
-          <div className="dropdown">
-            <button
-              className="btn btn-primary dropdown-toggle"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Fav Recipes{" "}
-              <span className="badge text-bg-secondary">
-                {store.favItems.length}
-              </span>
-            </button>
-            <ul className="dropdown-menu">
-              {store.favItems.map((favorite, index) => (
-                <li key={index} className="dropdown-item">
-                  {favorite}{" "}
-                  <span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        dispatch({
-                          type: "toggle_favitem",
-                          payload: favorite,
-                        })
-                      }
-                      className="btn"
-                    >
-                      X
-                    </button>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <Link to="/utensil_user">
-            <button className="btn btn-danger">utensilio usuario</button>
+            <button className="btn btn-danger">Agregar utensilio a receta</button>
           </Link>
           <Link to="/ingredient_users">
             <button className="btn btn-primary">Ingredient Users</button>
@@ -167,9 +123,7 @@ export const Navbar = () => {
             <button className="btn btn-danger">Agregar usuario</button>
           </Link>
           <Link to="/add_recipe_ingredient">
-            <button className="btn btn-danger">
-              Agregar ingrediente a receta
-            </button>
+            <button className="btn btn-danger">Agregar ingrediente a receta</button>
           </Link>
         </div>
       </div>

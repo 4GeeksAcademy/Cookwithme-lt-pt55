@@ -135,10 +135,12 @@ class Question(db.Model):
 
 class Recipe(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    description: Mapped[str] = mapped_column(String(120), nullable=False)
-    img: Mapped[str] = mapped_column(String(120), nullable=False)
-    name: Mapped[str] = mapped_column(String(120), nullable=False)
-    preparation: Mapped[str] = mapped_column(String(120), nullable=False)
+    description: Mapped[str] = mapped_column(String(1000), nullable=False)
+    img: Mapped[str] = mapped_column(nullable=False)
+    name: Mapped[str] = mapped_column(nullable=False)
+    preparation: Mapped[str] = mapped_column(nullable=False)
+
+    utensils: Mapped[str] = mapped_column(String(250), nullable=True)
 
     calification: Mapped[List["Calification"]] = relationship(back_populates="recipe")
     fav_recipe: Mapped[List["Fav_recipe"]] = relationship(back_populates="recipe")
@@ -160,9 +162,8 @@ class Recipe(db.Model):
             "name": self.name,
             "img": self.img,
             "preparation": self.preparation,
-            "chef": self.chef.serialize()
-            # "ingredients": [ri.ingredient.serialize() for ri in self.recipe_ingredients],
-            # "utensils": [ru.utensil.serialize() for ru in self.utensil_recipes]
+            "utensils": self.utensils,
+            "chef": self.chef.serialize() 
         }      
     
 class Answer(db.Model):

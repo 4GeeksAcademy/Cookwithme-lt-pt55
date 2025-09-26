@@ -7,11 +7,12 @@ export const initialStore = () => {
     usersFavs: {},       // { userId: [recipe1, recipe2] }
     authChef: false,
     authAdmin: false,
-    authUser: null,      // { id: 1, name: "Anthony" }
+    authUser: null,     
     favItems: [],        // recetas favoritas
-    charFav: []          // personajes favoritos u otro uso
+    charFav: []         
   };
 };
+
 
 export default function storeReducer(store, action = {}) {
   switch(action.type) {
