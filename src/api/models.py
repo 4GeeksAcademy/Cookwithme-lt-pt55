@@ -13,6 +13,7 @@ class User(db.Model):
     name: Mapped[str] = mapped_column(String(120), nullable=False)
     password: Mapped[str] = mapped_column(nullable=False)
     email: Mapped[str] = mapped_column(String(120), nullable=False)
+    image_url: Mapped[str] = mapped_column(nullable=True)
 
     questions: Mapped[List["Question"]] = relationship(back_populates="user")
     utensil_users: Mapped[List["Utensil_user"]
@@ -34,6 +35,7 @@ class User(db.Model):
             "username": self.username,
             "name": self.name,
             "email": self.email,
+            "image_url": self.image_url
             # do not serialize the password, its a security breach
         }
 
@@ -146,10 +148,12 @@ class Question(db.Model):
 
 class Recipe(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    description: Mapped[str] = mapped_column(String(120), nullable=False)
-    img: Mapped[str] = mapped_column(String(120), nullable=False)
-    name: Mapped[str] = mapped_column(String(120), nullable=False)
-    preparation: Mapped[str] = mapped_column(String(120), nullable=False)
+    description: Mapped[str] = mapped_column(String(1000), nullable=False)
+    img: Mapped[str] = mapped_column(nullable=False)
+    name: Mapped[str] = mapped_column(nullable=False)
+    preparation: Mapped[str] = mapped_column(nullable=False)
+
+    utensils: Mapped[str] = mapped_column(String(250), nullable=True)
 
     calification: Mapped[List["Calification"]
                          ] = relationship(back_populates="recipe")
@@ -175,10 +179,10 @@ class Recipe(db.Model):
             "name": self.name,
             "img": self.img,
             "preparation": self.preparation,
-            "chef": self.chef.serialize()
-        }
-
-
+            "utensils": self.utensils,
+            "chef": self.chef.serialize() 
+        }      
+    
 class Answer(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     text: Mapped[str] = mapped_column(nullable=False)

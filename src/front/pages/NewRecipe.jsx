@@ -1,54 +1,64 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 const NewRecipe = () => {
+    const navigate = useNavigate();
+    const { store } = useGlobalReducer();
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-    const navigate = useNavigate()
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [preparation, setPreparation] = useState('');
+    const [img, setImg] = useState('');
+    const [utensils, setUtensils] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
+    const [chefs, setChefs] = useState([]);
+    const [currentChef, setCurrentChef] = useState(null);
 
-    const { store, dispatch } = useGlobalReducer()
+    function handleNameChange(e) {
+        const newName = e.target.value;
+        setName(newName);
 
-    const backendUrl = import.meta.env.VITE_BACKEND_URL
+        if (newName.trim().length > 0) {
+            setDescription('');
+            setPreparation('');
+            setImg('');
+            setUtensils(''); 
+        }
+    }
 
-    const [name, setName] = useState('')
-    const [description, setDescription] = useState('')
-    const [preparation, setPreparation] = useState('')
-    const [img, setImg] = useState('')
-
-    const [chefs, setChefs] = useState([])
-
-    const [currentChef, setCurrentChef] = useState(null)
+    function handleSelectSuggestion(meal) {
+        setName(meal.strMeal);
+        setDescription(`${meal.strCategory} (${meal.strArea})`);
+        setPreparation(meal.strInstructions);
+        setImg(meal.strMealThumb);
+        setSuggestions([]);
+    }
 
     function getChefs() {
         fetch(backendUrl + `/api/chefs`)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
-                setChefs(data)
-            }
-            )
+                setChefs(data);
+            });
     }
 
-
     function sendData(e) {
-        e.preventDefault()
-        console.log('send data')
-        console.log(name, description, preparation, img)
+        e.preventDefault();
         const requestOptions = {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(
-                {
-                    "name": name,
-                    "description": description,
-                    "preparation": preparation,
-                    "img": "https://picsum.photos/200/300",
-                    "chef_id": currentChef.id
-
-                }
-            )
-        }
+            body: JSON.stringify({
+                "name": name,
+                "description": description,
+                "preparation": preparation,
+                "img": img,
+                "utensils": utensils,
+                "chef_id": currentChef.id
+            })
+        };
 
         fetch(backendUrl + "/api/recipes", requestOptions)
             .then(response => {
@@ -59,42 +69,108 @@ const NewRecipe = () => {
                 }
             })
             .then(data => {
-                console.log(data)
-                navigate("/recipes")
-            })
+                console.log(data);
+                navigate("/recipes");
+            });
     }
 
     useEffect(() => {
-        getChefs()
-    }, [])
+        getChefs();
+    }, []);
 
+    useEffect(() => {
+        const fetchRecipes = async () => {
+            if (name.trim().length > 1) {
+                try {
+                    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`);
+                    const data = await response.json();
+                    setSuggestions(data.meals || []);
+                } catch (error) {
+                    console.error("Error fetching recipes:", error);
+                    setSuggestions([]);
+                }
+            } else {
+                setSuggestions([]);
+            }
+        };
+
+        const timerId = setTimeout(() => {
+            fetchRecipes();
+        }, 300);
+
+        return () => {
+            clearTimeout(timerId);
+        };
+    }, [name]);
+
+    
+    useEffect(() => {
+        const keywords = ["pan", "oven", "plate", "spoon"];
+        if (!preparation) {
+            setUtensils('');
+            return;
+        }
+
+        const lowercasedPreparation = preparation.toLowerCase();
+        const foundKeywords = keywords.filter(keyword =>
+            lowercasedPreparation.includes(keyword)
+        );
+
+        setUtensils(foundKeywords.join(', '));
+    }, [preparation]);
 
     return (
         <div>
-            <form className="w-50 mx-auto">
+            <form className="w-50 mx-auto" onSubmit={sendData}>
                 <div className="mb-3">
-                    <label htmlFor="exampleInputEmail1" className="form-label">Name</label>
-                    <input value={name} onChange={(e) => setName(e.target.value)} type="text" className="form-control" id="exampleInputName" />
+                    <label htmlFor="exampleInputName" className="form-label">Name</label>
+                    
+                    <input value={name} onChange={handleNameChange} type="text" className="form-control" id="exampleInputName" />
+
+                    {suggestions.length > 0 && (
+                        <ul className="list-group mt-2">
+                            {suggestions.slice(0, 5).map(meal => (
+                                <li key={meal.idMeal}
+                                    className="list-group-item d-flex align-items-center"
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() => handleSelectSuggestion(meal)}>
+                                    <img src={meal.strMealThumb} alt={meal.strMeal} width="40" className="me-2" />
+                                    {meal.strMeal}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="exampleInputPassword1" className="form-label">Description</label>
-                    <input value={description} onChange={(e) => setDescription(e.target.value)} type="text" className="form-control" id="exampleInputsetDescription" />
+                    <label htmlFor="exampleInputDescription" className="form-label">Description</label>
+                    <input value={description} onChange={(e) => setDescription(e.target.value)} type="text" className="form-control" id="exampleInputDescription" />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="exampleInputPassword1" className="form-label">Preparation</label>
-                    <input value={preparation} onChange={(e) => setPreparation(e.target.value)} type="text" className="form-control" id="exampleInputPreparation" />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="exampleInputPassword1" className="form-label">Imagen</label>
-                    <input 
-                        value={"https://picsum.photos/200/300"} 
-                        onChange={(e) => setImg(e.target.value)} 
-                        type="text" 
-                        className="form-control" 
-                        id="exampleInputImage" 
+                    <label htmlFor="utensilsInput" className="form-label">Utensilios</label>
+                    <input
+                        value={utensils}
+                        type="text"
+                        className="form-control"
+                        id="utensilsInput"
+                        readOnly
                     />
                 </div>
-            
+                <div className="mb-3">
+                    <label htmlFor="exampleInputPreparation" className="form-label">Preparation</label>
+                    <textarea value={preparation} onChange={(e) => setPreparation(e.target.value)} type="text" className="form-control" rows="5" id="exampleInputPreparation" />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="exampleInputImage" className="form-label">Imagen</label>
+                    <input
+                        value={img}
+                        onChange={(e) => setImg(e.target.value)}
+                        type="text"
+                        className="form-control"
+                        id="exampleInputImage"
+                    />
+                    {img && <img src={img} alt={name} width="200" style={{ marginTop: "10px" }} />}
+                </div>
+
                 <div className="dropdown">
                     <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {!currentChef ? "Select chef" : "Chef: " + currentChef.name}
@@ -105,19 +181,19 @@ const NewRecipe = () => {
                         )}
                     </ul>
                 </div>
-                <button type="submit" className="btn btn-primary" onClick={sendData}>Create</button>
+                <button type="submit" className="btn btn-primary">Create</button>
                 {store.authChef ?
                     <Link to="/chef_home">
                         <button className="btn btn-primary">Back to home</button>
                     </Link>
-                    :   
+                    :
                     <Link to="/recipes">
                         <button className="btn btn-primary">Back to recipes</button>
                     </Link>
                 }
             </form>
         </div>
-    )
-}
+    );
+};
 
-export default NewRecipe
+export default NewRecipe;

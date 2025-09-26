@@ -41,6 +41,15 @@ def get_user(user_id):
         return {"error-msg": "enter a valid user"}, 400
     return jsonify(user.serialize()), 200
 
+@api.route('/user_info', methods=['GET'])
+@jwt_required()
+def get_current_user_info():
+    current_user_id = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_id).first()
+    if user is None:
+        return {"error-msg": "enter a valid user"}, 400
+    return jsonify(user.serialize()), 200
+
 
 @api.route('/users', methods=['POST'])
 def add_user():
@@ -76,10 +85,20 @@ def update_user(user_id):
 
     body = request.get_json()
 
-    user.username = body.get("username", user.username)
-    user.name = body.get("name", user.name)
-    user.password = body.get("password", user.password)
-    user.email = body.get("email", user.email)
+    if "username" in body:
+        user.username = body["username"]
+    if "name" in body:
+        user.name = body["name"]
+    if "email" in body:
+        user.email = body["email"]
+    if "image_url" in body:
+        user.image_url = body["image_url"]
+
+    # user.username = body.get("username", user.username)
+    # user.name = body.get("name", user.name)
+    # user.password = body.get("password", user.password)
+    # user.email = body.get("email", user.email)
+    # user.image_url = body.get("image_url", user.image_url)
 
     db.session.commit()
 
@@ -87,6 +106,31 @@ def update_user(user_id):
         "message": f"Usuario {user.id} actualizado correctamente",
         "user": user.serialize()
     }
+    return jsonify(response_body), 200
+
+@api.route('/users', methods=['PUT'])
+@jwt_required()
+def update_current_user():
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    if user is None:
+        return {"error-msg": "user does not exist"}, 400
+
+    body = request.get_json()
+    if "username" in body:
+        user.username = body["username"]
+    if "name" in body:
+        user.name = body["name"]
+    if "email" in body:
+        user.email = body["email"]
+    if "image_url" in body:
+        user.image_url = body["image_url"]
+        
+    db.session.commit()
+    response_body = {
+        "message": "User" + user.name + " successfully update"
+    }
+
     return jsonify(response_body), 200
 
 # ------chef------------------
@@ -403,9 +447,12 @@ def get_recipe(recipe_id):
 
 @api.route('/recipes', methods=['POST'])
 def add_recipe():
+
     body = request.get_json()
+    utensils_data = body.get("utensils", None)
+
     recipe = Recipe(name=body["name"], description=body["description"],
-                    img=body["img"], preparation=body["preparation"], chef_id=body["chef_id"])
+                    img=body["img"], preparation=body["preparation"],utensils=utensils_data, chef_id=body["chef_id"])
     db.session.add(recipe)
     db.session.commit()
     response_body = {
@@ -833,11 +880,15 @@ def add_current_chef_recipe():
     print(chef_id, "este es el chef id")
     body = request.get_json()
 
+    utensils_data = body.get("utensils", None)
+
+
     recipe = Recipe(
         name=body["name"],
         description=body["description"],
         img=body["img"],
         preparation=body["preparation"],
+        utensils=utensils_data,
         chef_id=chef_id
 
     )
@@ -1081,7 +1132,10 @@ def login_as_user():
         return jsonify({"msg": "Bad email or password"}), 401
 
     access_token = create_access_token(identity=email)
-    return jsonify(access_token=access_token)
+    return jsonify({
+        "access_token": access_token,
+        "user": user.serialize()  
+    }), 200
 
 
 @api.route('/signup_user', methods=['POST'])
@@ -1182,3 +1236,120 @@ def delete_ingredient_user(iu_id):
         "message": f"Ingredient_user {iu_id} deleted successfully"
     }
     return jsonify(response_body), 200
+
+# ---- Favoritos de recetas por usuario ----
+
+# Obtener todos los favoritos del usuario logueado
+@api.route('/user/fav_recipes', methods=['GET'])
+@jwt_required()
+def get_user_favrecipes():
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    favs = Fav_recipe.query.filter_by(user_id=user.id).all()
+    results = [fav.serialize() for fav in favs]
+
+    return jsonify(results), 200
+
+
+# Agregar receta a favoritos (del usuario logueado)
+@api.route('/user/fav_recipes', methods=['POST'])
+@jwt_required()
+def add_user_favrecipe():
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    body = request.get_json()
+    recipe_id = body.get("recipe_id")
+
+    if not recipe_id:
+        return jsonify({"error": "recipe_id is required"}), 400
+
+    # Validar que no esté repetido
+    existing_fav = Fav_recipe.query.filter_by(user_id=user.id, recipe_id=recipe_id).first()
+    if existing_fav:
+        return jsonify({"msg": "Recipe already in favorites"}), 400
+
+    fav = Fav_recipe(user_id=user.id, recipe_id=recipe_id)
+    db.session.add(fav)
+    db.session.commit()
+
+    return jsonify(fav.serialize()), 201
+
+
+# Eliminar receta de favoritos del usuario logueado
+@api.route('/user/fav_recipes/<int:recipe_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user_favrecipe(recipe_id):
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    fav = Fav_recipe.query.filter_by(user_id=user.id, recipe_id=recipe_id).first()
+    if not fav:
+        return jsonify({"error": "Favorite not found"}), 404
+
+    db.session.delete(fav)
+    db.session.commit()
+
+    return jsonify({"msg": f"Recipe {recipe_id} removed from favorites"}), 200
+
+# -----se crea para ver los resultado de recetas disponibles segun ingredientes y utensilios
+@api.route('/user/available_recipes', methods=['GET'])
+@jwt_required()
+def get_available_recipes():
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    # Ingredientes y utensilios del usuario
+    selected_ingredient_ids = [iu.ingredient_id for iu in Ingredient_user.query.filter_by(user_id=user.id)]
+    selected_utensil_ids = [uu.utensil_id for uu in Utensil_user.query.filter_by(user_id=user.id)]
+
+    available_recipes = []
+
+    for recipe in Recipe.query.all():
+        recipe_ingredient_ids = [ri.ingredient_id for ri in Recipe_ingredient.query.filter_by(recipe_id=recipe.id)]
+        recipe_utensil_ids = [ur.utensil_id for ur in Utensil_recipe.query.filter_by(recipe_id=recipe.id)]
+
+        # Solo si la receta contiene todos los ingredientes seleccionados y utensilios seleccionados
+        if set(selected_ingredient_ids).issubset(recipe_ingredient_ids) and set(selected_utensil_ids).issubset(recipe_utensil_ids):
+            available_recipes.append(recipe.serialize())
+
+    return jsonify(available_recipes), 200
+
+# --------------
+@api.route('/ingredient_users_bulk', methods=['POST'])
+@jwt_required()
+def ingredient_users_bulk():
+    user_id = request.json.get("user_id")
+    ingredient_ids = request.json.get("ingredient_ids", [])
+    utensil_ids = request.json.get("utensil_ids", [])
+
+    if not user_id:
+        return jsonify({"error": "user_id required"}), 400
+
+    # Limpiar selecciones previas
+    Ingredient_user.query.filter_by(user_id=user_id).delete()
+    Utensil_user.query.filter_by(user_id=user_id).delete()
+    db.session.commit()
+
+    # Agregar nuevas selecciones de ingredientes
+    for ing_id in ingredient_ids:
+        iu = Ingredient_user(user_id=user_id, ingredient_id=ing_id)
+        db.session.add(iu)
+
+    # Agregar nuevas selecciones de utensilios
+    for ut_id in utensil_ids:
+        uu = Utensil_user(user_id=user_id, utensil_id=ut_id)
+        db.session.add(uu)
+
+    db.session.commit()
+    return jsonify({"msg": "Selections updated"}), 201
+
