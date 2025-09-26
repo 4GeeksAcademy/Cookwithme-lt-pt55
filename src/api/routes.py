@@ -401,9 +401,12 @@ def get_recipe(recipe_id):
 
 @api.route('/recipes', methods=['POST'])
 def add_recipe():
+
     body = request.get_json()
+    utensils_data = body.get("utensils", None)
+
     recipe = Recipe(name=body["name"], description=body["description"],
-                    img=body["img"], preparation=body["preparation"], chef_id=body["chef_id"])
+                    img=body["img"], preparation=body["preparation"],utensils=utensils_data, chef_id=body["chef_id"])
     db.session.add(recipe)
     db.session.commit()
     response_body = {
@@ -830,11 +833,15 @@ def add_current_chef_recipe():
     print(chef_id, "este es el chef id")
     body = request.get_json()
 
+    utensils_data = body.get("utensils", None)
+
+
     recipe = Recipe(
         name=body["name"],
         description=body["description"],
         img=body["img"],
         preparation=body["preparation"],
+        utensils=utensils_data,
         chef_id=chef_id
 
     )

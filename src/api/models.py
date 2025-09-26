@@ -140,6 +140,8 @@ class Recipe(db.Model):
     name: Mapped[str] = mapped_column(nullable=False)
     preparation: Mapped[str] = mapped_column(nullable=False)
 
+    utensils: Mapped[str] = mapped_column(String(250), nullable=True)
+
     calification: Mapped[List["Calification"]] = relationship(back_populates="recipe")
     fav_recipe: Mapped[List["Fav_recipe"]] = relationship(back_populates="recipe")
 
@@ -160,6 +162,7 @@ class Recipe(db.Model):
             "name": self.name,
             "img": self.img,
             "preparation": self.preparation,
+            "utensils": self.utensils,
             "chef": self.chef.serialize() 
         }      
     
