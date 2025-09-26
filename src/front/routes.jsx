@@ -84,6 +84,10 @@ import { IngredientUser } from "./pages/IngredientUser";
 import { SingleIngredientUser } from "./pages/SingleIngredientUser";
 import NewIngredientUser from "./pages/NewIngredientUser";
 import { EditIngredientUser } from "./pages/EditIngredientUser";
+import NewChefRecipe from "./pages/NewChefRecipe";
+import EditChefRecipe from "./pages/EditChefRecipe";
+import ChefProfile from "./pages/ChefProfile";
+
 
 import { AvailableRecipes } from "./pages/AvailableRecipe.jsx";
 import { SelectIngredients } from "./pages/SelectIngredUtensil.jsx";
@@ -133,6 +137,10 @@ export const router = createBrowserRouter(
       <Route path= "/login_chef" element={<LoginChef />} />
       <Route path= "/chef_home" element={<HomeChef />} />
       <Route path= "/signup_chef" element={<SignupChef />} />
+
+      <Route path= "/new_chef_recipe" element={<NewChefRecipe />} />
+      <Route path="/chef_recipes/:recipe_id/update" element={ <EditChefRecipe />} />
+      <Route path= "/chef_profile" element={<ChefProfile />} />
 
       <Route path="/add_admin" element={<NewAdmin />} />
       <Route path="/adminuser" element={<AdminList />} />

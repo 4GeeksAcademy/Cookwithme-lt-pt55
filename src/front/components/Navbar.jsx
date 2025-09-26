@@ -28,59 +28,69 @@ export const Navbar = () => {
     ? store.usersFavs[store.authUser.id] || []
     : [];
 
-  if (store.authChef || store.authUser || store.authAdmin) {
-    return (
-      <nav className="navbar navbar-light bg-light">
-        <div className="container d-flex flex-column">
-          <div className="d-flex justify-content-between align-items-center w-100">
+  return (
+    <nav className="navbar navbar-light bg-light">
+      <div className="container d-flex flex-column">
+        <div className="d-flex justify-content-between align-items-center w-100">
+          {(store.authChef || store.authUser || store.authAdmin) && (
             <button className="btn btn-danger" onClick={logout}>
               Logout
             </button>
-            <Link to="/select_ingr&utensil">
-            <button className="btn btn-primary">Buscar recetas por componentes</button>
-          </Link>  
-          </div>
+          )}
 
-          {store.authUser && userFavs.length > 0 && (
-            <div className="mt-2 dropdown">
-              <button
-                className="btn btn-primary dropdown-toggle"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Mis Favoritos <span className="badge text-bg-secondary">{userFavs.length}</span>
+          {/* Vista para USER */}
+          {store.authUser && (
+            <Link to="/select_ingr&utensil">
+              <button className="btn btn-primary">
+                Buscar recetas por componentes
               </button>
-              <ul className="dropdown-menu">
-                {userFavs.map((fav, index) => (
-                  <li key={index} className="dropdown-item d-flex justify-content-between align-items-center">
-                    {fav}
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-danger"
-                      onClick={() => dispatch({ type: "toggle_fav_user", payload: fav })}
-                    >
-                      X
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            </Link>
+          )}
+
+          {/* Vista para CHEF */}
+          {store.authChef && (
+            <Link to="/chef_profile">
+              <button className="btn btn-primary">Perfil Chef</button>
+            </Link>
           )}
         </div>
-      </nav>
-    );
-  }
 
+        {/* Dropdown de favoritos SOLO para USER */}
+        {store.authUser && userFavs.length > 0 && (
+          <div className="mt-2 dropdown">
+            <button
+              className="btn btn-primary dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Mis Favoritos{" "}
+              <span className="badge text-bg-secondary">{userFavs.length}</span>
+            </button>
+            <ul className="dropdown-menu">
+              {userFavs.map((fav, index) => (
+                <li
+                  key={index}
+                  className="dropdown-item d-flex justify-content-between align-items-center"
+                >
+                  {fav}
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-danger"
+                    onClick={() =>
+                      dispatch({ type: "toggle_fav_user", payload: fav })
+                    }
+                  >
+                    X
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
-  return (
-    <nav className="navbar navbar-light bg-light">
-      <div className="container">
-        <Link to="/">
-          <span className="navbar-brand mb-0 h1">React Boilerplate</span>
-        </Link>
-
-        <div className="ml-auto">
+        {/* Todos los demás botones (para admin o chef) */}
+        <div className="ml-auto mt-3">
           <Link to="/demo">
             <button className="btn btn-primary">Check the Context</button>
           </Link>
@@ -105,39 +115,62 @@ export const Navbar = () => {
           <Link to="/answers">
             <button className="btn btn-primary">Answers</button>
           </Link>
-		  <Link to="/califications">
-			<button className="btn btn-primary">Califications</button>
-		  </Link>
-		  <Link to="/utensilio_receta">
-			<button className="btn btn-danger">Agregar utensilio a receta</button>
-		 </Link>
-		<div className="dropdown">
-			<button className="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-			 Fav Recipes <span className="badge text-bg-secondary"> {store.favItems.length} </span>
-			</button>
-			<ul className="dropdown-menu">
-					{store.favItems.map((favorite, index) =><li key={index} className="dropdown-item">
-									{favorite} <span > <button type="button" onClick={() => dispatch({
-										type: 'toggle_favitem',
-										payload: favorite
-									})} class="btn"> X </button> </span>
-								</li>)}
-
-						</ul>
-		</div>
-		  <Link to="/utensil_user">
-			<button className="btn btn-danger">utensilio usuario</button>
-		</Link>
-		<Link to="/ingredient_users">
-			<button className="btn btn-primary">Ingredient Users</button>
-		</Link>
-		<Link to="/users">
-			<button className="btn btn-danger">Agregar usuario</button>
-		</Link>
-    <Link to="/add_recipe_ingredient">
-			<button className="btn btn-danger">Agregar ingrediente a receta</button>
-		</Link>
-			
+          <Link to="/califications">
+            <button className="btn btn-primary">Califications</button>
+          </Link>
+          <Link to="/utensilio_receta">
+            <button className="btn btn-danger">
+              Agregar utensilio a receta
+            </button>
+          </Link>
+          <div className="dropdown">
+            <button
+              className="btn btn-primary dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Fav Recipes{" "}
+              <span className="badge text-bg-secondary">
+                {store.favItems.length}
+              </span>
+            </button>
+            <ul className="dropdown-menu">
+              {store.favItems.map((favorite, index) => (
+                <li key={index} className="dropdown-item">
+                  {favorite}{" "}
+                  <span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        dispatch({
+                          type: "toggle_favitem",
+                          payload: favorite,
+                        })
+                      }
+                      className="btn"
+                    >
+                      X
+                    </button>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <Link to="/utensil_user">
+            <button className="btn btn-danger">utensilio usuario</button>
+          </Link>
+          <Link to="/ingredient_users">
+            <button className="btn btn-primary">Ingredient Users</button>
+          </Link>
+          <Link to="/users">
+            <button className="btn btn-danger">Agregar usuario</button>
+          </Link>
+          <Link to="/add_recipe_ingredient">
+            <button className="btn btn-danger">
+              Agregar ingrediente a receta
+            </button>
+          </Link>
         </div>
       </div>
     </nav>
