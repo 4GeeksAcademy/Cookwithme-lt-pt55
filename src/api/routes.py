@@ -41,6 +41,15 @@ def get_user(user_id):
         return {"error-msg": "enter a valid user"}, 400
     return jsonify(user.serialize()), 200
 
+@api.route('/user_info', methods=['GET'])
+@jwt_required()
+def get_current_user_info():
+    current_user_id = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_id).first()
+    if user is None:
+        return {"error-msg": "enter a valid user"}, 400
+    return jsonify(user.serialize()), 200
+
 
 @api.route('/users', methods=['POST'])
 def add_user():
@@ -76,10 +85,20 @@ def update_user(user_id):
 
     body = request.get_json()
 
-    user.username = body.get("username", user.username)
-    user.name = body.get("name", user.name)
-    user.password = body.get("password", user.password)
-    user.email = body.get("email", user.email)
+    if "username" in body:
+        user.username = body["username"]
+    if "name" in body:
+        user.name = body["name"]
+    if "email" in body:
+        user.email = body["email"]
+    if "image_url" in body:
+        user.image_url = body["image_url"]
+
+    # user.username = body.get("username", user.username)
+    # user.name = body.get("name", user.name)
+    # user.password = body.get("password", user.password)
+    # user.email = body.get("email", user.email)
+    # user.image_url = body.get("image_url", user.image_url)
 
     db.session.commit()
 
@@ -87,6 +106,31 @@ def update_user(user_id):
         "message": f"Usuario {user.id} actualizado correctamente",
         "user": user.serialize()
     }
+    return jsonify(response_body), 200
+
+@api.route('/users', methods=['PUT'])
+@jwt_required()
+def update_current_user():
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    if user is None:
+        return {"error-msg": "user does not exist"}, 400
+
+    body = request.get_json()
+    if "username" in body:
+        user.username = body["username"]
+    if "name" in body:
+        user.name = body["name"]
+    if "email" in body:
+        user.email = body["email"]
+    if "image_url" in body:
+        user.image_url = body["image_url"]
+        
+    db.session.commit()
+    response_body = {
+        "message": "User" + user.name + " successfully update"
+    }
+
     return jsonify(response_body), 200
 
 # ------chef------------------

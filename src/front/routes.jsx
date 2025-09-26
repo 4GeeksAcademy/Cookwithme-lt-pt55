@@ -75,6 +75,7 @@ import { Users } from "./pages/Users";
 import NewUser from "./pages/NewUser";
 import { SingleUser } from "./pages/SingleUser";
 import { EditUser } from "./pages/EditUser";
+import UserProfile from "./pages/UserProfile";
 
 import { LoginUser } from "./pages/LoginUser";
 import { HomeUser } from "./pages/HomeUser";
@@ -177,9 +178,13 @@ export const router = createBrowserRouter(
       <Route path="/utensiluser/:utensiluser_id/edit" element={<EditUtensilToUser />} />
 
       <Route path="/users" element={<Users />} />
-      <Route path="users/:user_id" element={<SingleUser />} />
-      <Route path="users/:user_id/edit" element={<EditUser />} />
-      <Route path="add_user" element={<NewUser />} />
+      <Route path="/users/:user_id" element={<SingleUser />} />
+      <Route path="/users/:user_id/edit" element={<EditUser />} />
+      <Route path="/add_user" element={<NewUser />} />
+      <Route path= "/user_profile" element={<UserProfile />} />
+      <Route path= "/login_user" element={<LoginUser/>} />
+      <Route path= "/signup_user" element={<SignupUser/>} />
+      <Route path= "/home_user" element={<HomeUser/>} />
 
       <Route path="/ingredient_users" element={<IngredientUser />} />
       <Route path="/ingredient_users/:ingredient_user_id" element={<SingleIngredientUser />} />

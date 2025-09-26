@@ -134,4 +134,4 @@ const NewIngrediente = () => {
     );
 };
 
-export default NewIngrediente; 
+export default NewIngrediente
