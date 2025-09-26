@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const Results = () => {
-  console.log("🚀 Entré a Results.jsx");
+  console.log("Results.jsx");
   const { store } = useGlobalReducer();
   const token = store.authUser?.token; 
   const [results, setResults] = useState([]);
@@ -12,16 +12,16 @@ export const Results = () => {
 
   useEffect(() => {
     if (!token) {
-      console.log("⏳ Esperando token...");
+      console.log(" Esperando token");
       return; 
     }
 
 
-  console.log("✅ Token detectado:", token);
+  console.log("Token detectado:", token);
 
   const fetchRecipes = async () => {
     try {
-      console.log("🔄 Fetch a:", backendUrl + "/api/user/available_recipes");
+      console.log("Fetch a:", backendUrl + "/api/user/available_recipes");
       const res = await fetch(backendUrl + "/api/user/available_recipes", {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -32,7 +32,7 @@ export const Results = () => {
       }
 
       const data = await res.json();
-      console.log("📦 Recetas recibidas:", data);
+      console.log("Recetas recibidas:", data);
       setResults(data);
     } catch (err) {
       console.error("Error fetching recipes:", err);
@@ -45,7 +45,7 @@ export const Results = () => {
   fetchRecipes();
   }, [token, backendUrl]);
 
-  if (loading) return <p className="mt-5">Cargando recetas...</p>;
+  if (loading) return <p className="mt-5">Cargando recetas</p>;
   if (error) return <p className="mt-5 text-danger">Error: {error}</p>;
 
   return (
