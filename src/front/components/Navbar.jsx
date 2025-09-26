@@ -134,6 +134,9 @@ export const Navbar = () => {
 		<Link to="/users">
 			<button className="btn btn-danger">Agregar usuario</button>
 		</Link>
+    <Link to="/add_recipe_ingredient">
+			<button className="btn btn-danger">Agregar ingrediente a receta</button>
+		</Link>
 			
         </div>
       </div>
