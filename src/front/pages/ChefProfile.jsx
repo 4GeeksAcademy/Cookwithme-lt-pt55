@@ -98,14 +98,22 @@ const ChefProfile = () => {
                                 <h2>{chef.name}</h2>
                                 <p>Email: {chef.email}</p>
                                 <p>Rating: {chef.rating}</p>
-                                <img src={chef.image_url} alt="" />
+                                <img 
+                                    src={chef.image_url} 
+                                    alt="" 
+                                    style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                                />
 
 
                                 <div>
                                     <input type="file" accept="image/*" onChange={changeUploadImage} />
                                     {urlImg && (
                                         <div>
-                                            <img src={urlImg} alt="" />
+                                            <img 
+                                                src={urlImg} 
+                                                alt="Chef image" 
+                                                style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                                            />
                                         </div>
                                     )}
                                 </div>

@@ -11,7 +11,7 @@ const NewRecipe = () => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [preparation, setPreparation] = useState('');
-    // const [img, setImg] = useState('');
+    const [img, setImg] = useState('');
     const [utensils, setUtensils] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [chefs, setChefs] = useState([]);
@@ -21,6 +21,8 @@ const NewRecipe = () => {
 
     const uploadRecipeImage = async (e) => {
         const file = e.target.files[0];
+
+        setImg("");
 
         const formData = new FormData()
 
@@ -39,7 +41,7 @@ const NewRecipe = () => {
 
             if (data.secure_url) {
                 setUrlImg(data.secure_url)
-                // setImage("");
+
             } else {
                 console.error("Failed to upload the image, please try again");
             }
@@ -80,6 +82,9 @@ const NewRecipe = () => {
 
     function sendData(e) {
         e.preventDefault();
+
+        const finalImageUrl = urlImg || img
+
         const requestOptions = {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
@@ -87,7 +92,7 @@ const NewRecipe = () => {
                 "name": name,
                 "description": description,
                 "preparation": preparation,
-                "img": urlImg,
+                "img": finalImageUrl,
                 "utensils": utensils,
                 "chef_id": currentChef.id
             })
@@ -182,6 +187,7 @@ const NewRecipe = () => {
                     <label htmlFor="utensilsInput" className="form-label">Utensilios</label>
                     <input
                         value={utensils}
+                        onChange={(e) => setUtensils(e.target.value)}
                         type="text"
                         className="form-control"
                         id="utensilsInput"
@@ -193,9 +199,13 @@ const NewRecipe = () => {
                 </div>
                 <div>
                     <input type="file" accept="image/*" onChange={uploadRecipeImage} />
-                    {urlImg && (
+                    {(urlImg || img) && (
                         <div>
-                            <img src={urlImg} alt="" />
+                            <img 
+                                src={urlImg || img}
+                                alt="Ingrediente Imagen" 
+                                style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                            />
                         </div>
                     )}
                 </div>
