@@ -56,7 +56,12 @@ export const Recipe = props => {
                         <p>Preparation: {recipe.preparation}</p>
                         <p>Chef who made it: {recipe.chef.name}</p>
                         <div className="">
-                            <img src={recipe.img} alt="recipe image" className="h-25 d-inline-block" />
+                            <img 
+                                src={recipe.img} 
+                                alt="recipe image" 
+                                className="h-25 d-inline-block" 
+                                style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                            />
                         </div>
                     </div>
                     <div className="text-center mt-4">
