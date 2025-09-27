@@ -15,10 +15,46 @@ const EditChefRecipe = () => {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [preparation, setPreparation] = useState("");
-    const [img, setImg] = useState("https://picsum.photos/200/300")
+    const [img, setImg] = useState("")
+    const [urlImg, setUrlImg] = useState("")
+
+    const changeUploadedImage = async (e) => {
+        const file = e.target.files[0];
+
+        setImg("");
+
+        const formData = new FormData()
+
+        formData.append('file', file)
+        formData.append('upload_preset', 'chef_image')
+        formData.append('cloud_name', 'dwi8lacfr')
+
+        try {
+            const response = await fetch("https://api.cloudinary.com/v1_1/dwi8lacfr/image/upload", {
+                method: 'POST',
+                body: formData
+            })
+
+            const data = await response.json()
+            console.log(data)
+
+            if (data.secure_url) {
+                setUrlImg(data.secure_url)
+
+            } else {
+                console.error("Failed to upload the image, please try again");
+            }
+
+        }
+        catch (error) {
+            console.error("Error uploading image:", error)
+        }
+    }
 
     function updateData(e) {
         e.preventDefault();
+
+        const finalImageUrl = urlImg || img
 
         const requestOptions = {
             method: "PUT",
@@ -31,7 +67,7 @@ const EditChefRecipe = () => {
                     "name": name,
                     "description": description,
                     "preparation": preparation,
-                    "img": img
+                    "img": finalImageUrl
 
                 }
             ),
@@ -99,7 +135,7 @@ const EditChefRecipe = () => {
                                 className="form-control"
                             />
                         </div>
-                        <div className="mb-3">
+                        {/* <div className="mb-3">
                             <label className="form-label">Image</label>
                             <input
                                 value={img}
@@ -107,6 +143,18 @@ const EditChefRecipe = () => {
                                 type="text"
                                 className="form-control"
                             />
+                        </div> */}
+                        <div>
+                            <input type="file" accept="image/*" onChange={changeUploadedImage} />
+                            {(urlImg || img) && (
+                                <div>
+                                    <img
+                                        src={urlImg || img}
+                                        alt="Ingrediente Imagen"
+                                        style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                                    />
+                                </div>
+                            )}
                         </div>
                         <button type="submit" className="btn btn-primary">
                             Guardar Cambios

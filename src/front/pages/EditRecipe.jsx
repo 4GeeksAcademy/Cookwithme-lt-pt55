@@ -9,12 +9,46 @@ export const EditRecipe = () => {
     const [description, setDescription] = useState("");
     const [preparation, setPreparation] = useState("");
     const [img, setImg] = useState('')
+    const [urlImg, setUrlImg] = useState("")
 
     const [chefs, setChefs] = useState([])
 
     const [currentChef, setCurrentChef] = useState(null)
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+    const changeUploadedImage = async (e) => {
+        const file = e.target.files[0];
+
+        setImg("");
+
+        const formData = new FormData()
+
+        formData.append('file', file)
+        formData.append('upload_preset', 'chef_image')
+        formData.append('cloud_name', 'dwi8lacfr')
+
+        try {
+            const response = await fetch("https://api.cloudinary.com/v1_1/dwi8lacfr/image/upload", {
+                method: 'POST',
+                body: formData
+            })
+
+            const data = await response.json()
+            console.log(data)
+
+            if (data.secure_url) {
+                setUrlImg(data.secure_url)
+
+            } else {
+                console.error("Failed to upload the image, please try again");
+            }
+
+        }
+        catch (error) {
+            console.error("Error uploading image:", error)
+        }
+    }
 
     function getChefs() {
         fetch(backendUrl + `/api/chefs`)
@@ -31,13 +65,16 @@ export const EditRecipe = () => {
                 setDescription(data.description);
                 setPreparation(data.preparation);
                 setImg(data.img);
+                setUrlImg("");
             });
         getChefs()
-    }, [recipe_id]);
+    }, [recipe_id, backendUrl]);
 
 
     function updateData(e) {
         e.preventDefault();
+
+        const finalImageUrl = urlImg || img
 
         const requestOptions = {
             method: "PUT",
@@ -47,7 +84,7 @@ export const EditRecipe = () => {
                     "name": name,
                     "description": description,
                     "preparation": preparation,
-                    "img": img,
+                    "img": finalImageUrl,
                     "chef_id": currentChef.id
 
                 }
@@ -93,14 +130,17 @@ export const EditRecipe = () => {
                         className="form-control"
                     />
                 </div>
-                <div className="mb-3">
-                    <label className="form-label">Image</label>
-                    <input
-                        value={img}
-                        onChange={(e) => setImg(e.target.value)}
-                        type="text"
-                        className="form-control"
-                    />
+                <div>
+                    <input type="file" accept="image/*" onChange={changeUploadedImage} />
+                    {(urlImg || img) && (
+                        <div>
+                            <img
+                                src={urlImg || img}
+                                alt="Ingrediente Imagen"
+                                style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                            />
+                        </div>
+                    )}
                 </div>
 
                 <div className="dropdown">

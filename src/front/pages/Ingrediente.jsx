@@ -58,6 +58,7 @@ export const Ingrediente = () => {
                                         src={ingrediente.image}
                                         alt={ingrediente.name}
                                         className="img-fluid mt-3"
+                                        style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
                                     />
 
                     <Link to={"/ingredientes/"+ingrediente.id}>

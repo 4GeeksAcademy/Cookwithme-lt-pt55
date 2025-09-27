@@ -452,7 +452,7 @@ def add_recipe():
     utensils_data = body.get("utensils", None)
 
     recipe = Recipe(name=body["name"], description=body["description"],
-                    img=body["img"], preparation=body["preparation"],utensils=utensils_data, chef_id=body["chef_id"])
+                    img=body["img"], preparation=body["preparation"], chef_id=body["chef_id"], utensils=utensils_data)
     db.session.add(recipe)
     db.session.commit()
     response_body = {
@@ -838,24 +838,6 @@ def signup_as_chef():
     db.session.commit()
     access_token = create_access_token(identity=body["email"])
     return jsonify(access_token=access_token), 200
-
-
-# @api.route('/chef_profile/image', methods=['POST'])
-# @jwt_required()
-# def chef_image():
-#     current_chef_id = get_jwt_identity()
-#     chef = Chef.query.filter_by(email=current_chef_id).first()
-#     print(chef)
-#     body = request.get_json()
-#     image_url = Chef(image_url=body["image_url"])
-#     print(image_url)
-#     db.session.add(image_url)
-#     db.session.commit()
-#     response_body = {
-#         "se agrego la imagen ": image_url.serialize()
-#     }
-
-#     return jsonify(response_body), 200
 
 
 @api.route('/chef_recipes', methods=['GET'])

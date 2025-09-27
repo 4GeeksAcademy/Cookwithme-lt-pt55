@@ -42,7 +42,13 @@ export const Chef = () => {
                     <li>Name: {chef.name}</li>
                     <li>Email: {chef.email}</li>
                     <li>Rating: {chef.rating}</li>
-                    <li><img src={chef.image_url} alt="" /></li>
+                    <li>
+                        <img 
+                            src={chef.image_url} 
+                            alt="Chef Image" 
+                            style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
+                        />
+                    </li>
                     
                     <Link to={"/chefs/" + chef.id}>
                         <button className="btn btn-primary">See chef</button>
