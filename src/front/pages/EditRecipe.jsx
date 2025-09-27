@@ -130,15 +130,6 @@ export const EditRecipe = () => {
                         className="form-control"
                     />
                 </div>
-                {/* <div className="mb-3">
-                    <label className="form-label">Image</label>
-                    <input
-                        value={img}
-                        onChange={(e) => setImg(e.target.value)}
-                        type="text"
-                        className="form-control"
-                    />
-                </div> */}
                 <div>
                     <input type="file" accept="image/*" onChange={changeUploadedImage} />
                     {(urlImg || img) && (
