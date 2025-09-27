@@ -11,11 +11,44 @@ const NewRecipe = () => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [preparation, setPreparation] = useState('');
-    const [img, setImg] = useState('');
+    // const [img, setImg] = useState('');
     const [utensils, setUtensils] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [chefs, setChefs] = useState([]);
     const [currentChef, setCurrentChef] = useState(null);
+
+    const [urlImg, setUrlImg] = useState("")
+
+    const uploadRecipeImage = async (e) => {
+        const file = e.target.files[0];
+
+        const formData = new FormData()
+
+        formData.append('file', file)
+        formData.append('upload_preset', 'chef_image')
+        formData.append('cloud_name', 'dwi8lacfr')
+
+        try {
+            const response = await fetch("https://api.cloudinary.com/v1_1/dwi8lacfr/image/upload", {
+                method: 'POST',
+                body: formData
+            })
+
+            const data = await response.json()
+            console.log(data)
+
+            if (data.secure_url) {
+                setUrlImg(data.secure_url)
+                // setImage("");
+            } else {
+                console.error("Failed to upload the image, please try again");
+            }
+
+        }
+        catch (error) {
+            console.error("Error uploading image:", error)
+        }
+    }
 
     function handleNameChange(e) {
         const newName = e.target.value;
@@ -25,7 +58,7 @@ const NewRecipe = () => {
             setDescription('');
             setPreparation('');
             setImg('');
-            setUtensils(''); 
+            setUtensils('');
         }
     }
 
@@ -54,7 +87,7 @@ const NewRecipe = () => {
                 "name": name,
                 "description": description,
                 "preparation": preparation,
-                "img": img,
+                "img": urlImg,
                 "utensils": utensils,
                 "chef_id": currentChef.id
             })
@@ -103,7 +136,7 @@ const NewRecipe = () => {
         };
     }, [name]);
 
-    
+
     useEffect(() => {
         const keywords = ["pan", "oven", "plate", "spoon"];
         if (!preparation) {
@@ -124,7 +157,7 @@ const NewRecipe = () => {
             <form className="w-50 mx-auto" onSubmit={sendData}>
                 <div className="mb-3">
                     <label htmlFor="exampleInputName" className="form-label">Name</label>
-                    
+
                     <input value={name} onChange={handleNameChange} type="text" className="form-control" id="exampleInputName" />
 
                     {suggestions.length > 0 && (
@@ -152,23 +185,19 @@ const NewRecipe = () => {
                         type="text"
                         className="form-control"
                         id="utensilsInput"
-                        readOnly
                     />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="exampleInputPreparation" className="form-label">Preparation</label>
                     <textarea value={preparation} onChange={(e) => setPreparation(e.target.value)} type="text" className="form-control" rows="5" id="exampleInputPreparation" />
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="exampleInputImage" className="form-label">Imagen</label>
-                    <input
-                        value={img}
-                        onChange={(e) => setImg(e.target.value)}
-                        type="text"
-                        className="form-control"
-                        id="exampleInputImage"
-                    />
-                    {img && <img src={img} alt={name} width="200" style={{ marginTop: "10px" }} />}
+                <div>
+                    <input type="file" accept="image/*" onChange={uploadRecipeImage} />
+                    {urlImg && (
+                        <div>
+                            <img src={urlImg} alt="" />
+                        </div>
+                    )}
                 </div>
 
                 <div className="dropdown">
