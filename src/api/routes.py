@@ -1353,3 +1353,16 @@ def ingredient_users_bulk():
     db.session.commit()
     return jsonify({"msg": "Selections updated"}), 201
 
+@api.route('/signup_admin', methods=['POST'])
+def signup_as_admin():
+    adminu_body = request.get_json()
+    adminu = Admin_user.query.filter_by(email=adminu_body ["email"]).first()
+    if adminu:
+        return jsonify({"msg": "Admin already exist"}), 401
+
+    adminu = Admin_user( email=adminu_body["email"],password=adminu_body["password"],)
+    db.session.add(adminu)
+    db.session.commit()
+    access_token = create_access_token(identity=adminu_body["email"])
+    return jsonify(access_token=access_token), 200
+
