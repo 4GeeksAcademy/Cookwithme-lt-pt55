@@ -1,0 +1,207 @@
+[
+  {
+    "name": "papel de hornear",
+    "description": "Hoja antiadherente para hornear sin que los alimentos se peguen.",
+    "image": "https://static5.depositphotos.com/1011255/444/i/450/depositphotos_4448440-stock-photo-baking-paper.jpg"
+  },
+  {
+    "name": "batidora",
+    "description": "Aparato eléctrico para batir, licuar o mezclar alimentos.",
+    "image": "https://cocuisineshop.com/cdn/shop/products/69581-BATIDORAINOXFRONTAL_1600x.jpg?v=1655728399"
+  },
+   {
+    "name": "licuadora",
+    "description": "Aparato eléctrico para batir, licuar o mezclar alimentos.",
+    "image": "https://cocuisineshop.com/cdn/shop/products/69581-BATIDORAINOXFRONTAL_1600x.jpg?v=1655728399"
+  }, 
+  {
+    "name": "bol",
+    "description": "Recipiente redondo utilizado para mezclar o contener alimentos.",
+    "image": "https://www.alambique.com/8053-large_default/bol-acero-inoxidable.jpg"
+  },
+  {
+    "name": "cazuela",
+    "description": "Recipiente hondo usado para cocinar a fuego lento.",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyQrsx37pwfL76jP9XZm0Jch3Ez-9D1EPKBQ&s"
+  },
+  {
+    "name": "film transparente",
+    "description": "Plástico delgado usado para envolver y conservar alimentos.",
+    "image": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRCaQ7-o-_5F4fBUhEmTn1svvCYrE84W7-DC5sCIVNLinUfZB1KCyNHB4itU_H38XLaXHxkp6yC0cLTchVRhWQSSJFEYDkwwCJJhy4dsXgQOEMgb4YvI-97JA&usqp=CAc"
+  },
+  {
+    "name": "colador",
+    "description": "Utensilio con malla para separar líquidos de sólidos.",
+    "image": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTh0_q0TcEcdnqc9g1h6rC3fSMMrcsYx0WAoYjcDBIg6hh9do6ukfQqS70SGzDlMCFu64EEnPlqLV465DGfOiLm7Vy6FDx04rUEPz5tA3j4EDs1KGnu4HPTBB0MqtG_DPOb7pTtUGgnsuQ&usqp=CAc"
+  },
+  {
+    "name": "taza",
+    "description": "Recipiente con medidas estándar para ingredientes.",
+    "image": "https://sw6.elbenwald.de/media/0e/80/f7/1633454052/E1065475_4.jpg"
+  },
+  {
+    "name": "tabla de cortar",
+    "description": "Superficie plana donde se cortan alimentos con cuchillo.",
+    "image": "https://assets.katogroup.eu/i/katogroup/ZA057195_01_zassenhaus?%24product-image%24=&fmt=auto&h=434&w=652"
+  },
+  {
+    "name": "fuente",
+    "description": "Recipiente para hornear o servir alimentos.",
+    "image": "https://cdn.grupoelcorteingles.es/SGFM/dctm/MEDIA03/201806/22/00107320687598____2__1200x1200.jpg?impolicy=Resize&width=1200"
+  },
+   {
+    "name": "plato hondo",
+    "description": "Recipiente para hornear o servir alimentos.",
+    "image": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQ6zyAd_CaZ2qEaauK2kqWtzH7Yq2IG35ZP0bWYwtLXA78VTza3byZ-VVy2GavP81u9u2L2Q3Cg5YeF0h4B_trKXgW9h5wfiyEJJIR12CuemdjFRJibh8Pi-Scw4lz1YCQkpg&usqp=CAc"
+  }, 
+  {
+    "name": "procesador de alimentos",
+    "description": "Máquina que corta, tritura y mezcla rápidamente.",
+    "image": "https://images.ctfassets.net/0e6jqcgsrcye/5Te1u6qeZNdEzwnOSQYHlj/58e01d5f4c84ec4ff702aff975e7a899/PLP-food-processors-benefits-prep-everything-effortlessly_B.jpg"
+  },
+  {
+    "name": "tenedor",
+    "description": "Utensilio con puntas usado para comer o sostener alimentos.",
+    "image": "https://anforama.com/cdn/shop/files/TenedorparaMesaa4dientesdeAceroInoxidableEleganteToledoMovenM00120033.png?v=1756940560"
+  },
+  {
+    "name": "sartén",
+    "description": "Utensilio plano con mango para freír o saltear.",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRk3uS4Iqz0wpKN7kKDF66RnKk1cNE5QAjb-g&s"
+  },
+  {
+    "name": "rallador",
+    "description": "Utensilio con superficie rugosa para rallar alimentos.",
+    "image": "https://inoxibar.com/3489-large_default/rallador-4-caras.jpg"
+  },
+  {
+    "name": "parrilla",
+    "description": "Rejilla usada para asar alimentos al calor directo.",
+    "image": "https://m.media-amazon.com/images/I/71ClRecsA0L.jpg"
+  },
+  {
+    "name": "jarra",
+    "description": "Recipiente para contener y servir líquidos.",
+    "image": ""
+  },
+  {
+    "name": "cuchillo",
+    "description": "Herramienta de filo usada para cortar alimentos.",
+    "image": ""
+  },
+  {
+    "name": "cucharón",
+    "description": "Cuchara grande para servir sopas y caldos.",
+    "image": ""
+  },
+  {
+    "name": "mortero",
+    "description": "Recipiente usado para triturar especias con la mano del mortero.",
+    "image": ""
+  },
+  {
+    "name": "taza",
+    "description": "Recipiente pequeño para beber líquidos.",
+    "image": ""
+  },
+  {
+    "name": "horno",
+    "description": "Electrodoméstico cerrado que cocina con calor seco.",
+    "image": ""
+  },
+  {
+    "name": "cazo",
+    "description": "Recipiente pequeño con mango para calentar líquidos.",
+    "image": ""
+  },
+  {
+    "name": "mano del mortero",
+    "description": "Herramienta cilíndrica usada con el mortero.",
+    "image": ""
+  },
+  {
+    "name": "plato",
+    "description": "Superficie plana para servir alimentos.",
+    "image": ""
+  },
+  {
+    "name": "olla",
+    "description": "Recipiente hondo usado para hervir o guisar.",
+    "image": ""
+  },
+  {
+    "name": "molde individual",
+    "description": "Pequeño recipiente para soufflés y postres.",
+    "image": ""
+  },
+  {
+    "name": "rodillo",
+    "description": "Cilindro usado para estirar masas.",
+    "image": ""
+  },
+  {
+    "name": "cazo pequeño",
+    "description": "Variante reducida del cazo, ideal para salsas.",
+    "image": ""
+  },
+  {
+    "name": "tijeras",
+    "description": "Herramienta para cortar hierbas o envases.",
+    "image": ""
+  },
+  {
+    "name": "bandeja de horno",
+    "description": "Superficie metálica para hornear galletas o panes.",
+    "image": ""
+  },
+  {
+    "name": "tamiz",
+    "description": "Utensilio de malla fina para harina o cacao.",
+    "image": ""
+  },
+  {
+    "name": "sartén de hierro",
+    "description": "Sartén robusta que retiene bien el calor.",
+    "image": ""
+  },
+  {
+    "name": "espátula",
+    "description": "Herramienta plana para remover, voltear o servir.",
+    "image": ""
+  },
+  {
+    "name": "cuchara",
+    "description": "Utensilio cóncavo para comer o servir alimentos.",
+    "image": ""
+  },
+  {
+    "name": "colador fino",
+    "description": "Colador de malla más cerrada para filtrar líquidos claros.",
+    "image": ""
+  },
+  {
+    "name": "cucharada",
+    "description": "Medida estándar equivalente a 15 ml.",
+    "image": ""
+  },
+  {
+    "name": "cucharadita",
+    "description": "Medida estándar equivalente a 5 ml.",
+    "image": ""
+  },
+  {
+    "name": "molde de hornear",
+    "description": "Recipiente para hornear tortas o panes.",
+    "image": ""
+  },
+  {
+    "name": "pinzas",
+    "description": "Utensilio para sujetar y voltear alimentos.",
+    "image": ""
+  },
+  {
+    "name": "bandeja",
+    "description": "Superficie plana para transportar alimentos.",
+    "image": ""
+  }
+]
