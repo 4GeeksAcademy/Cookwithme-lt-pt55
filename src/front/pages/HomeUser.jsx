@@ -15,34 +15,44 @@ export const HomeUser = () => {
       .then(data => setRecipes(data));
   }, []);
 
-
-    console.log("AuthUser:", store.authUser);
-    console.log("UsersFavs:", store.usersFavs);
   const userFavs = store.authUser ? store.usersFavs[store.authUser.id] || [] : [];
 
   return (
-    <div className="container text-center mt-5">
-      <h1>Welcome, {store.authUser?.email}</h1>
+    <div className="w-50 mx-auto">
+      <h1>Welcome,  <strong>{store.authUser?.username} </strong></h1>
       <h2>Recetas</h2>
       {recipes.map(recipe => {
         const isFavorite = userFavs.includes(recipe.name);
         return (
-          <div key={recipe.id} className="card mt-3 p-3">
-            <h3>{recipe.name}</h3>
-            <img src={recipe.img} alt={recipe.name} className="img-fluid mb-2" style={{ maxHeight: "200px" }} />
-            <p>{recipe.description}</p>
-            <i
-              className={isFavorite ? "fa-solid fa-heart mx-5" : "fa-regular fa-heart mx-5"}
-              style={{ color: isFavorite ? "red" : "black", cursor: "pointer" }}
-              onClick={() => {
-              console.log("Toggle fav:", recipe.name,);
-              dispatch({ type: "toggle_fav_user", payload: recipe.name });
-                }}
-            ></i>
+        <div key={recipe.id} className="card mt-2 p-1">
+          <h3 className="text-center">{recipe.name}</h3>
+          <img
+            src={recipe.img}
+            alt={recipe.name}
+            className="img-fluid mb-2"
+            style={{ maxWidth: "100%", maxHeight: "200px", objectFit: "contain" }}
+          />
+          <p className="text-center">{recipe.description}</p>
+          
+          <div className="d-flex justify-content-between align-items-center">
             <Link to={`/recipes/${recipe.id}`}>
-              <button className="btn btn-primary">See Recipe</button>
+              <button className="btn btn-primary">Ver receta</button>
             </Link>
+
+            <i
+              className={
+                isFavorite
+                  ? "fa-solid fa-heart text-danger fs-4"
+                  : "fa-regular fa-heart text-dark fs-4"
+              }
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                dispatch({ type: "toggle_fav_user", payload: recipe.name });
+              }}
+            ></i>
           </div>
+        </div>
+
         );
       })}
     </div>

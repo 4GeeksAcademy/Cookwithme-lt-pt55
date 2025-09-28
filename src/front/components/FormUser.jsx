@@ -30,7 +30,7 @@ const FormUser = () => {
       localStorage.setItem("tokenUser", data.access_token);
       
 
-      dispatch({ type: "set_auth_user", payload: { id: data.user.id, email: data.user.email,token:data.access_token  } });
+      dispatch({ type: "set_auth_user", payload: {...data.user,token:data.access_token  } });
       setError('');
       navigate("/home_user");
 
