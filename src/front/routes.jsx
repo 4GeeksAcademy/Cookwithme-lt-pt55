@@ -94,6 +94,8 @@ import { AvailableRecipes } from "./pages/AvailableRecipe.jsx";
 import { SelectIngredients } from "./pages/SelectIngredUtensil.jsx";
 import { Results } from "./pages/ResultRecipe.jsx";
 import FavRecipeUser from "./pages/FavRecipeUser.jsx";
+import { HomeAvailableRecipes } from "./pages/HomeUserAvailableRecipe.jsx";
+
  
 
 
@@ -207,6 +209,7 @@ export const router = createBrowserRouter(
      <Route path="/results" element={<Results />} />
 
      <Route path="/fav_recipe_user" element={<FavRecipeUser />} />   
+     <Route path="/home_user_avail_recipe" element={<HomeAvailableRecipes />} />   
 
     </Route>
   )

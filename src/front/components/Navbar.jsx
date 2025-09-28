@@ -40,6 +40,13 @@ export const Navbar = () => {
           {/* Botones según rol */}
           {store.authUser && (
             <>
+
+            <Link to="/home_user_avail_recipe">
+              <button className="btn btn-primary">
+                🧑‍🍳 Recetas disponibles
+              </button>
+            </Link>
+
             <Link to="/fav_recipe_user">
               <button className="btn btn-primary">
                ⭐ Ver recetas favoritas <span className="badge text-bg-secondary">{userFavs.length}</span>
