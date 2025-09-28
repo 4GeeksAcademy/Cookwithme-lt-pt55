@@ -1348,3 +1348,94 @@ def signup_as_admin():
     access_token = create_access_token(identity=adminu_body["email"])
     return jsonify(access_token=access_token), 200
 
+#--------------------inventario de usuario ingredientes
+@api.route('/user/inventory/ingredients', methods=['GET'])
+@jwt_required()
+def get_user_ingredients():
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    ingredients = [iu.serialize() for iu in Ingredient_user.query.filter_by(user_id=user.id)]
+    return jsonify(ingredients), 200
+
+@api.route('/user/inventory/ingredients', methods=['POST'])
+@jwt_required()
+def add_user_ingredient():
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    ingredient_id = request.json.get("ingredient_id")
+    if not ingredient_id:
+        return jsonify({"error": "ingredient_id required"}), 400
+
+    new_item = Ingredient_user(user_id=user.id, ingredient_id=ingredient_id)
+    db.session.add(new_item)
+    db.session.commit()
+
+    return jsonify(new_item.serialize()), 201
+
+@api.route('/user/inventory/ingredients/<int:ingredient_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user_ingredient(ingredient_id):
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    item = Ingredient_user.query.filter_by(user_id=user.id, ingredient_id=ingredient_id).first()
+    if not item:
+        return jsonify({"error": "Ingredient not found in inventory"}), 404
+
+    db.session.delete(item)
+    db.session.commit()
+    return jsonify({"msg": "Ingredient removed"}), 200
+
+#---------inventario utensilios
+@api.route('/user/inventory/utensils', methods=['GET'])
+@jwt_required()
+def get_user_utensils():
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    utensils = [uu.serialize() for uu in Utensil_user.query.filter_by(user_id=user.id)]
+    return jsonify(utensils), 200
+
+@api.route('/user/inventory/utensils', methods=['POST'])
+@jwt_required()
+def add_user_utensil():
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    utensil_id = request.json.get("utensil_id")
+    if not utensil_id:
+        return jsonify({"error": "utensil_id required"}), 400
+
+    new_item = Utensil_user(user_id=user.id, utensil_id=utensil_id)
+    db.session.add(new_item)
+    db.session.commit()
+
+    return jsonify(new_item.serialize()), 201
+
+@api.route('/user/inventory/utensils/<int:utensil_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user_utensil(utensil_id):
+    current_user_email = get_jwt_identity()
+    user = User.query.filter_by(email=current_user_email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    item = Utensil_user.query.filter_by(user_id=user.id, utensil_id=utensil_id).first()
+    if not item:
+        return jsonify({"error": "Utensil not found in inventory"}), 404
+
+    db.session.delete(item)
+    db.session.commit()
+    return jsonify({"msg": "Utensil removed"}), 200

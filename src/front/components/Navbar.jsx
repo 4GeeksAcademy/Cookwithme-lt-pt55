@@ -52,6 +52,12 @@ export const Navbar = () => {
                ⭐ Ver recetas favoritas <span className="badge text-bg-secondary">{userFavs.length}</span>
               </button>
             </Link>
+          
+            <Link to="/user_inventory">
+              <button className="btn btn-primary">
+                Ingresar mi inventario 🥦🍴
+              </button>
+            </Link>
 
             <Link to="/select_ingr&utensil">
               <button className="btn btn-primary">
