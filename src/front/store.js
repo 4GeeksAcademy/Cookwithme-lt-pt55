@@ -7,7 +7,8 @@ export const initialStore = () => {
     usersFavs: {},       // { userId: [recipe1, recipe2] }
     authChef: false,
     authAdmin: false,
-    authUser: null,     
+    authUser: null,  
+    token: null,   
     favItems: [],        // recetas favoritas
     charFav: []         
   };
@@ -38,7 +39,8 @@ export default function storeReducer(store, action = {}) {
     case 'set_auth_user':
       return {
         ...store,
-        authUser: action.payload
+        authUser: action.payload.user || action.payload, // por si envías solo user
+        token: action.payload.token || store.token       // guarda el token también
       };
 
     case 'add_task':

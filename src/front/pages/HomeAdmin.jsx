@@ -11,11 +11,11 @@ export const HomeAdmin = () => {
 
 	 function adminLogout(){
 		
-		localStorage.removeItem("token");
+		localStorage.removeItem("tokenAdmin");
 
 		dispatch({ type:'set_auth_admin', payload: false })
 
-		navigate('/')
+		navigate('/login_admin')
 
 	 }
 
@@ -27,8 +27,7 @@ export const HomeAdmin = () => {
                 <Navigate to='/login_admin'/>
             }
 
-             { store.authAdmin ? <button onClick={adminLogout} className="btn btn-danger">Log out</button> :
-					<Navigate to='/testadm'/>}
+             
         </div>
         
     );

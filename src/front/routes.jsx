@@ -93,6 +93,14 @@ import ChefProfile from "./pages/ChefProfile";
 import { AvailableRecipes } from "./pages/AvailableRecipe.jsx";
 import { SelectIngredients } from "./pages/SelectIngredUtensil.jsx";
 import { Results } from "./pages/ResultRecipe.jsx";
+import FavRecipeUser from "./pages/FavRecipeUser.jsx";
+import { HomeAvailableRecipes } from "./pages/HomeUserAvailableRecipe.jsx";
+import { InventoryUser } from "./pages/UserInventory.jsx";
+
+
+ 
+
+
 
 
 export const router = createBrowserRouter(
@@ -150,7 +158,7 @@ export const router = createBrowserRouter(
       <Route path="/adminuser/:admin_id/edit" element={<EditAdmin />} />
       <Route path= "/login_admin" element={<LoginAdmin />} />
       <Route path= "/signup_admin" element={<SignupAdmin />} />
-      <Route path= "/testadm" element={<HomeAdmin />} />
+      <Route path= "/home_admin" element={<HomeAdmin />} />
 
       <Route path="/questions" element={<Question />} />
       <Route path="/questions/:question_id" element={<SingleQuestion />} />
@@ -190,6 +198,7 @@ export const router = createBrowserRouter(
       <Route path= "/login_user" element={<LoginUser/>} />
       <Route path= "/signup_user" element={<SignupUser/>} />
       <Route path= "/home_user" element={<HomeUser/>} />
+   
 
       <Route path="/ingredient_users" element={<IngredientUser />} />
       <Route path="/ingredient_users/:ingredient_user_id" element={<SingleIngredientUser />} />
@@ -204,6 +213,9 @@ export const router = createBrowserRouter(
      <Route path="/select_ingr&utensil" element={<SelectIngredients />} />   
      <Route path="/results" element={<Results />} />
 
+     <Route path="/fav_recipe_user" element={<FavRecipeUser />} />   
+     <Route path="/home_user_avail_recipe" element={<HomeAvailableRecipes />} />   
+     <Route path="/user_inventory" element={<InventoryUser />} />   
     </Route>
   )
 );
