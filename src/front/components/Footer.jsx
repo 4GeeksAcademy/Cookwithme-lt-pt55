@@ -7,9 +7,9 @@ export const Footer = () => (
 		</p>
 		<p>
 			Made with <i className="fa fa-heart text-danger" /> by{" "}
-			<Link to="/">
+			{/* <Link to="/">
 				<button className="btn btn-success">Regresar</button>
-			</Link>
+			</Link> */}
 
 		</p>
 	</footer>
