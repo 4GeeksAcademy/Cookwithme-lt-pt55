@@ -93,9 +93,6 @@ import ChefProfile from "./pages/ChefProfile";
 import { AvailableRecipes } from "./pages/AvailableRecipe.jsx";
 import { SelectIngredients } from "./pages/SelectIngredUtensil.jsx";
 import { Results } from "./pages/ResultRecipe.jsx";
-import UserEditCalification from "./pages/Califications/UserEditReview.jsx";
-import { UserCalifications } from "./pages/Califications/UserReviews.jsx";
-import UserNewCalification from "./pages/Califications/UserNewReview.jsx";
 
 
 
@@ -155,7 +152,7 @@ export const router = createBrowserRouter(
       <Route path="/adminuser/:admin_id/edit" element={<EditAdmin />} />
       <Route path= "/login_admin" element={<LoginAdmin />} />
       <Route path= "/signup_admin" element={<SignupAdmin />} />
-      <Route path= "/testadm" element={<HomeAdmin />} />
+      <Route path= "/home_admin" element={<HomeAdmin />} />
 
       <Route path="/questions" element={<Question />} />
       <Route path="/questions/:question_id" element={<SingleQuestion />} />
@@ -195,9 +192,7 @@ export const router = createBrowserRouter(
       <Route path= "/login_user" element={<LoginUser/>} />
       <Route path= "/signup_user" element={<SignupUser/>} />
       <Route path= "/home_user" element={<HomeUser/>} />
-      <Route path= "/user_califications" element={<UserCalifications/>} />
-      <Route path= "/user_califications/:user_id/edit" element={<UserEditCalification/>} />
-      <Route path= "/user_califications/:user_id/new" element={<UserNewCalification/>} />
+   
 
       <Route path="/ingredient_users" element={<IngredientUser />} />
       <Route path="/ingredient_users/:ingredient_user_id" element={<SingleIngredientUser />} />

@@ -30,7 +30,7 @@ export const Navbar = () => {
   return (
     <nav className="navbar navbar-light bg-light">
       <div className="container d-flex  flex-column">
-        <div className="d-flex justify-content-between align-items-center w-100">
+        <div className="d-flex justify-content-between align-items-center flex-wrap w-100">
           {(store.authChef || store.authUser || store.authAdmin) && (
             <button className="btn btn-danger" onClick={logout}>
               Logout
@@ -141,10 +141,6 @@ export const Navbar = () => {
            {(store.authUser ||store.authAdmin) && (
           <Link to="/utensil_user">
             <button className="btn btn-primary m-2">User's Utensils</button>
-          </Link>)}
-          {( store.authUser || store.authAdmin) && (
-          <Link to="/user_califications">
-            <button className="btn btn-primary m-2">Califications</button>
           </Link>)}
           {( store.authAdmin) && (
           <Link to="/califications">
