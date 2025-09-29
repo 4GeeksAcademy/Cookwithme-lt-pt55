@@ -64,6 +64,12 @@ export const Navbar = () => {
                 Buscar recetas por componentes
               </button>
             </Link>
+
+            <Link to="/home_user_avail_recipe">
+              <button className="btn btn-primary">
+                home recetas disponible
+              </button>
+            </Link>
             </>
           )}
 

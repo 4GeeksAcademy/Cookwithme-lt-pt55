@@ -1290,21 +1290,27 @@ def get_available_recipes():
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    # Ingredientes y utensilios del usuario
-    selected_ingredient_ids = [iu.ingredient_id for iu in Ingredient_user.query.filter_by(user_id=user.id)]
-    selected_utensil_ids = [uu.utensil_id for uu in Utensil_user.query.filter_by(user_id=user.id)]
+    user_ingredient_ids = {iu.ingredient_id for iu in Ingredient_user.query.filter_by(user_id=user.id)}
+    user_utensil_ids = {uu.utensil_id for uu in Utensil_user.query.filter_by(user_id=user.id)}
 
     available_recipes = []
 
     for recipe in Recipe.query.all():
-        recipe_ingredient_ids = [ri.ingredient_id for ri in Recipe_ingredient.query.filter_by(recipe_id=recipe.id)]
-        recipe_utensil_ids = [ur.utensil_id for ur in Utensil_recipe.query.filter_by(recipe_id=recipe.id)]
+        recipe_ingredient_ids = {ri.ingredient_id for ri in Recipe_ingredient.query.filter_by(recipe_id=recipe.id)}
+        recipe_utensil_ids = {ur.utensil_id for ur in Utensil_recipe.query.filter_by(recipe_id=recipe.id)}
 
-        # Solo si la receta contiene todos los ingredientes seleccionados y utensilios seleccionados
-        if set(selected_ingredient_ids).issubset(recipe_ingredient_ids) and set(selected_utensil_ids).issubset(recipe_utensil_ids):
-            available_recipes.append(recipe.serialize())
+        missing_ingredients = recipe_ingredient_ids - user_ingredient_ids
+        missing_utensils = recipe_utensil_ids - user_utensil_ids
+
+        available_recipes.append({
+            **recipe.serialize(),
+            "missing_ingredients_count": len(missing_ingredients),
+            "missing_utensils_count": len(missing_utensils),
+            "can_make": len(missing_ingredients) == 0 and len(missing_utensils) == 0
+        })
 
     return jsonify(available_recipes), 200
+
 
 # --------------
 @api.route('/ingredient_users_bulk', methods=['POST'])
@@ -1357,7 +1363,14 @@ def get_user_ingredients():
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    ingredients = [iu.serialize() for iu in Ingredient_user.query.filter_by(user_id=user.id)]
+    results = (
+        db.session.query(Ingredient.id, Ingredient.name)
+        .join(Ingredient_user, Ingredient.id == Ingredient_user.ingredient_id)
+        .filter(Ingredient_user.user_id == user.id)
+        .all()
+    )
+
+    ingredients = [{"id": i.id, "name": i.name} for i in results]
     return jsonify(ingredients), 200
 
 @api.route('/user/inventory/ingredients', methods=['POST'])
@@ -1403,7 +1416,14 @@ def get_user_utensils():
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    utensils = [uu.serialize() for uu in Utensil_user.query.filter_by(user_id=user.id)]
+    results = (
+        db.session.query(Utensil.id, Utensil.name)
+        .join(Utensil_user, Utensil.id == Utensil_user.utensil_id)
+        .filter(Utensil_user.user_id == user.id)
+        .all()
+    )
+
+    utensils = [{"id": u.id, "name": u.name} for u in results]
     return jsonify(utensils), 200
 
 @api.route('/user/inventory/utensils', methods=['POST'])
