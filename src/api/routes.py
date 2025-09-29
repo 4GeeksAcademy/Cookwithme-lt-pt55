@@ -498,6 +498,12 @@ def update_recipe(recipe_id):
 
     if "chef_id" in body:
         recipe.chef_id = body["chef_id"]
+    
+    if "utensils" in body:
+        recipe.utensils = body["utensils"]
+    
+    if "ingredients" in body:
+        recipe.ingredients = body["ingredients"]
 
     db.session.commit()
     response_body = {
