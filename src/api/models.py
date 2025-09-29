@@ -67,8 +67,7 @@ class Utensil(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
-    url_img: Mapped[str] = mapped_column(nullable=True)
-
+    url_img: Mapped[str] = mapped_column(String(1000), nullable=True)
     utensil_recipes: Mapped[List["Utensil_recipe"]
                             ] = relationship(back_populates="utensil")
     utensil_users: Mapped[List["Utensil_user"]
