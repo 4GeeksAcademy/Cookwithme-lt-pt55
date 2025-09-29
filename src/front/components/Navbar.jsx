@@ -43,11 +43,38 @@ export const Navbar = () => {
 
           {/* Botones según rol */}
           {store.authUser && (
+            <>
+
+            <Link to="/home_user_avail_recipe">
+              <button className="btn btn-primary">
+                🧑‍🍳 Recetas disponibles
+              </button>
+            </Link>
+
+            <Link to="/fav_recipe_user">
+              <button className="btn btn-primary">
+               ⭐ Ver recetas favoritas <span className="badge text-bg-secondary">{userFavs.length}</span>
+              </button>
+            </Link>
+          
+            <Link to="/user_inventory">
+              <button className="btn btn-primary">
+                Ingresar mi inventario 🥦🍴
+              </button>
+            </Link>
+
             <Link to="/select_ingr&utensil">
               <button className="btn btn-primary m-2">
                 Buscar recetas por componentes
               </button>
             </Link>
+
+            <Link to="/home_user_avail_recipe">
+              <button className="btn btn-primary">
+                home recetas disponible
+              </button>
+            </Link>
+            </>
           )}
 
           {store.authChef && (
@@ -110,6 +137,20 @@ export const Navbar = () => {
         )}
 
         {/* Otros botones (combina lógica de develop y tu rama) */}
+
+          {/* Botones Home */}
+          {( store.authChef) && (
+          <Link to="/chef_home">
+            <button className="btn btn-primary m-2">HOME</button>
+          </Link>)}
+          {(store.authAdmin) && (
+          <Link to="/home_admin">
+            <button className="btn btn-primary m-2">HOME</button>
+          </Link>)}
+          {(store.authUser) && (
+          <Link to="/home_user">
+            <button className="btn btn-primary m-2">HOME</button>
+          </Link>)}
          
           {/* <Link to="/demo">
             <button className="btn btn-primary m-2">Check the Context</button>

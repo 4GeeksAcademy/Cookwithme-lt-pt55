@@ -1,50 +1,68 @@
-import { Link, useParams } from "react-router-dom";  // To use link for navigation and useParams to get URL parameters
-import PropTypes from "prop-types";  // To define prop types for this component
-import React, { useEffect, useState } from "react"
+import { Link, useParams } from "react-router-dom";
+import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
-export const SingleRecipe = props => {
-
-  const [recipe, setRecipe] = useState([])
-
-  const backendUrl = import.meta.env.VITE_BACKEND_URL
-
-  const { store, dispatch } = useGlobalReducer()
-
-  function getRecipe() {
-    fetch(backendUrl + `/api/recipes/` + recipe_id,)
-      .then(response => response.json())
-      .then(data => setRecipe(data))
-  }
+export const SingleRecipe = () => {
+  const [recipe, setRecipe] = useState(null);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const { store, dispatch } = useGlobalReducer();
+  const { recipe_id } = useParams();
 
   useEffect(() => {
-    getRecipe()
-  }, [])
+    fetch(`${backendUrl}/api/recipes/${recipe_id}`)
+      .then(response => response.json())
+      .then(data => setRecipe(data));
+  }, [recipe_id]);
 
-  const { recipe_id } = useParams()
+  if (!recipe) {
+    return <p className="text-center">Loading recipe...</p>;
+  }
 
   return (
-    <>
-      <div className="container text-center">
+    <div className="container my-4 d-flex justify-content-center">
+      <div className="card" style={{ maxWidth: "600px" }}>
+        <h2 className="card-title text-center">{recipe.name}</h2>
+        <img
+          src={recipe.img}
+          alt={recipe.name}
+          className="card-img-top img-fluid"
+          style={{ maxHeight: "300px", objectFit: "contain" }}
+        />
+        <div className="card-body text-center">
+          <p className="card-text ">{recipe.description}</p>
+          <p className="text-start"><strong>Preparation:</strong> {recipe.preparation}</p>
+          
+          {store.authChef ? (
+            <Link to="/chef_home" className="btn btn-primary me-2">
+              Back to Home
+            </Link>
+          ) : (
+            <Link to="/home_user" className="btn btn-secondary me-2">
+              Back to Recipes
+            </Link>
+          )}
 
-        <h1 className="display-4">Recipe Name: {recipe.name}</h1>
-        <h1 className="display-4">Recipe Description: {recipe.description}</h1>
-        <h1 className="display-4">Recipe Preparation: {recipe.preparation}</h1>
-        <img src={recipe.img} alt="" />
-        {store.authChef ?
-          <Link to="/chef_home">
-            <button className="btn btn-primary">Back to Home</button>
-          </Link>
-          :
-          null}
+          {/* Botón de favoritos */}
+          {store.authUser && (
+            <i
+              className={
+                (store.usersFavs[store.authUser.id] || []).includes(recipe.name)
+                  ? "fa-solid fa-heart text-danger fs-4 ms-3"
+                  : "fa-regular fa-heart text-dark fs-4 ms-3"
+              }
+              style={{ cursor: "pointer" }}
+              onClick={() =>
+                dispatch({ type: "toggle_fav_user", payload: recipe.name })
+              }
+            ></i>
+          )}
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
-// Use PropTypes to validate the props passed to this component, ensuring reliable behavior.
 SingleRecipe.propTypes = {
-  // Although 'match' prop is defined here, it is not used in the component.
-  // Consider removing or using it as needed.
   match: PropTypes.object
 };
