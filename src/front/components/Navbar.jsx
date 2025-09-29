@@ -39,11 +39,38 @@ export const Navbar = () => {
 
           {/* Botones según rol */}
           {store.authUser && (
+            <>
+
+            <Link to="/home_user_avail_recipe">
+              <button className="btn btn-primary">
+                🧑‍🍳 Recetas disponibles
+              </button>
+            </Link>
+
+            <Link to="/fav_recipe_user">
+              <button className="btn btn-primary">
+               ⭐ Ver recetas favoritas <span className="badge text-bg-secondary">{userFavs.length}</span>
+              </button>
+            </Link>
+          
+            <Link to="/user_inventory">
+              <button className="btn btn-primary">
+                Ingresar mi inventario 🥦🍴
+              </button>
+            </Link>
+
             <Link to="/select_ingr&utensil">
               <button className="btn btn-primary">
                 Buscar recetas por componentes
               </button>
             </Link>
+
+            <Link to="/home_user_avail_recipe">
+              <button className="btn btn-primary">
+                home recetas disponible
+              </button>
+            </Link>
+            </>
           )}
 
           {store.authChef && (
@@ -59,33 +86,6 @@ export const Navbar = () => {
           )}
         </div>
 
-        {/* Dropdown de favoritos SOLO para USER */}
-        {store.authUser && userFavs.length > 0 && (
-          <div className="mt-2 dropdown">
-            <button
-              className="btn btn-primary dropdown-toggle"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Mis Favoritos <span className="badge text-bg-secondary">{userFavs.length}</span>
-            </button>
-            <ul className="dropdown-menu">
-              {userFavs.map((fav, index) => (
-                <li key={index} className="dropdown-item d-flex justify-content-between align-items-center">
-                  {fav}
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-danger"
-                    onClick={() => dispatch({ type: "toggle_fav_user", payload: fav })}
-                  >
-                    X
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
 
         {/* Otros botones (combina lógica de develop y tu rama) */}
         <div className="ml-auto mt-3">
