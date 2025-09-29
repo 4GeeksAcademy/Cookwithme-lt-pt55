@@ -76,9 +76,6 @@ export const HomeChef = () => {
                             {chefRecipe.map((recipe) =>
                                 <React.Fragment key={recipe.id}>
                                     <div className="text-center mt-4">
-                                        <Link to="/new_chef_recipe">
-                                            <button className="btn btn-success">Add new recipe</button>
-                                        </Link>
                                         <h1>Name: {recipe.name}</h1>
                                         <p>Description: {recipe.description}</p>
                                         <p>Preparation: {recipe.preparation}</p>

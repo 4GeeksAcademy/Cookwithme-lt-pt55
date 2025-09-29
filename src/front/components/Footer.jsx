@@ -3,9 +3,14 @@ import { Link, Navigate } from "react-router-dom";
 export const Footer = () => (
 	<footer className="footer mt-auto py-3 text-center">
 		<p>
-			<Link to="/">
+			Check the <a target="_blank" href="https://4geeks.com/docs/start/react-flask-template">template documentation</a> <i className="fa-solid fa-file"></i> for help.
+		</p>
+		<p>
+			Made with <i className="fa fa-heart text-danger" /> by{" "}
+			{/* <Link to="/">
 				<button className="btn btn-success">Regresar</button>
-			</Link>
+			</Link> */}
+
 		</p>
 	</footer>
 );
