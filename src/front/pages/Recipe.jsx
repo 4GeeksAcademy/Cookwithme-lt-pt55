@@ -54,6 +54,7 @@ export const Recipe = props => {
                         <p>Description: {recipe.description}</p>
                         {recipe.utensils && <p>Utensilios: {recipe.utensils}</p>}
                         <p>Preparation: {recipe.preparation}</p>
+                        <p>Ingredients: {recipe.ingredients}</p>
                         <p>Chef who made it: {recipe.chef.name}</p>
                         <div className="">
                             <img 

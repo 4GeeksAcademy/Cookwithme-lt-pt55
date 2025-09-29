@@ -7,7 +7,7 @@ const NewChefRecipe = () => {
 
     const navigate = useNavigate()
 
-    const { store, dispatch } = useGlobalReducer()
+    const { store } = useGlobalReducer()
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL
 
@@ -16,7 +16,109 @@ const NewChefRecipe = () => {
     const [preparation, setPreparation] = useState('')
     const [img, setImg] = useState("")
     const [urlImg, setUrlImg] = useState("")
+    const [utensils, setUtensils] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
+    const [ingredientes, setIngredientes] = useState([])
+    const [currentSelection, setCurrentSelection] = useState('');
+    const [selectedIngredients, setSelectedIngredients] = useState([]);
+
+    function getIngredientes() {
+        fetch(backendUrl + '/api/ingredients')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                setIngredientes(data)
+                if (data.length > 0) {
+                    setCurrentSelection(data[0].name);
+                }
+            })
+            .catch(error => console.error("Fetch error:", error));
+    }
+
+    const handleDropdownChange = (event) => {
+
+        setCurrentSelection(event.target.value);
+    };
     
+    
+
+    const handleAddIngredient = (e) => {
+
+        e.preventDefault();
+
+        if (currentSelection && !selectedIngredients.includes(currentSelection)) {
+
+            setSelectedIngredients(prevIngredients => [
+                ...prevIngredients,
+                currentSelection
+            ]);
+        }
+    };
+
+    function handleNameChange(e) {
+        const newName = e.target.value;
+        setName(newName);
+
+        if (newName.trim().length > 0) {
+            setDescription('');
+            setPreparation('');
+            setImg('');
+            setUtensils('');
+        }
+    }
+
+    function handleSelectSuggestion(meal) {
+        setName(meal.strMeal);
+        setDescription(`${meal.strCategory} (${meal.strArea})`);
+        setPreparation(meal.strInstructions);
+        setImg(meal.strMealThumb);
+        setSuggestions([]);
+    }
+
+    useEffect(() => {
+        const fetchRecipes = async () => {
+            if (name.trim().length > 1) {
+                try {
+                    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`);
+                    const data = await response.json();
+                    setSuggestions(data.meals || []);
+                } catch (error) {
+                    console.error("Error fetching recipes:", error);
+                    setSuggestions([]);
+                }
+            } else {
+                setSuggestions([]);
+            }
+        };
+
+        const timerId = setTimeout(() => {
+            fetchRecipes();
+        }, 300);
+
+        return () => {
+            clearTimeout(timerId);
+        };
+    }, [name]);
+
+
+    useEffect(() => {
+        getIngredientes()
+        const keywords = ["pan", "oven", "plate", "spoon"];
+        if (!preparation) {
+            setUtensils('');
+            return;
+        }
+
+        const lowercasedPreparation = preparation.toLowerCase();
+        const foundKeywords = keywords.filter(keyword =>
+            lowercasedPreparation.includes(keyword)
+        );
+
+        setUtensils(foundKeywords.join(', '));
+    }, [preparation]);
+
+
+
     const uploadChefRecipeImage = async (e) => {
         const file = e.target.files[0];
 
@@ -54,6 +156,13 @@ const NewChefRecipe = () => {
 
         const finalImageUrl = urlImg || img
 
+
+        const ingredientsForPost = selectedIngredients.map(name => ({
+            name: name,
+            quantity: "1 unit" // Add a default quantity if your model requires it
+            // You may need to adjust this structure based on your backend API
+        }));
+
         e.preventDefault();
         console.log('send data')
         const token = localStorage.getItem("tokenChef")
@@ -73,7 +182,9 @@ const NewChefRecipe = () => {
                     "name": name,
                     "description": description,
                     "preparation": preparation,
-                    "img": finalImageUrl
+                    "img": finalImageUrl,
+                    "utensils": utensils,
+                    "ingredients": selectedIngredients
                 }
             )
         }
@@ -100,33 +211,85 @@ const NewChefRecipe = () => {
             <form className="w-50 mx-auto" onSubmit={sendData}>
                 <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">Name</label>
-                    <input value={name} onChange={(e) => setName(e.target.value)} type="text" className="form-control" id="exampleInputName" />
+                    <input value={name} onChange={handleNameChange} type="text" className="form-control" id="exampleInputName" />
+
+                    {suggestions.length > 0 && (
+                        <ul className="list-group mt-2">
+                            {suggestions.slice(0, 5).map(meal => (
+                                <li key={meal.idMeal}
+                                    className="list-group-item d-flex align-items-center"
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() => handleSelectSuggestion(meal)}>
+                                    <img src={meal.strMealThumb} alt={meal.strMeal} width="40" className="me-2" />
+                                    {meal.strMeal}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+
                 </div>
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">Description</label>
                     <input value={description} onChange={(e) => setDescription(e.target.value)} type="text" className="form-control" id="exampleInputsetDescription" />
                 </div>
+
+                <div className="mb-3">
+                    <label htmlFor="utensilsInput" className="form-label">Utensilios</label>
+                    <input
+                        value={utensils}
+                        onChange={(e) => setUtensils(e.target.value)}
+                        type="text"
+                        className="form-control"
+                        id="utensilsInput"
+                    />
+                </div>
+                <div>
+                    <h2>Select Ingredients for your Recipe</h2>
+
+                    <div>
+                        <select
+                            value={currentSelection}
+                            onChange={handleDropdownChange}
+                            className="form-select me-2"
+                        >
+
+                            {ingredientes.map(ingredient => (
+                                <option
+                                    key={ingredient.id}
+                                    value={ingredient.name}
+                                >
+                                    {ingredient.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <hr />
+
+
+                    <h3>Selected Ingredients ({selectedIngredients.length})</h3>
+                    <ul className="list-group mb-3">
+
+                        {selectedIngredients.map((ingredient, index) => (
+                            <li key={index} className="list-group-item">{ingredient}</li>
+                        ))}
+                    </ul>
+                </div>
+                <button type="button" onClick={handleAddIngredient} className="btn btn-secondary" disabled={!currentSelection}>
+                    Add Ingredient ➕
+                </button>
+
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">Preparation</label>
                     <input value={preparation} onChange={(e) => setPreparation(e.target.value)} type="text" className="form-control" id="exampleInputPreparation" />
                 </div>
-                {/* <div className="mb-3">
-                    <label htmlFor="exampleInputPassword1" className="form-label">Imagen</label>
-                    <input
-                        value={"https://picsum.photos/200/300"}
-                        onChange={(e) => setImg(e.target.value)}
-                        type="text"
-                        className="form-control"
-                        id="exampleInputImage"
-                    />
-                </div> */}
                 <div>
                     <input type="file" accept="image/*" onChange={uploadChefRecipeImage} />
                     {(urlImg || img) && (
                         <div>
-                            <img 
+                            <img
                                 src={urlImg || img}
-                                alt="Ingrediente Imagen" 
+                                alt="Ingrediente Imagen"
                                 style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
                             />
                         </div>
@@ -138,7 +301,7 @@ const NewChefRecipe = () => {
                     <button className="btn btn-primary">Back to home</button>
                 </Link>
             </form>
-        </div>
+        </div >
     )
 }
 

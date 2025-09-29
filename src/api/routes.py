@@ -450,9 +450,10 @@ def add_recipe():
 
     body = request.get_json()
     utensils_data = body.get("utensils", None)
+    ingredients_data = body.get("ingredients", None)
 
     recipe = Recipe(name=body["name"], description=body["description"],
-                    img=body["img"], preparation=body["preparation"], chef_id=body["chef_id"], utensils=utensils_data)
+                    img=body["img"], preparation=body["preparation"], chef_id=body["chef_id"], utensils=utensils_data, ingredients=ingredients_data)
     db.session.add(recipe)
     db.session.commit()
     response_body = {
@@ -497,6 +498,12 @@ def update_recipe(recipe_id):
 
     if "chef_id" in body:
         recipe.chef_id = body["chef_id"]
+    
+    if "utensils" in body:
+        recipe.utensils = body["utensils"]
+    
+    if "ingredients" in body:
+        recipe.ingredients = body["ingredients"]
 
     db.session.commit()
     response_body = {

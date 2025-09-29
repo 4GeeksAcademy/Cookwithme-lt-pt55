@@ -79,6 +79,8 @@ export const HomeChef = () => {
                                         <h1>Name: {recipe.name}</h1>
                                         <p>Description: {recipe.description}</p>
                                         <p>Preparation: {recipe.preparation}</p>
+                                        <p>Ingredients: {recipe.ingredients}</p>
+                                        <p>Utensils: {recipe.utensils}</p>
                                         <div className="">
                                             <img 
                                                 src={recipe.img} 
