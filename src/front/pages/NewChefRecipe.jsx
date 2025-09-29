@@ -18,6 +18,42 @@ const NewChefRecipe = () => {
     const [urlImg, setUrlImg] = useState("")
     const [utensils, setUtensils] = useState('');
     const [suggestions, setSuggestions] = useState([]);
+    const [ingredientes, setIngredientes] = useState([])
+    const [currentSelection, setCurrentSelection] = useState('');
+    const [selectedIngredients, setSelectedIngredients] = useState([]);
+
+    function getIngredientes() {
+        fetch(backendUrl + '/api/ingredients')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                setIngredientes(data)
+                if (data.length > 0) {
+                    setCurrentSelection(data[0].name);
+                }
+            })
+            .catch(error => console.error("Fetch error:", error));
+    }
+
+    const handleDropdownChange = (event) => {
+
+        setCurrentSelection(event.target.value);
+    };
+    
+    
+
+    const handleAddIngredient = (e) => {
+
+        e.preventDefault();
+
+        if (currentSelection && !selectedIngredients.includes(currentSelection)) {
+
+            setSelectedIngredients(prevIngredients => [
+                ...prevIngredients,
+                currentSelection
+            ]);
+        }
+    };
 
     function handleNameChange(e) {
         const newName = e.target.value;
@@ -66,6 +102,7 @@ const NewChefRecipe = () => {
 
 
     useEffect(() => {
+        getIngredientes()
         const keywords = ["pan", "oven", "plate", "spoon"];
         if (!preparation) {
             setUtensils('');
@@ -119,6 +156,13 @@ const NewChefRecipe = () => {
 
         const finalImageUrl = urlImg || img
 
+
+        const ingredientsForPost = selectedIngredients.map(name => ({
+            name: name,
+            quantity: "1 unit" // Add a default quantity if your model requires it
+            // You may need to adjust this structure based on your backend API
+        }));
+
         e.preventDefault();
         console.log('send data')
         const token = localStorage.getItem("tokenChef")
@@ -139,7 +183,8 @@ const NewChefRecipe = () => {
                     "description": description,
                     "preparation": preparation,
                     "img": finalImageUrl,
-                    "utensils": utensils
+                    "utensils": utensils,
+                    "ingredients": selectedIngredients
                 }
             )
         }
@@ -198,6 +243,41 @@ const NewChefRecipe = () => {
                         id="utensilsInput"
                     />
                 </div>
+                <div>
+                    <h2>Select Ingredients for your Recipe</h2>
+
+                    <div>
+                        <select
+                            value={currentSelection}
+                            onChange={handleDropdownChange}
+                            className="form-select me-2"
+                        >
+
+                            {ingredientes.map(ingredient => (
+                                <option
+                                    key={ingredient.id}
+                                    value={ingredient.name}
+                                >
+                                    {ingredient.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <hr />
+
+
+                    <h3>Selected Ingredients ({selectedIngredients.length})</h3>
+                    <ul className="list-group mb-3">
+
+                        {selectedIngredients.map((ingredient, index) => (
+                            <li key={index} className="list-group-item">{ingredient}</li>
+                        ))}
+                    </ul>
+                </div>
+                <button type="button" onClick={handleAddIngredient} className="btn btn-secondary" disabled={!currentSelection}>
+                    Add Ingredient ➕
+                </button>
 
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">Preparation</label>
@@ -221,7 +301,7 @@ const NewChefRecipe = () => {
                     <button className="btn btn-primary">Back to home</button>
                 </Link>
             </form>
-        </div>
+        </div >
     )
 }
 
