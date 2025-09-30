@@ -96,9 +96,7 @@ import { Results } from "./pages/ResultRecipe.jsx";
 import FavRecipeUser from "./pages/FavRecipeUser.jsx";
 import { HomeAvailableRecipes } from "./pages/HomeUserAvailableRecipe.jsx";
 import { InventoryUser } from "./pages/UserInventory.jsx";
-
-
- 
+import WelcomeChef from "./pages/WelcomeChef.jsx";
 
 
 
@@ -216,6 +214,8 @@ export const router = createBrowserRouter(
      <Route path="/fav_recipe_user" element={<FavRecipeUser />} />   
      <Route path="/home_user_avail_recipe" element={<HomeAvailableRecipes />} />   
      <Route path="/user_inventory" element={<InventoryUser />} />   
+     <Route path="/welcome_chef" element={<WelcomeChef />} /> 
+
     </Route>
   )
 );
