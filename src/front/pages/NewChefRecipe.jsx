@@ -22,6 +22,12 @@ const NewChefRecipe = () => {
     const [currentSelection, setCurrentSelection] = useState('');
     const [selectedIngredients, setSelectedIngredients] = useState([]);
 
+
+    const [utensilios, setUtensilios] = useState([])
+    const [currentSelectedUtensil, setCurrentSelectedUtensil] = useState('');
+    const [selectedUtensils, setSelectedUtensils] = useState([]);
+
+
     function getIngredientes() {
         fetch(backendUrl + '/api/ingredients')
             .then(response => response.json())
@@ -35,12 +41,44 @@ const NewChefRecipe = () => {
             .catch(error => console.error("Fetch error:", error));
     }
 
+    function getUtensilios() {
+        fetch(backendUrl + '/api/utensils')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                setUtensilios(data)
+                if (data.length > 0) {
+                    setCurrentSelectedUtensil(data[0].name);
+                }
+            })
+            .catch(error => console.error("Fetch error:", error));
+    }
+
+    const handleDropdownUtensils = (event) => {
+
+        setCurrentSelectedUtensil(event.target.value);
+    };
+
+
+    const handleAddUtensil = (e) => {
+
+        e.preventDefault();
+
+        if (currentSelectedUtensil && !selectedUtensils.includes(currentSelectedUtensil)) {
+
+            setSelectedUtensils(prevUtensils => [
+                ...prevUtensils,
+                currentSelectedUtensil
+            ]);
+        }
+    };
+
     const handleDropdownChange = (event) => {
 
         setCurrentSelection(event.target.value);
     };
-    
-    
+
+
 
     const handleAddIngredient = (e) => {
 
@@ -103,19 +141,8 @@ const NewChefRecipe = () => {
 
     useEffect(() => {
         getIngredientes()
-        const keywords = ["pan", "oven", "plate", "spoon"];
-        if (!preparation) {
-            setUtensils('');
-            return;
-        }
-
-        const lowercasedPreparation = preparation.toLowerCase();
-        const foundKeywords = keywords.filter(keyword =>
-            lowercasedPreparation.includes(keyword)
-        );
-
-        setUtensils(foundKeywords.join(', '));
-    }, [preparation]);
+        getUtensilios()
+    }, []);
 
 
 
@@ -163,6 +190,12 @@ const NewChefRecipe = () => {
             // You may need to adjust this structure based on your backend API
         }));
 
+        const utensilsForPost = selectedUtensils.map(name => ({
+            name: name,
+            quantity: "1 unit" // Add a default quantity if your model requires it
+            // You may need to adjust this structure based on your backend API
+        }));
+
         e.preventDefault();
         console.log('send data')
         const token = localStorage.getItem("tokenChef")
@@ -183,7 +216,7 @@ const NewChefRecipe = () => {
                     "description": description,
                     "preparation": preparation,
                     "img": finalImageUrl,
-                    "utensils": utensils,
+                    "utensils": selectedUtensils,
                     "ingredients": selectedIngredients
                 }
             )
@@ -233,16 +266,44 @@ const NewChefRecipe = () => {
                     <input value={description} onChange={(e) => setDescription(e.target.value)} type="text" className="form-control" id="exampleInputsetDescription" />
                 </div>
 
-                <div className="mb-3">
-                    <label htmlFor="utensilsInput" className="form-label">Utensilios</label>
-                    <input
-                        value={utensils}
-                        onChange={(e) => setUtensils(e.target.value)}
-                        type="text"
-                        className="form-control"
-                        id="utensilsInput"
-                    />
+
+                <div>
+                    <h2>Select Utensils for your Recipe</h2>
+
+                    <div>
+                        <select
+                            value={currentSelectedUtensil}
+                            onChange={handleDropdownUtensils}
+                            className="form-select me-2"
+                        >
+
+                            {utensilios.map(utensil => (
+                                <option
+                                    key={utensil.id}
+                                    value={utensil.name}
+                                >
+                                    {utensil.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <hr />
+
+
+                    <h3>Selected Utensils ({selectedUtensils.length})</h3>
+                    <ul className="list-group mb-3">
+
+                        {selectedUtensils.map((utensil, index) => (
+                            <li key={index} className="list-group-item">{utensil}</li>
+                        ))}
+                    </ul>
                 </div>
+                <button type="button" onClick={handleAddUtensil} className="btn btn-secondary" disabled={!currentSelectedUtensil}>
+                    Add Utensil ➕
+                </button>
+
+
                 <div>
                     <h2>Select Ingredients for your Recipe</h2>
 
