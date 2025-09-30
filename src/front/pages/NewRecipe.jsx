@@ -193,6 +193,14 @@ const NewRecipe = () => {
         }
     };
 
+    
+    const handleRemoveIngredient = (ingredientName) => {
+    setSelectedIngredients(prev =>
+        prev.filter(ing => ing !== ingredientName)
+    );
+    };
+
+
 
     useEffect(() => {
         const keywords = ["pan", "oven", "plate", "spoon"];
@@ -294,11 +302,23 @@ const NewRecipe = () => {
 
                     {/* Selected Ingredients List */}
                     <h3>Selected Ingredients ({selectedIngredients.length})</h3>
+
                     <ul className="list-group mb-3">
-                        {/* Map over the selectedIngredients state to display the user's list */}
-                        {selectedIngredients.map((ingredient, index) => (
-                            <li key={index} className="list-group-item">{ingredient}</li>
-                        ))}
+                    {selectedIngredients.map((ingredient, index) => (
+                        <li 
+                        key={index} 
+                        className="list-group-item d-flex justify-content-between align-items-center"
+                        >
+                        <span>{ingredient}</span>
+                        <button 
+                            type="button" 
+                            className="btn btn-sm"
+                            onClick={() => handleRemoveIngredient(ingredient)}
+                        >
+                            ❌
+                        </button>
+                        </li>
+                    ))}
                     </ul>
                 </div>
                 {/* --------------------------------------------------------------------- */}
