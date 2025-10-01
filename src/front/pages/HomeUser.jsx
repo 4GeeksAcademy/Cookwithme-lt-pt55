@@ -42,20 +42,59 @@ export const HomeUser = () => {
       .then(data => setUtensils(data));
   }, [store.token]);
 
+  // 🔴 Eliminar ingrediente del inventario
+  const removeIngredient = (id) => {
+    fetch(`${backendUrl}/api/user/inventory/ingredients/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${store.token}`,
+      },
+    }).then((res) => {
+      if (res.ok) {
+        setIngredients(ingredients.filter((ing) => ing.id !== id));
+      }
+    });
+  };
+
+  // 🔴 Eliminar utensilio del inventario
+  const removeUtensil = (id) => {
+    fetch(`${backendUrl}/api/user/inventory/utensils/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${store.token}`,
+      },
+    }).then((res) => {
+      if (res.ok) {
+        setUtensils(utensils.filter((ut) => ut.id !== id));
+      }
+    });
+  };
+
   const userFavs = store.authUser ? store.usersFavs[store.authUser.id] || [] : [];
 
   return (
     <div className="w-50 mx-auto">
-      <h1>Welcome, <strong>{store.authUser?.username}</strong></h1>
+      <h1>
+        Welcome, <strong>{store.authUser?.username}</strong>
+      </h1>
 
       {/* Inventario del usuario */}
       <div className="mt-4">
         <h2>🍅 Ingredientes en tu inventario</h2>
         {ingredients.length > 0 ? (
           <div>
-            {ingredients.map(ing => (
-              <span key={ing.id} className="badge bg-primary me-1 mb-1" style={{fontSize:"1rem"}}>
+            {ingredients.map((ing) => (
+              <span
+                key={ing.id}
+                className="badge bg-primary me-1 mb-1 d-inline-flex align-items-center"
+                style={{ fontSize: "1rem" }}
+              >
                 {ing.name}
+                <i
+                  className="fa-solid fa-xmark ms-2"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => removeIngredient(ing.id)}
+                ></i>
               </span>
             ))}
           </div>
@@ -66,9 +105,18 @@ export const HomeUser = () => {
         <h2 className="mt-3">🍴 Utensilios en tu inventario</h2>
         {utensils.length > 0 ? (
           <div>
-            {utensils.map(ut => (
-              <span key={ut.id} className="badge bg-success me-1 mb-1" style={{fontSize:"1rem"}}>
+            {utensils.map((ut) => (
+              <span
+                key={ut.id}
+                className="badge bg-success me-1 mb-1 d-inline-flex align-items-center"
+                style={{ fontSize: "1rem" }}
+              >
                 {ut.name}
+                <i
+                  className="fa-solid fa-xmark ms-2"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => removeUtensil(ut.id)}
+                ></i>
               </span>
             ))}
           </div>
@@ -79,7 +127,7 @@ export const HomeUser = () => {
 
       {/* Recetas */}
       <h2 className="mt-4">Recetas</h2>
-      {recipes.map(recipe => {
+      {recipes.map((recipe) => {
         const isFavorite = userFavs.includes(recipe.id);
         return (
           <div key={recipe.id} className="card mt-2 p-1">
