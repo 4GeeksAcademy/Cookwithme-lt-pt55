@@ -80,7 +80,7 @@ export const HomeUser = () => {
       {/* Recetas */}
       <h2 className="mt-4">Recetas</h2>
       {recipes.map(recipe => {
-        const isFavorite = userFavs.includes(recipe.name);
+        const isFavorite = userFavs.includes(recipe.id);
         return (
           <div key={recipe.id} className="card mt-2 p-1">
             <h3 className="text-center">{recipe.name}</h3>
@@ -105,7 +105,7 @@ export const HomeUser = () => {
                 }
                 style={{ cursor: "pointer" }}
                 onClick={() => {
-                  dispatch({ type: "toggle_fav_user", payload: recipe.name });
+                  dispatch({ type: "toggle_fav_user", payload: recipe.id });
                 }}
               ></i>
             </div>
