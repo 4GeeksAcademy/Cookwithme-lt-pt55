@@ -884,6 +884,7 @@ def add_current_chef_recipe():
 
     db.session.add(recipe)
     db.session.commit()
+    print(recipe.serialize())
     response_body = {
         "se creo el recipe ": recipe.serialize()
     }
@@ -1289,35 +1290,36 @@ def delete_user_favrecipe(recipe_id):
     return jsonify({"msg": f"Recipe {recipe_id} removed from favorites"}), 200
 
 # -----se crea para ver los resultado de recetas disponibles segun ingredientes y utensilios
-@api.route('/user/available_recipes', methods=['GET'])
+@api.route('/user/recipes/available', methods=['GET'])
 @jwt_required()
-def get_available_recipes():
+def get_user_available_recipes():
     current_user_email = get_jwt_identity()
     user = User.query.filter_by(email=current_user_email).first()
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    user_ingredient_ids = {iu.ingredient_id for iu in Ingredient_user.query.filter_by(user_id=user.id)}
-    user_utensil_ids = {uu.utensil_id for uu in Utensil_user.query.filter_by(user_id=user.id)}
+    # Inventario del usuario
+    user_ingredient_ids = {int(iu.ingredient_id) for iu in Ingredient_user.query.filter_by(user_id=user.id)}
+    user_utensil_ids = {int(uu.utensil_id) for uu in Utensil_user.query.filter_by(user_id=user.id)}
 
     available_recipes = []
 
     for recipe in Recipe.query.all():
-        recipe_ingredient_ids = {ri.ingredient_id for ri in Recipe_ingredient.query.filter_by(recipe_id=recipe.id)}
-        recipe_utensil_ids = {ur.utensil_id for ur in Utensil_recipe.query.filter_by(recipe_id=recipe.id)}
+        recipe_ingredient_ids = {int(ri.ingredient_id) for ri in Recipe_ingredient.query.filter_by(recipe_id=recipe.id)}
+        recipe_utensil_ids = {int(ur.utensil_id) for ur in Utensil_recipe.query.filter_by(recipe_id=recipe.id)}
+
+        # Ignorar recetas que no tengan ingredientes ni utensilios asociados
+        if not recipe_ingredient_ids and not recipe_utensil_ids:
+            continue
 
         missing_ingredients = recipe_ingredient_ids - user_ingredient_ids
         missing_utensils = recipe_utensil_ids - user_utensil_ids
 
-        available_recipes.append({
-            **recipe.serialize(),
-            "missing_ingredients_count": len(missing_ingredients),
-            "missing_utensils_count": len(missing_utensils),
-            "can_make": len(missing_ingredients) == 0 and len(missing_utensils) == 0
-        })
+        # Solo agregar si no falta nada
+        if not missing_ingredients and not missing_utensils:
+            available_recipes.append(recipe.serialize())
 
     return jsonify(available_recipes), 200
-
 
 # --------------
 @api.route('/ingredient_users_bulk', methods=['POST'])

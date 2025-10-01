@@ -47,13 +47,13 @@ export const SingleRecipe = () => {
           {store.authUser && (
             <i
               className={
-                (store.usersFavs[store.authUser.id] || []).includes(recipe.name)
+                (store.usersFavs[store.authUser.id] || []).includes(recipe.id)
                   ? "fa-solid fa-heart text-danger fs-4 ms-3"
                   : "fa-regular fa-heart text-dark fs-4 ms-3"
               }
               style={{ cursor: "pointer" }}
               onClick={() =>
-                dispatch({ type: "toggle_fav_user", payload: recipe.name })
+                dispatch({ type: "toggle_fav_user", payload: recipe.id })
               }
             ></i>
           )}

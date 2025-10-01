@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { Link } from "react-router-dom";
 
-export const InventoryUser = () => {
+export const InventoryUser = ({ onInventoryChange }) => {
   const { store } = useGlobalReducer();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -10,60 +10,34 @@ export const InventoryUser = () => {
   const [utensils, setUtensils] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [selectedUtensils, setSelectedUtensils] = useState([]);
-
   const [ingredientInput, setIngredientInput] = useState("");
   const [utensilInput, setUtensilInput] = useState("");
-
   const [ingredientSuggestions, setIngredientSuggestions] = useState([]);
   const [utensilSuggestions, setUtensilSuggestions] = useState([]);
 
   useEffect(() => {
-    fetch(`${backendUrl}/api/ingredients`)
-      .then(res => res.json())
-      .then(data => setIngredients(data));
-
-    fetch(`${backendUrl}/api/utensils`)
-      .then(res => res.json())
-      .then(data => setUtensils(data));
+    fetch(`${backendUrl}/api/ingredients`).then(res => res.json()).then(data => setIngredients(data));
+    fetch(`${backendUrl}/api/utensils`).then(res => res.json()).then(data => setUtensils(data));
   }, []);
 
-  // Filtrar sugerencias mientras se escribe
   useEffect(() => {
-    if (ingredientInput === "") {
-      setIngredientSuggestions([]);
-    } else {
-      setIngredientSuggestions(
-        ingredients.filter(i =>
-          i.name.toLowerCase().includes(ingredientInput.toLowerCase())
-        )
-      );
-    }
+    if (ingredientInput === "") setIngredientSuggestions([]);
+    else setIngredientSuggestions(ingredients.filter(i => i.name.toLowerCase().includes(ingredientInput.toLowerCase())));
   }, [ingredientInput, ingredients]);
 
   useEffect(() => {
-    if (utensilInput === "") {
-      setUtensilSuggestions([]);
-    } else {
-      setUtensilSuggestions(
-        utensils.filter(u =>
-          u.name.toLowerCase().includes(utensilInput.toLowerCase())
-        )
-      );
-    }
+    if (utensilInput === "") setUtensilSuggestions([]);
+    else setUtensilSuggestions(utensils.filter(u => u.name.toLowerCase().includes(utensilInput.toLowerCase())));
   }, [utensilInput, utensils]);
 
-  const addIngredient = (id, name) => {
-    if (!selectedIngredients.includes(id)) {
-      setSelectedIngredients([...selectedIngredients, id]);
-    }
-    setIngredientInput(""); // limpiar input
+  const addIngredient = (id) => {
+    if (!selectedIngredients.includes(id)) setSelectedIngredients([...selectedIngredients, id]);
+    setIngredientInput("");
     setIngredientSuggestions([]);
   };
 
-  const addUtensil = (id, name) => {
-    if (!selectedUtensils.includes(id)) {
-      setSelectedUtensils([...selectedUtensils, id]);
-    }
+  const addUtensil = (id) => {
+    if (!selectedUtensils.includes(id)) setSelectedUtensils([...selectedUtensils, id]);
     setUtensilInput("");
     setUtensilSuggestions([]);
   };
@@ -71,19 +45,17 @@ export const InventoryUser = () => {
   const saveInventory = () => {
     fetch(`${backendUrl}/api/ingredient_users_bulk`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${store.token}`,
-      },
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${store.token}` },
       body: JSON.stringify({
         user_id: store.authUser.id,
         ingredient_ids: selectedIngredients,
-        utensil_ids: selectedUtensils,
-      }),
+        utensil_ids: selectedUtensils
+      })
     })
       .then(res => res.json())
       .then(() => {
-        alert("Inventario actualizado");
+        alert("Se ha actualizado su inventario")
+        if (onInventoryChange) onInventoryChange(); //refresca las recetas
       });
   };
 
@@ -91,24 +63,12 @@ export const InventoryUser = () => {
     <div className="container">
       <h2>🛒 Tu Inventario</h2>
 
+      {/* Ingredientes */}
       <h4>Ingredientes</h4>
-      <input
-        type="text"
-        className="form-control"
-        placeholder="Escribe un ingrediente..."
-        value={ingredientInput}
-        onChange={(e) => setIngredientInput(e.target.value)}
-      />
+      <input type="text" className="form-control" placeholder="Escribe un ingrediente..." value={ingredientInput} onChange={e => setIngredientInput(e.target.value)} />
       <div className="list-group">
         {ingredientSuggestions.map(i => (
-          <button
-            key={i.id}
-            type="button"
-            className="list-group-item list-group-item-action"
-            onClick={() => addIngredient(i.id, i.name)}
-          >
-            {i.name}
-          </button>
+          <button key={i.id} type="button" className="list-group-item list-group-item-action" onClick={() => addIngredient(i.id)}>{i.name}</button>
         ))}
       </div>
       <div className="mt-2">
@@ -118,24 +78,12 @@ export const InventoryUser = () => {
         })}
       </div>
 
+      {/* Utensilios */}
       <h4 className="mt-3">🍴 Utensilios</h4>
-      <input
-        type="text"
-        className="form-control"
-        placeholder="Escribe un utensilio..."
-        value={utensilInput}
-        onChange={(e) => setUtensilInput(e.target.value)}
-      />
+      <input type="text" className="form-control" placeholder="Escribe un utensilio..." value={utensilInput} onChange={e => setUtensilInput(e.target.value)} />
       <div className="list-group">
         {utensilSuggestions.map(u => (
-          <button
-            key={u.id}
-            type="button"
-            className="list-group-item list-group-item-action"
-            onClick={() => addUtensil(u.id, u.name)}
-          >
-            {u.name}
-          </button>
+          <button key={u.id} type="button" className="list-group-item list-group-item-action" onClick={() => addUtensil(u.id)}>{u.name}</button>
         ))}
       </div>
       <div className="mt-2">
@@ -145,11 +93,7 @@ export const InventoryUser = () => {
         })}
       </div>
 
-      <Link to="/home_user_avail_recipe">
-        <button className="btn btn-success mt-3" onClick={saveInventory}>
-          Guardar Inventario
-        </button>
-      </Link>
+      <button className="btn btn-success mt-3" onClick={saveInventory}>Guardar Inventario</button>
     </div>
   );
 };
