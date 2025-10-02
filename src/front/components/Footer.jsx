@@ -1,73 +1,32 @@
 import React from "react";
 import "../css/Footer.css";
 
+import ceviche from "../assets/img/Ceviche.jpg";
+import lasagna from "../assets/img/Lasagna.jpg";
+import paella from "../assets/img/Paella.webp";
+import ramen from "../assets/img/Ramen.jpg";
+import taco from "../assets/img/Taco.jpeg";
+import thai from "../assets/img/Thai.webp";
+
 const Footer = () => {
   return (
     <>
-      {/* Food Images Strip */}
-      <div className="container-fluid px-0">
+      <div className="container-fluid px-0 pt-5 mt-5">
         <div className="row g-0">
-          <div className="col-lg-2 col-md-4 col-sm-6">
-            <div
-              className="food-strip-div"
-              style={{
-                backgroundImage:
-                  "url(https://diariodegastronomia.com/wp-content/uploads/2018/02/La-comida-asi%C3%A1tica-entra-con-fuerza-en-la-franquicia-759x500.jpg)",
-              }}
-            ></div>
-          </div>
-          <div className="col-lg-2 col-md-4 col-sm-6">
-            <div
-              className="food-strip-div"
-              style={{
-                backgroundImage:
-                  "url(https://diariodegastronomia.com/wp-content/uploads/2021/01/La-cocina-peruana-en-Espan%CC%83a-femenina-y-plural-Foto-Promperu-759x500.jpg)",
-              }}
-            ></div>
-          </div>
-          <div className="col-lg-2 col-md-4 col-sm-6">
-            <div
-              className="food-strip-div"
-              style={{
-                backgroundImage:
-                  "url(https://estoyhechouncocinillas.com/wp-content/uploads/2023/03/paella-de-marisco.jpg)",
-              }}
-            ></div>
-          </div>
-          <div className="col-lg-2 col-md-4 col-sm-6">
-            <div
-              className="food-strip-div"
-              style={{
-                backgroundImage:
-                  "url(https://www.viajaraitalia.com/wp-content/uploads/2009/09/lasagna.jpg)",
-              }}
-            ></div>
-          </div>
-          <div className="col-lg-2 col-md-4 col-sm-6">
-            <div
-              className="food-strip-div"
-              style={{
-                backgroundImage: "url(https://imag.bonviveur.com/pad-thai.webp)",
-              }}
-            ></div>
-          </div>
-          <div className="col-lg-2 col-md-4 col-sm-6">
-            <div
-              className="food-strip-div"
-              style={{
-                backgroundImage:
-                  "url(https://tse4.mm.bing.net/th/id/OIP.FIvNkO-jOGKFK7bkq6TvCQHaE8?pid=Api)",
-              }}
-            ></div>
-          </div>
+          {[ceviche, lasagna, paella, ramen, taco, thai].map((img, index) => (
+            <div className="col-lg-2 col-md-4 col-sm-6" key={index}>
+              <div
+                className="food-strip-div"
+                style={{ backgroundImage: `url(${img})` }}
+              ></div>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Footer Start */}
       <div className="container-fluid bg-dark text-light footer pt-5">
         <div className="container py-2">
           <div className="row g-5">
-            {/* Get In Touch */}
             <div className="col-lg-3 col-md-6">
               <h4 className="section-title text-start ff-secondary fw-normal mb-4">
                 Get In Touch
@@ -98,7 +57,6 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Quick Links */}
             <div className="col-lg-3 col-md-6">
               <h4 className="section-title text-start ff-secondary fw-normal mb-4">
                 Quick Links
@@ -111,7 +69,6 @@ const Footer = () => {
               <a className="btn btn-link" href="#">Contact Us</a>
             </div>
 
-            {/* More Links */}
             <div className="col-lg-3 col-md-6">
               <h4 className="section-title text-start ff-secondary fw-normal mb-4">
                 More Links
@@ -124,7 +81,6 @@ const Footer = () => {
               <a className="btn btn-link" href="#">Contact Us</a>
             </div>
 
-            {/* Newsletter */}
             <div className="col-lg-3 col-md-6">
               <h4 className="section-title text-start ff-secondary fw-normal mb-4">
                 Newsletter

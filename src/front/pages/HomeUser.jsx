@@ -78,29 +78,45 @@ export const HomeUser = () => {
         Welcome, <strong>{store.authUser?.username}</strong>
       </h1>
 
-      {/* Inventario del usuario */}
-      <div className="mt-4">
-        <h2>🍅 Ingredientes en tu inventario</h2>
-        {ingredients.length > 0 ? (
-          <div>
-            {ingredients.map((ing) => (
-              <span
-                key={ing.id}
-                className="badge bg-primary me-1 mb-1 d-inline-flex align-items-center"
-                style={{ fontSize: "1rem" }}
-              >
-                {ing.name}
-                <i
-                  className="fa-solid fa-xmark ms-2"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => removeIngredient(ing.id)}
-                ></i>
-              </span>
-            ))}
+        {/* Inventario del usuario */}
+        <div className="mt-4">
+          <h2>🍅 Ingredientes en tu inventario</h2>
+
+          {/* Botones de acción */}
+          <div className="mb-3">
+            <Link to="/add_ingrediente">
+              <button className="btn btn-success me-2">
+                ➕ Agregar Ingrediente
+              </button>
+            </Link>
+            <Link to="/add_ingrediente_ai">
+              <button className="btn btn-warning">
+                🤖 Identificar Ingredientes con IA
+              </button>
+            </Link>
           </div>
-        ) : (
-          <p>No tienes ingredientes agregados.</p>
-        )}
+
+          {/* Lista de ingredientes */}
+          {ingredients.length > 0 ? (
+            <div>
+              {ingredients.map((ing) => (
+                <span
+                  key={ing.id}
+                  className="badge bg-primary me-1 mb-1 d-inline-flex align-items-center"
+                  style={{ fontSize: "1rem" }}
+                >
+                  {ing.name}
+                  <i
+                    className="fa-solid fa-xmark ms-2"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => removeIngredient(ing.id)}
+                  ></i>
+                </span>
+              ))}
+            </div>
+          ) : (
+            <p>No tienes ingredientes agregados.</p>
+          )}
 
         <h2 className="mt-3">🍴 Utensilios en tu inventario</h2>
         {utensils.length > 0 ? (

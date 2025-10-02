@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Chef, Utensil, Ingredient, Admin_user, Question, Answer, Recipe, Calification, Utensil_recipe, Recipe_ingredient, Utensil_user, Ingredient_user, Fav_recipe
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
+from api.gemini_service import detect_ingredients_from_image
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -1468,3 +1469,13 @@ def delete_user_utensil(utensil_id):
     db.session.delete(item)
     db.session.commit()
     return jsonify({"msg": "Utensil removed"}), 200
+
+#---------IA Ingredientes----------
+@api.route('/detect_ingredients', methods=['POST'])
+def detect_ingredients():
+    data = request.get_json()
+    image_url = data.get("image_url")
+
+    result = detect_ingredients_from_image(image_url)
+
+    return jsonify(result), 200
