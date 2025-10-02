@@ -3,43 +3,34 @@ import { useNavigate } from "react-router-dom";
 
 const NewIngredienteAI = () => {
   const navigate = useNavigate();
-
-  const [urlImg, setUrlImg] = useState("");
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-  const [allIngredients, setAllIngredients] = useState([]);
-
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  // 📖 Diccionario para traducciones
-  const translations = {
-    "arroz": "rice",
-    "pollo": "chicken",
-    "tomate": "tomato",
-    "cebolla": "onion",
-    "papa": "potato",
-    "zanahoria": "carrot",
-    "ajo": "garlic",
-    "carne": "beef",
-    "pescado": "fish",
-    "albahaca": "basil",
-  };
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState(""); // imagen oficial (TheMealDB)
+  const [uploadedImg, setUploadedImg] = useState(""); // foto subida a Cloudinary
+  const [detected, setDetected] = useState([]); // sugerencias IA
+  const [loading, setLoading] = useState(false);
+  const [allIngredients, setAllIngredients] = useState([]); // lista TheMealDB
 
-  const reverseTranslations = Object.fromEntries(
-    Object.entries(translations).map(([es, en]) => [en, es])
-  );
+  // 🔹 Cargar lista de ingredientes de TheMealDB
+  useEffect(() => {
+    const fetchAllIngredients = async () => {
+      try {
+        const response = await fetch(
+          "https://www.themealdb.com/api/json/v1/1/list.php?i=list"
+        );
+        const data = await response.json();
+        if (data.meals) {
+          setAllIngredients(data.meals);
+        }
+      } catch (error) {
+        console.error("Error fetching TheMealDB list:", error);
+      }
+    };
+    fetchAllIngredients();
+  }, []);
 
-  const normalize = (str) =>
-    str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-
-  const translateToSpanish = (text) => {
-    const normalized = normalize(text);
-    return reverseTranslations[normalized] || text;
-  };
-
-  // 📤 Subir imagen a Cloudinary
   const UploadIngredientImage = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -50,6 +41,7 @@ const NewIngredienteAI = () => {
     formData.append("cloud_name", "dwi8lacfr");
 
     try {
+      setLoading(true);
       const response = await fetch(
         "https://api.cloudinary.com/v1_1/dwi8lacfr/image/upload",
         { method: "POST", body: formData }
@@ -57,96 +49,76 @@ const NewIngredienteAI = () => {
 
       const data = await response.json();
       if (data.secure_url) {
-        setUrlImg(data.secure_url);
-        setImage(""); // reset por si venía de TheMealDB
+        setUploadedImg(data.secure_url); // solo mostramos la subida
+        setImage(""); // no rellenamos aún Imagen final
+
+        // Llamar a tu endpoint IA
+        const aiRes = await fetch(`${backendUrl}/api/detect_ingredients`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ image_url: data.secure_url }),
+        });
+
+        const aiData = await aiRes.json();
+        setDetected(aiData.ingredients || []);
       }
-    } catch (error) {
-      console.error("❌ Error subiendo imagen:", error);
+    } catch (err) {
+      console.error("Error subiendo imagen:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // 📥 Cargar lista de todos los ingredientes de TheMealDB
-  useEffect(() => {
-    const fetchAllIngredients = async () => {
-      try {
-        const response = await fetch(
-          "https://www.themealdb.com/api/json/v1/1/list.php?i=list"
-        );
-        const data = await response.json();
-        if (data.meals) setAllIngredients(data.meals);
-      } catch (error) {
-        console.error("Error fetching all ingredients:", error);
-      }
-    };
-    fetchAllIngredients();
-  }, []);
+  const handleUseIngredient = (ingName) => {
+    // Buscar ingrediente en la lista de TheMealDB
+    const found = allIngredients.find(
+      (i) =>
+        i.strIngredient.toLowerCase() === ingName.toLowerCase()
+    );
 
-  // 🔎 Autocompletar sugerencias
-  useEffect(() => {
-    if (name.trim().length > 1) {
-      const normalizedName = normalize(name);
-      const englishQuery = translations[normalizedName] || normalizedName;
-
-      const filtered = allIngredients
-        .filter((ing) => normalize(ing.strIngredient).includes(englishQuery))
-        .slice(0, 5);
-
-      setSuggestions(
-        filtered.map((ing) => ({
-          idMeal: ing.idIngredient,
-          strMeal: ing.strIngredient,
-          strDescription: ing.strDescription,
-          strMealThumb: `https://www.themealdb.com/images/ingredients/${ing.strIngredient}.png`,
-        }))
+    if (found) {
+      setName(found.strIngredient);
+      setDescription(found.strDescription || "");
+      setImage(
+        `https://www.themealdb.com/images/ingredients/${found.strIngredient}.png`
       );
     } else {
-      setSuggestions([]);
+      // fallback si no existe en TheMealDB
+      setName(ingName);
+      setDescription("Descripción no disponible.");
     }
-  }, [name, allIngredients]);
+  };
 
-  // ✅ Seleccionar sugerencia
-  function handleSelectSuggestion(meal) {
-    const spanishName = translateToSpanish(meal.strMeal);
-    setName(spanishName);
-    setDescription(meal.strDescription);
-    setImage(meal.strMealThumb);
-    setSuggestions([]);
-  }
-
-  // 📌 Guardar ingrediente en tu backend
-  function sendData(e) {
+  const sendData = async (e) => {
     e.preventDefault();
+    const finalImage = image || uploadedImg;
 
-    const finalImageURL = urlImg || image;
-    if (!finalImageURL) {
-      alert("Por favor sube o selecciona una imagen.");
-      return;
-    }
+    try {
+      const response = await fetch(`${backendUrl}/api/ingredients`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          description,
+          image: finalImage,
+        }),
+      });
 
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name,
-        description,
-        image: finalImageURL,
-      }),
-    };
-
-    fetch(`${backendUrl}/api/ingredients`, requestOptions)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("✅ Ingrediente creado:", data);
+      if (response.ok) {
         navigate("/ingredientes");
-      })
-      .catch((err) => console.error("❌ Error creando ingrediente:", err));
-  }
+      } else {
+        alert("Error creando ingrediente");
+      }
+    } catch (err) {
+      console.error("Error enviando data:", err);
+    }
+  };
 
   return (
-    <div>
-      <form className="w-50 mx-auto" onSubmit={sendData}>
-        <h2>🤖 Crear Ingrediente con IA</h2>
+    <div className="container mt-4">
+      <h2>🤖 Crear Ingrediente con IA</h2>
 
+      <form className="w-50 mx-auto" onSubmit={sendData}>
         <div className="mb-3">
           <label className="form-label">Nombre</label>
           <input
@@ -154,27 +126,8 @@ const NewIngredienteAI = () => {
             onChange={(e) => setName(e.target.value)}
             type="text"
             className="form-control"
+            placeholder="Nombre del ingrediente"
           />
-          {suggestions.length > 0 && (
-            <ul className="list-group mt-2">
-              {suggestions.map((meal) => (
-                <li
-                  key={meal.idMeal}
-                  className="list-group-item d-flex align-items-center"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => handleSelectSuggestion(meal)}
-                >
-                  <img
-                    src={meal.strMealThumb}
-                    alt={meal.strMeal}
-                    width="40"
-                    className="me-2"
-                  />
-                  {translateToSpanish(meal.strMeal)}
-                </li>
-              ))}
-            </ul>
-          )}
         </div>
 
         <div className="mb-3">
@@ -188,28 +141,62 @@ const NewIngredienteAI = () => {
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Imagen</label>
+          <label className="form-label">Imagen final (DB)</label>
           <input
-            value={urlImg || image}
+            value={image}
+            onChange={(e) => setImage(e.target.value)}
             type="text"
             className="form-control"
             readOnly
           />
-          {(urlImg || image) && (
+          {image && (
             <img
-              src={urlImg || image}
-              alt={name}
+              src={image}
+              alt="final"
               width="200"
               style={{ marginTop: "10px" }}
             />
           )}
         </div>
 
-        <div>
+        <div className="mb-3">
+          <label className="form-label">Sube una foto</label>
           <input type="file" accept="image/*" onChange={UploadIngredientImage} />
+          {loading && <p>Analizando con IA...</p>}
+          {uploadedImg && (
+            <div>
+              <p>📷 Imagen subida:</p>
+              <img
+                src={uploadedImg}
+                alt="subida"
+                width="200"
+                style={{ marginTop: "10px" }}
+              />
+            </div>
+          )}
         </div>
 
-        <button type="submit" className="btn btn-primary mt-3">
+        {detected.length > 0 && (
+          <div className="mb-3">
+            <h5>Sugerencias IA:</h5>
+            <ul>
+              {detected.map((ing, idx) => (
+                <li key={idx}>
+                  {ing.name} ({Math.round(ing.confidence * 100)}%)
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-outline-primary ms-2"
+                    onClick={() => handleUseIngredient(ing.name)}
+                  >
+                    Usar
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <button type="submit" className="btn btn-primary">
           Crear
         </button>
       </form>
