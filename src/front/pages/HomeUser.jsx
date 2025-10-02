@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import Dashboard from "../components/Dashboard.jsx";
 
 export const HomeUser = () => {
   const { store, dispatch } = useGlobalReducer();
@@ -76,6 +77,8 @@ export const HomeUser = () => {
           <p>No tienes utensilios agregados.</p>
         )}
       </div>
+
+      <Dashboard/>
 
       {/* Recetas */}
       <h2 className="mt-4">Recetas</h2>
