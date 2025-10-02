@@ -1,0 +1,81 @@
+/* Contenedor general */
+.navbar-container {
+  background-color: #111111;
+  color: white;
+}
+
+/* Barra superior con info */
+.top-bar {
+  background-color: #1a1a1a;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.top-bar .text-start, .top-bar .text-end {
+  display: flex;
+  align-items: center;
+}
+
+.top-bar .text-end {
+  justify-content: flex-end;
+}
+
+/* Navbar principal */
+.navbar-main {
+  padding: 1rem 2rem;
+  background-color: #111111;
+}
+
+/* Links de navbar */
+.nav-link {
+  margin: 0 0.3rem;
+  color: white;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: #0f0501;
+}
+
+/* Dropdown */
+.dropdown-menu {
+  background-color: #222;
+}
+
+.dropdown-item {
+  color: white;
+}
+
+.dropdown-item:hover {
+  background-color: #ff7f50;
+  color: white;
+}
+
+/* Iconos sociales */
+.social-icons a {
+  margin-left: 0.5rem;
+  color: white;
+  transition: all 0.2s;
+}
+
+.social-icons a:hover {
+  background-color: #ff7f50;
+  border-color: #ff7f50;
+  color: white;
+}
+
+/* Botones square */
+.btn-square {
+  width: 35px;
+  height: 35px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Colores de fondo de la columna izquierda */
+.bg-primary {
+  background-color: #ff7f50 !important;
+}
