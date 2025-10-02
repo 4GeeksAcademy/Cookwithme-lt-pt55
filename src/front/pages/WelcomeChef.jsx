@@ -46,7 +46,7 @@ const WelcomeChef = () => {
             {chefs.map((chef, index) => (
               <div key={index} className="col-lg-3 col-md-6">
                 <div className="team-item text-center rounded overflow-hidden shadow">
-                  {/* Imagen del chef */}
+                  
                   <div className="overflow-hidden">
                     <img
                       className="img-fluid"
@@ -55,17 +55,18 @@ const WelcomeChef = () => {
                       style={{ height: "250px", objectFit: "cover", width: "100%" }}
                     />
                   </div>
-                  {/* Texto debajo */}
+                  
                   <div className="team-text bg-light p-4">
                     <h5>{chef.name}</h5>
-                    {/* Ranking */}
+                    
                     <p style={{ color: "rgb(251, 91, 33)" }}>
                       {chef.rating ? `⭐ ${chef.rating}` : "No rating yet"}
                     </p>
+
                     <p style={{ color: "rgb(251, 91, 33)" }}>
                       {chef.email ? `${chef.email}` : "No email yet"}
                     </p>
-                    {/* Redes sociales (si decides agregarlas en tu backend) */}
+                    
                     <div className="team-social text-center">
                       <a className="btn btn-square mx-1" href={chef.facebook || "#"}>
                         <i className="fab fa-facebook-f"></i>
@@ -83,7 +84,7 @@ const WelcomeChef = () => {
             ))}
           </div>
 
-          {/* Caso cuando no hay chefs */}
+          
           {chefs.length === 0 && (
             <p className="text-center text-muted">No chefs yet, add one!</p>
           )}
