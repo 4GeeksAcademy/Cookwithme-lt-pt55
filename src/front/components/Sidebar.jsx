@@ -2,7 +2,7 @@ import React from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 
-const Dashboard = () => {
+const Sidebar = () => {
 
     const { store, dispatch } = useGlobalReducer();
     return (
@@ -245,4 +245,4 @@ const Dashboard = () => {
     )
 }
 
-export default Dashboard
+export default Sidebar

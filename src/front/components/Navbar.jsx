@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { useNavigate } from "react-router-dom";
-import Dashboard from "./Dashboard.jsx";
+import Sidebar from "./Sidebar.jsx";
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ export const Navbar = () => {
         <div className="d-flex justify-content-between align-items-center flex-wrap w-100">
           {(store.authChef || store.authUser || store.authAdmin) && (
             <>
-              <Dashboard />
+              <Sidebar />
               <button className="btn btn-danger" onClick={logout}>
                 Logout
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-door-open-fill mx-2" viewBox="0 0 16 16">

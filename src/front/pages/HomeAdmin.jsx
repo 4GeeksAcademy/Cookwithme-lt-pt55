@@ -2,7 +2,6 @@ import React, { useEffect } from "react"
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { Navigate } from "react-router-dom";
 import { useParams, useNavigate } from "react-router-dom";
-import Dashboard from "../components/Dashboard.jsx";
 
 export const HomeAdmin = () => {
 
