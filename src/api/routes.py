@@ -1468,3 +1468,13 @@ def delete_user_utensil(utensil_id):
     db.session.delete(item)
     db.session.commit()
     return jsonify({"msg": "Utensil removed"}), 200
+
+#---------IA Ingredientes----------
+@api.route('/detect_ingredients', methods=['POST'])
+def detect_ingredients():
+    data = request.get_json()
+    image_url = data.get("image_url")
+
+    result = detect_ingredients_from_image(image_url)
+
+    return jsonify(result), 200
