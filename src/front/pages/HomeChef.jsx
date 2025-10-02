@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { Navigate, Link } from "react-router-dom";
-import Dashboard from "../components/Dashboard.jsx";
 
 export const HomeChef = () => {
 
@@ -70,7 +69,6 @@ export const HomeChef = () => {
         <div className="container text-center mt-5">
             {store.authChef ?
                 <>
-                    <Dashboard/>
                     <h1 className="display-4">Hello, welcome {chef.name}!!</h1>
                     {chefRecipe.length != 0 ?
                         <>

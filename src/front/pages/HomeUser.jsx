@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-import Dashboard from "../components/Dashboard.jsx";
 
 export const HomeUser = () => {
   const { store, dispatch } = useGlobalReducer();
@@ -47,8 +46,8 @@ export const HomeUser = () => {
 
   return (
     <div className="w-50 mx-auto">
+      
       <h1>Welcome, <strong>{store.authUser?.username}</strong></h1>
-
       {/* Inventario del usuario */}
       <div className="mt-4">
         <h2>🍅 Ingredientes en tu inventario</h2>
@@ -77,9 +76,6 @@ export const HomeUser = () => {
           <p>No tienes utensilios agregados.</p>
         )}
       </div>
-
-      <Dashboard/>
-
       {/* Recetas */}
       <h2 className="mt-4">Recetas</h2>
       {recipes.map(recipe => {
