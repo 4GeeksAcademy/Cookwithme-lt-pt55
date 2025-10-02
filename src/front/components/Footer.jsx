@@ -11,7 +11,7 @@ import thai from "../assets/img/Thai.webp";
 const Footer = () => {
   return (
     <>
-      <div className="container-fluid px-0">
+      <div className="container-fluid px-0 pt-5 mt-5">
         <div className="row g-0">
           {[ceviche, lasagna, paella, ramen, taco, thai].map((img, index) => (
             <div className="col-lg-2 col-md-4 col-sm-6" key={index}>
