@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "./Sidebar.jsx";
+import SidebarEx from "./SidebarEx.jsx";
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -34,7 +34,8 @@ export const Navbar = () => {
         <div className="d-flex justify-content-between align-items-center flex-wrap w-100">
           {(store.authChef || store.authUser || store.authAdmin) && (
             <>
-              <Sidebar />
+              {/* <Sidebar /> */}
+              <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i class="fa-solid fa-bars"></i></button>
               <button className="btn btn-danger" onClick={logout}>
                 Logout
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-door-open-fill mx-2" viewBox="0 0 16 16">
@@ -210,6 +211,14 @@ export const Navbar = () => {
 
         </div>
       </div>
+
+{/* ----------------------Body Sidebar------------------------------ */}
+
+
+      <div class="offcanvas offcanvas-start bg-dark" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+        <SidebarEx/>
+      </div>
+
     </nav>
   );
 };
