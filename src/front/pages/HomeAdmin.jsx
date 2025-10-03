@@ -27,7 +27,7 @@ export const HomeAdmin = () => {
   // Traer información de chefs para mostrar su nombre junto a las recetas
   function getAllChefs() {
     const token = localStorage.getItem("tokenAdmin");
-    fetch(`${backendUrl}/api/admin_chefs`, {
+    fetch(`${backendUrl}/api/chefs`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
