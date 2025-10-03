@@ -388,7 +388,7 @@ async function sendData(e) {
                         </div>
                     )}
                 </div>
-                <Link className="btn btn-custom">Create</Link>
+                <button type="submit" className="btn btn-custom">Create</button>
 
 
                 <Link to="/chef_home" className="btn btn-custom" >Back to home</Link>

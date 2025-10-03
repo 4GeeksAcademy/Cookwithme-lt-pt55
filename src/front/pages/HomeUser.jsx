@@ -61,7 +61,7 @@ export const HomeUser = () => {
     <div className="menu-container">
       <h5 className="section-title">Your Inventory</h5>
       <h1 className="display-3 mb-0">Manage Your Kitchen</h1>
-
+ 
       {/* Inventario */}
       <div className="mt-4">
         <h2>🍅 Ingredientes</h2>
@@ -76,6 +76,7 @@ export const HomeUser = () => {
           </div>
         ) : <p>No tienes ingredientes agregados.</p>}
 
+
         <h2 className="mt-3">🍴 Utensilios</h2>
         {utensils.length > 0 ? (
           <div>
@@ -88,7 +89,6 @@ export const HomeUser = () => {
           </div>
         ) : <p>No tienes utensilios agregados.</p>}
       </div>
-
       {/* Recetas */}
       <h2 className="mt-4">Recetas</h2>
       <div className="menu-grid">

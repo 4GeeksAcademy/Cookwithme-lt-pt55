@@ -10,6 +10,7 @@ export const HomeChef = () => {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 
+
   function getChefInfo() {
     const token = localStorage.getItem("tokenChef");
     fetch(backendUrl + `/api/chef_info`, {
@@ -18,6 +19,7 @@ export const HomeChef = () => {
       .then((res) => res.json())
       .then((data) => setChef(data));
   }
+
 
 
   function getChefRecipes() {
