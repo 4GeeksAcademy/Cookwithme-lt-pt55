@@ -31,6 +31,7 @@ export const Navbar = () => {
   return (
     <div className="navbar-container">
       {/* Top Info Bar */}
+      <button class="btn btn-outline-dark border border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i class="fa-solid fa-bars"></i></button>
       <div className="row gx-0 top-bar">
         <div className="col-6 text-start">
           <div className="info-item">
