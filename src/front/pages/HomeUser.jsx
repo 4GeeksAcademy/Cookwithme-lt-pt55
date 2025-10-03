@@ -140,7 +140,6 @@ export const HomeUser = () => {
           <p>No tienes utensilios agregados.</p>
         )}
       </div>
-
       {/* Recetas */}
       <h2 className="mt-4">Recetas</h2>
       {recipes.map((recipe) => {

@@ -69,7 +69,6 @@ export const HomeChef = () => {
         <div className="container text-center mt-5">
             {store.authChef ?
                 <>
-
                     <h1 className="display-4">Hello, welcome {chef.name}!!</h1>
                     {chefRecipe.length != 0 ?
                         <>

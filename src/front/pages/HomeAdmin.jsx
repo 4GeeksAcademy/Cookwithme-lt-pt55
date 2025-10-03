@@ -22,7 +22,10 @@ export const HomeAdmin = () => {
     return (
         <div className="text-center mt-5">
             {store.authAdmin ? 
-                <h1 className="display-4">Hello, welcome Admin!!</h1>  
+                <>
+                    
+                    <h1 className="display-4">Hello, welcome Admin!!</h1>  
+                </>
                 :
                 <Navigate to='/login_admin'/>
             }
