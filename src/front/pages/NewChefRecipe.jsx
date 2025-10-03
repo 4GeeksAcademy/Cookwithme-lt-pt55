@@ -179,62 +179,93 @@ const NewChefRecipe = () => {
         }
     }
 
-    function sendData(e) {
+async function sendData(e) {
+    e.preventDefault();
+    console.log('send data');
 
-        const finalImageUrl = urlImg || img
+    const token = localStorage.getItem("tokenChef");
+    if (!token) {
+        alert("Not authenticated");
+        return navigate("/login_chef");
+    }
 
+    const finalImageUrl = urlImg || img;
 
-        const ingredientsForPost = selectedIngredients.map(name => ({
-            name: name,
-            quantity: "1 unit" // Add a default quantity if your model requires it
-            // You may need to adjust this structure based on your backend API
-        }));
-
-        const utensilsForPost = selectedUtensils.map(name => ({
-            name: name,
-            quantity: "1 unit" // Add a default quantity if your model requires it
-            // You may need to adjust this structure based on your backend API
-        }));
-
-        e.preventDefault();
-        console.log('send data')
-        const token = localStorage.getItem("tokenChef")
-        if (!token) {
-            alert("Not authenticated");
-            return navigate("/login_chef");
-        }
-
+    try {
+        //crear receta
         const requestOptions = {
             method: 'POST',
             headers: {
-                "Content-Type": `application/json`,
+                "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify(
-                {
-                    "name": name,
-                    "description": description,
-                    "preparation": preparation,
-                    "img": finalImageUrl,
-                    "utensils": selectedUtensils,
-                    "ingredients": selectedIngredients
-                }
-            )
+            body: JSON.stringify({
+                name,
+                description,
+                preparation,
+                img: finalImageUrl
+            })
+        };
+
+        const recipeResponse = await fetch(backendUrl + "/api/chef_recipes", requestOptions);
+
+        if (!recipeResponse.ok) throw new Error('Failed to create recipe.');
+
+        const recipeData = await recipeResponse.json();
+        const recipeId = recipeData["se creo el recipe "].id;  //<------id de receta ya creada
+        console.log("Receta creada con id:", recipeId);
+
+        // agregar ingredientes usando el endpoint independiente
+        for (const ingredientName of selectedIngredients) {
+            const ingredient = ingredientes.find(i => i.name === ingredientName);
+            if (!ingredient) continue;
+
+            const ingredientResponse = await fetch(backendUrl + "/api/recipe_ingredients", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    recipe_id: recipeId,
+                    ingredient_id: ingredient.id
+                })
+            });
+
+            if (!ingredientResponse.ok) {
+                const errorData = await ingredientResponse.json();
+                console.error("Error agregando ingrediente:", errorData);
+            }
         }
 
-        fetch(backendUrl + "/api/chef_recipes", requestOptions)
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Failed to create recipe.');
-                }
-            })
-            .then(data => {
-                console.log(data)
-                navigate("/chef_home")
-            })
+        // Agregar utensilios usando el endpoint independiente
+        for (const utensilName of selectedUtensils) {
+            const utensil = utensilios.find(u => u.name === utensilName);
+            if (!utensil) continue;
+
+            const utensilResponse = await fetch(backendUrl + "/api/utensil_recipe", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    recipe_id: recipeId,
+                    utensil_id: utensil.id
+                })
+            });
+
+            if (!utensilResponse.ok) {
+                const errorData = await utensilResponse.json();
+                console.error("Error agregando utensilio:", errorData);
+            }
+        }
+        navigate("/chef_home");
+
+    } catch (error) {
+        console.error("Error creando la receta:", error);
     }
+}
 
     if (!store.authChef) return <Navigate to="/login_chef" />;
 
