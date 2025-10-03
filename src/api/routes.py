@@ -896,15 +896,19 @@ def add_current_chef_recipe():
 @jwt_required()
 def delete_chef_recipe(recipe_id):
     chef_recipe = Recipe.query.filter_by(id=recipe_id).first()
-    print(chef_recipe, "id del recipe")
     if chef_recipe is None:
         return {"error-msg": "enter a valid recipe"}, 400
+    
+    Utensil_recipe.query.filter_by(recipe_id=recipe_id).delete()
+    
+    Recipe_ingredient.query.filter_by(recipe_id=recipe_id).delete()
+
     db.session.delete(chef_recipe)
     db.session.commit()
-    response_body = {
-        "message": "se elimino el recipe " + chef_recipe.name
-    }
 
+    response_body = {
+        "message": f"Se eliminó el recipe {chef_recipe.name}"
+    }
     return jsonify(response_body), 200
 
 

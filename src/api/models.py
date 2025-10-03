@@ -291,7 +291,8 @@ class Recipe_ingredient(db.Model):
         return {
             "id": self.id,
             "recipe_id": self.recipe_id,
-            "ingredient_id": self.ingredient_id
+            "ingredient_id": self.ingredient_id,
+            "ingredient_name": self.ingredient.name
         }
 
 
