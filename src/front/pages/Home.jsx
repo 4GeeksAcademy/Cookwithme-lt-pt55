@@ -5,9 +5,11 @@ import personafeliz from "../assets/img/personafeliz.png";
 import logov1 from "../assets/img/logov1.png";
 import iafoto from "../assets/img/iafoto.png";
 import gorro from "../assets/img/gorro_cheff.png";
+import { Link } from "react-router-dom"
 
 export const Home = () => {
-  const { dispatch } = useGlobalReducer();
+
+  const { store,dispatch } = useGlobalReducer();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const loadMessage = async () => {
