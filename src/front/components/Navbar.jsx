@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { useNavigate } from "react-router-dom";
-import SidebarEx from "./SidebarEx.jsx";
+import Sidebar from "./Sidebar.jsx";
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -216,7 +216,7 @@ export const Navbar = () => {
 
 
       <div class="offcanvas offcanvas-start bg-dark" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
-        <SidebarEx/>
+        <Sidebar/>
       </div>
 
     </nav>

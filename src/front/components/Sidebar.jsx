@@ -2,7 +2,8 @@ import { Link, useParams } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import React, { useEffect, useState } from "react";
 
-const SidebarEx = () => {
+
+const Sidebar = () => {
     const { store, dispatch } = useGlobalReducer();
     const [chef, setChef] = useState([])
     const [user, setUser] = useState([])
@@ -69,25 +70,25 @@ const SidebarEx = () => {
     }
 
     useEffect(() => {
-        getChefInfo()
+        getChefInfo();
         getUserInfo()
-    }, [chef_id, user_id]);
+    }, []);
     return (
         <>
             {store.authChef && (
-                <div>
+                <div className="container" style={{ backgroundColor: '#313a46' }}>
                     <div class="offcanvas-header">
                         <button type="button" class="btn-close bg-warning" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
                         <Link to="/chef_home">
-                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                            <button type="button" class="btn btn-outline border border-0 object-fit-fill" data-bs-parent="#sidebar">
                                 <i class="fa-solid fa-house p-2 text-secondary"></i>
-                                <span className="text-secondary">Home</span>
+                                <span className="text-secondary ">Home</span>
                             </button>
                         </Link>
                         <Link to="/chef_home">
-                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                            <button type="button" class="btn btn-outline border border-0 object-fit-fill" data-bs-parent="#sidebar">
                                 <i class="fa-solid fa-book p-2 text-secondary"></i>
                                 <span className="text-secondary">Recetas</span>
                             </button>
@@ -95,18 +96,18 @@ const SidebarEx = () => {
 
 
                         <Link to="/new_chef_recipe">
-                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                            <button type="button" class="btn btn-outline border border-0 object-fit-fill" data-bs-parent="#sidebar">
                                 <i class="fa-solid fa-square-plus p-2 text-secondary"></i>
                                 <span className="text-secondary">Nueva Receta</span>
                             </button>
                         </Link>
                         <Link to="/chef_home">
-                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                            <button type="button" class="btn btn-outline border border-0 object-fit-fill" data-bs-parent="#sidebar">
                                 <i class="fa-solid fa-question p-2 text-secondary"></i>
                                 <span className="text-secondary">Preguntas</span>
                             </button>
                         </Link>
-                        <div className="dropdown bg-dark container text-center">
+                        <div className="dropdown container text-center">
                             <div class="row justify-content-around">
                                 <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
                                     <div className="col-4">
@@ -145,19 +146,19 @@ const SidebarEx = () => {
                 </div>
             )}
             {store.authUser && (
-                <div>
+                <div className="container" style={{ backgroundColor: '#313a46' }}>
                     <div class="offcanvas-header">
                         <button type="button" class="btn-close bg-warning" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
                         <Link to="/home_user">
-                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                            <button type="button" class="btn btn-outline border border-0 object-fit-fill" data-bs-parent="#sidebar">
                                 <i class="fa-solid fa-house p-2 text-secondary"></i>
                                 <span className="text-secondary">Home</span>
                             </button>
                         </Link>
                         <Link to="/home_user">
-                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                            <button type="button" class="btn btn-outline border border-0 object-fit-fill" data-bs-parent="#sidebar">
                                 <i class="fa-solid fa-book p-2 text-secondary"></i>
                                 <span className="text-secondary">Buscar Recetas</span>
                             </button>
@@ -165,24 +166,24 @@ const SidebarEx = () => {
 
 
                         <Link to="/add_ingredient_user">
-                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                            <button type="button" class="btn btn-outline border border-0 object-fit-fill" data-bs-parent="#sidebar">
                                 <i class="fa-solid fa-bowl-food p-2 text-secondary"></i>
                                 <span className="text-secondary">Agregar Ingrediente</span>
                             </button>
                         </Link>
                         <Link to="/add_utensil_to_user">
-                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                            <button type="button" class="btn btn-outline border border-0 object-fit-fill" data-bs-parent="#sidebar">
                                 <i class="fa-solid fa-utensils p-2 text-secondary"></i>
                                 <span className="text-secondary">Agregar Utensilio</span>
                             </button>
                         </Link>
                         <Link to="/fav_recipe_user">
-                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                            <button type="button" class="btn btn-outline border border-0 object-fit-fill" data-bs-parent="#sidebar">
                                 <i class="fa-solid fa-heart p-2 text-secondary"></i>
                                 <span className="text-secondary">Recetas Favoritas</span>
                             </button>
                         </Link>
-                        <div className="dropdown bg-dark container text-center">
+                        <div className="dropdown container text-center">
                             <div class="row justify-content-around">
                                 <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
                                     <div className="col-4">
@@ -221,19 +222,19 @@ const SidebarEx = () => {
                 </div>
             )}
             {store.authAdmin && (
-                <div>
+                <div className="container" style={{ backgroundColor: '#313a46' }}>
                     <div class="offcanvas-header">
                         <button type="button" class="btn-close bg-warning" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
                         <Link to="/users">
-                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                            <button type="button" class="btn btn-outline border border-0 object-fit-fill" data-bs-parent="#sidebar">
                                 <i class="fa-solid fa-house p-2 text-secondary"></i>
                                 <span className="text-secondary">Usuarios</span>
                             </button>
                         </Link>
                         <Link to="/adminuser">
-                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                            <button type="button" class="btn btn-outline border border-0 object-fit-fill" data-bs-parent="#sidebar">
                                 <i class="fa-solid fa-user-tie p-2 text-secondary"></i>
                                 <span className="text-secondary">Admins</span>
                             </button>
@@ -241,32 +242,32 @@ const SidebarEx = () => {
 
 
                         <Link to="/chefs">
-                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                            <button type="button" class="btn btn-outline border border-0 object-fit-fill" data-bs-parent="#sidebar">
                                 <i class="fa-solid fa-kitchen-set p-2 text-secondary"></i>
                                 <span className="text-secondary">Chefs</span>
                             </button>
                         </Link>
 
                         <Link to="/utensilios">
-                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                            <button type="button" class="btn btn-outline border border-0 object-fit-fill" data-bs-parent="#sidebar">
                                 <i class="fa-solid fa-utensils p-2 text-secondary"></i>
                                 <span className="text-secondary">Utensilios</span>
                             </button>
                         </Link>
                         <Link to="/ingredientes">
-                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                            <button type="button" class="btn btn-outline border border-0 object-fit-fill" data-bs-parent="#sidebar">
                                 <i class="fa-solid fa-bowl-food p-2 text-secondary"></i>
                                 <span className="text-secondary">Ingredientes</span>
                             </button>
                         </Link>
-                        <div className="dropdown bg-dark container text-center">
+                        <div className="dropdown container text-center">
                             <div class="row justify-content-around">
                                 <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
                                     <div className="col-4">
                                         <i class="fa-solid fa-user"></i>
                                     </div>
                                     <div className="col-4">
-                                        <span>{admininfo.email}</span>
+                                        <span>User Name</span>
                                     </div>
                                 </a>
                                 <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
@@ -301,4 +302,4 @@ const SidebarEx = () => {
 
     )
 }
-export default SidebarEx
+export default Sidebar
