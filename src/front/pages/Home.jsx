@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-
+import  Gemini_Generated_Image_neuv33neuv33neuv2r3   from "../assets/img/Gemini_Generated_Image_neuv33neuv33neuv2r3.png";
 import personafeliz from "../assets/img/personafeliz.png";
 import logov1 from "../assets/img/logov1.png";
 import iafoto from "../assets/img/iafoto.png";
 import gorro from "../assets/img/gorro_cheff.png";
+import { Link } from "react-router-dom"
 
 export const Home = () => {
-  const { dispatch } = useGlobalReducer();
+
+  const { store,dispatch } = useGlobalReducer();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const loadMessage = async () => {
@@ -21,6 +23,25 @@ export const Home = () => {
       console.error(error.message);
     }
   };
+  
+    // Logout unificado
+    function logout() {
+      if (store.authChef) {
+        localStorage.removeItem("tokenChef");
+        dispatch({ type: "set_auth_chef", payload: false });
+        navigate("/"); // o /login_chef si quieres
+      }
+      if (store.authUser) {
+        localStorage.removeItem("tokenUser");
+        dispatch({ type: "set_auth_user", payload: false });
+        navigate("/"); // o /login_user
+      }
+      if (store.authAdmin) {
+        localStorage.removeItem("tokenAdmin");
+        dispatch({ type: "set_auth_admin", payload: false });
+        navigate("/"); // o /login_admin
+      }
+    }
 
   useEffect(() => {
     loadMessage();
@@ -38,8 +59,125 @@ export const Home = () => {
 
   return (
     <>
-      {/* === 1. CookWithMe === */}
-      <section id="cookwithme" style={{ background: "#2a2e33" }} className="py-5">
+      {/* === BLOQUE ORIGINAL (sin cambios) ===
+      <div className="text-center  mt-5">
+        <h1 className="display-4">¿What is your role?</h1>
+
+        <div className="row  d-flex justify-content-around align-items-center m-5">
+          <div className="card col-3 p-2 ">
+            <div className="card-body">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/3461/3461980.png"
+                className="card-img-top"
+                style={{ width: 180 }}
+                alt="Chef icon"
+              />
+              <h2 className="card-subtitle m-2 text-body-secondary">Chef</h2>
+              <div>
+                <Link to="/login_chef">
+                  <button className="btn btn-success m-2">Login as Chef</button>
+                </Link>
+                <Link to="/signup_chef">
+                  <button className="btn btn-warning m-2">Signup as New Chef</button>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          <div className="card col-3 p-2">
+            <div className="card-body">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/1400/1400111.png"
+                className="card-img-top"
+                style={{ width: 180 }}
+                alt="Chef icon"
+              />
+              <h2 className="card-subtitle m-2 text-body-secondary">User</h2>
+              <div className="ml-auto">
+                <Link to="/login_user">
+                  <button className="btn btn-danger m-2">Login as user</button>
+                </Link>
+                <Link to="/signup_user">
+                  <button className="btn btn-danger m-2">Signup as New user</button>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          <div className="card col-3 p-2">
+            <div className="card-body">
+              <img
+                src="https://i.pinimg.com/564x/07/24/da/0724daaa15be4c49aca82e7067fdd5a1.jpg"
+                className="card-img-top"
+                style={{ width: 180 }}
+                alt="Chef icon"
+              />
+              <h2 className="card-subtitle m-2 text-body-secondary">Admin</h2>
+              <div className="ml-auto">
+                <Link to="/login_admin">
+                  <button className="btn btn-success m-2">Login as Admin</button>
+                </Link>
+                {store.authAdmin ? (
+                  <Link to="/signup_admin">
+                    <button className="btn btn-warning m-2">Signup as New Admin</button>
+                  </Link>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="alert alert-info my-5">
+          {store.message ? (
+            <span>{store.message}</span>
+          ) : (
+            <span className="text-danger">
+              Loading message from the backend (make sure your python 🐍 backend is running)...
+            </span>
+          )}
+        </div>
+      </div> */}
+
+      {/* Navbar Exclusivo de HOME */}
+        <div className="container-fluid bg-dark px-0">
+        <div className="row gx-0 wow fadeIn" data-wow-delay="0.1s">
+            <div className="col-lg-3  d-none d-lg-block">
+                <a href="index.html" className="navbar-brand primary-orange w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
+                    <img src={Gemini_Generated_Image_neuv33neuv33neuv2r3} alt="logo cook with me" height="110" />
+                </a>
+            </div>
+            <div className="col-lg-9 ">
+                <nav className="navbar navbar-expand-lg navbar-dark p-3 p-lg-0 px-lg-5 h-100" style={{background: '#111111'}}>
+
+                    <button type="button" className="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+                    <div className="collapse navbar-collapse justify-content-between align-items-center" id="navbarCollapse">
+                        <div className="navbar-nav mr-auto py-0">
+                          <button className="btn text-light m-2">Recipes</button>
+                           <button className="btn text-light m-2">Chefs</button>
+                           <button className="btn text-light m-2">About us</button>
+                           <button className="btn text-light m-2">Contact</button>
+                           {(store.authChef || store.authUser || store.authAdmin ? null :(
+                            <Link to="/select_role">
+                            <button className="btn btn-outline-light m-2">Enter</button>
+                            </Link>
+                              ))}
+                           {(store.authChef || store.authUser || store.authAdmin) && (
+                             <button className="btn btn-outline-danger" onClick={logout}>
+                                  Logout
+                                </button>)}
+                         
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        </div> 
+      {/* --------------------------------- */}
+
+      {/* === NUEVA SECCIÓN: Layout tipo "foto" === */}
+      <section style={{ background: "#2a2e33" }} className="py-5">
         <div className="container">
           <h2
             className="display-1 fw-bold text-center text-white mb-5"

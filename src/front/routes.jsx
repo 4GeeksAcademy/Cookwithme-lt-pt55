@@ -96,6 +96,16 @@ import { Results } from "./pages/ResultRecipe.jsx";
 import FavRecipeUser from "./pages/FavRecipeUser.jsx";
 import { HomeAvailableRecipes } from "./pages/HomeUserAvailableRecipe.jsx";
 import { InventoryUser } from "./pages/UserInventory.jsx";
+import LoginUserLayout from "./pages/LoginsSIgnupLayout/LoginUserLayout.jsx";
+import SignupUserLayout from "./pages/LoginsSIgnupLayout/SignupUserLayout.jsx";
+import { RoleSelect } from "./pages/RoleSelect.jsx";
+import LoginChefLayout from "./pages/LoginsSIgnupLayout/LoginChefLayout.jsx";
+import SignupChefLayout from "./pages/LoginsSIgnupLayout/SignupChefLayout.jsx";
+import LoginAdminLayout from "./pages/LoginsSIgnupLayout/LoginAdminLayout.jsx";
+
+
+
+ 
 import WelcomeChef from "./pages/WelcomeChef.jsx";
 import NewIngredienteAI from "./pages/NewIngredienteAI"; 
 
@@ -142,9 +152,9 @@ export const router = createBrowserRouter(
       <Route path="/chefs/:chef_id" element={ <SingleChef />} />
       <Route path= "/add_chef" element={<NewChef/>} />
       <Route path="/chefs/:chef_id/update" element={<EditChef />} />
-      <Route path= "/login_chef" element={<LoginChef />} />
+      <Route path= "/oldlogin_chef" element={<LoginChef />} />
       <Route path= "/chef_home" element={<HomeChef />} />
-      <Route path= "/signup_chef" element={<SignupChef />} />
+      <Route path= "/oldsignup_chef" element={<SignupChef />} />
 
       <Route path= "/new_chef_recipe" element={<NewChefRecipe />} />
       <Route path="/chef_recipes/:recipe_id/update" element={ <EditChefRecipe />} />
@@ -155,7 +165,7 @@ export const router = createBrowserRouter(
       <Route path="/edit_admin/:editAdmId" element={<EditAdmin />} />
       <Route path="/adminuser/:admin_id" element={<SingleAdmin />} />
       <Route path="/adminuser/:admin_id/edit" element={<EditAdmin />} />
-      <Route path= "/login_admin" element={<LoginAdmin />} />
+      <Route path= "/oldlogin_admin" element={<LoginAdmin />} />
       <Route path= "/signup_admin" element={<SignupAdmin />} />
       <Route path= "/home_admin" element={<HomeAdmin />} />
 
@@ -194,8 +204,6 @@ export const router = createBrowserRouter(
       <Route path="/users/:user_id/edit" element={<EditUser />} />
       <Route path="/add_user" element={<NewUser />} />
       <Route path= "/user_profile" element={<UserProfile />} />
-      <Route path= "/login_user" element={<LoginUser/>} />
-      <Route path= "/signup_user" element={<SignupUser/>} />
       <Route path= "/home_user" element={<HomeUser/>} />
    
 
@@ -204,9 +212,9 @@ export const router = createBrowserRouter(
       <Route path="/add_ingredient_user" element={<NewIngredientUser />} />
       <Route path="/ingredient_users/:ingredient_user_id/edit" element={<EditIngredientUser />} />
 
-      <Route path= "/login_user" element={<LoginUser />} />
+      <Route path= "/oldlogin_user" element={<LoginUser />} />
       <Route path= "/home_user" element={<HomeUser />} />
-      <Route path= "/signup_user" element={<SignupUser />} />
+      <Route path= "/oldsignup_user" element={<SignupUser />} />
 
      <Route path="/available_recipes" element={<AvailableRecipes />} />
      <Route path="/select_ingr&utensil" element={<SelectIngredients />} />   
@@ -214,6 +222,16 @@ export const router = createBrowserRouter(
 
      <Route path="/fav_recipe_user" element={<FavRecipeUser />} />   
      <Route path="/home_user_avail_recipe" element={<HomeAvailableRecipes />} />   
+     <Route path="/user_inventory" element={<InventoryUser />} />  
+
+      <Route path="/login_user" element={<LoginUserLayout />} />  
+      <Route path="/signup_user" element={<SignupUserLayout />} />
+      <Route path="/login_chef" element={<LoginChefLayout />} />  
+      <Route path="/signup_chef" element={<SignupChefLayout />} /> 
+      <Route path="/login_admin" element={<LoginAdminLayout />} /> 
+      <Route path="/select_role" element={<RoleSelect />} />  
+      
+     
      <Route path="/user_inventory" element={<InventoryUser />} />   
      <Route path="/welcome_chef" element={<WelcomeChef />} /> 
      <Route path="/add_ingrediente_ai" element={<NewIngredienteAI />} /> 
