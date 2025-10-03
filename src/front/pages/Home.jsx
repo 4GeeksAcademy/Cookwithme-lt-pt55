@@ -39,10 +39,10 @@ export const Home = () => {
 			<h1 className="display-4">¿What is your role?</h1>
 			
 			
-  			<div class="row  d-flex justify-content-around align-items-center m-5">
+  			<div className="row  d-flex justify-content-around align-items-center m-5">
 					<div className="card col-3 p-2 " >
 					<div className="card-body">
-						 <img src="https://cdn-icons-png.flaticon.com/512/3461/3461980.png" class="card-img-top" style={{width: 180 }} alt="Chef icon" />
+						 <img src="https://cdn-icons-png.flaticon.com/512/3461/3461980.png" className="card-img-top" style={{width: 180 }} alt="Chef icon" />
 						<h2 className="card-subtitle m-2 text-body-secondary">Chef</h2>
 						<div>
 							<Link to="/login_chef">
@@ -59,7 +59,7 @@ export const Home = () => {
 
 					<div className="card col-3 p-2" >
 					<div className="card-body">
-						 <img src="https://cdn-icons-png.flaticon.com/512/1400/1400111.png" class="card-img-top" style={{width: 180 }} alt="Chef icon" />
+						 <img src="https://cdn-icons-png.flaticon.com/512/1400/1400111.png" className="card-img-top" style={{width: 180 }} alt="Chef icon" />
 						<h2 className="card-subtitle m-2 text-body-secondary">User</h2>
 						<div className="ml-auto">
 						<Link to="/login_user">
@@ -75,7 +75,7 @@ export const Home = () => {
 
 					<div className="card col-3 p-2" >
 					<div className="card-body">
-						 <img src="https://i.pinimg.com/564x/07/24/da/0724daaa15be4c49aca82e7067fdd5a1.jpg" class="card-img-top" style={{width: 180 }} alt="Chef icon" />
+						 <img src="https://i.pinimg.com/564x/07/24/da/0724daaa15be4c49aca82e7067fdd5a1.jpg" className="card-img-top" style={{width: 180 }} alt="Chef icon" />
 						<h2 className="card-subtitle m-2 text-body-secondary">Admin</h2>
 						<div className="ml-auto">
 						<Link to="/login_admin">
@@ -87,6 +87,9 @@ export const Home = () => {
 						</Link> : null}
 						</div>
 					</div>
+					<Link to="/select_role">
+							<button className="btn btn-warning m-2">Select role</button>
+					</Link>
 					</div>
 			</div>
 			
@@ -107,4 +110,3 @@ export const Home = () => {
 	</>
 	);
 }; 
-
