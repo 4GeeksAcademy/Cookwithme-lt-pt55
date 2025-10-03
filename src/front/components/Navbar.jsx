@@ -68,6 +68,7 @@ export const Navbar = () => {
                 {/* Rol Admin */}
                 {store.authAdmin && (
                   <>
+                    <Link to="/home_admin" className="nav-item nav-link">Home</Link>
                     <Link to="/adminuser" className="nav-item nav-link">Admins</Link>
                     <Link to="/chefs" className="nav-item nav-link">Chefs</Link>
                     <Link to="/recipes" className="nav-item nav-link">Recipes</Link>

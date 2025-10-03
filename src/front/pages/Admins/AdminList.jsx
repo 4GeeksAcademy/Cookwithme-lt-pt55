@@ -1,67 +1,71 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import "../../css/Homechef.css"; // mantenemos estilos de HomeChef
 
 export const AdminList = () => {
+  const [adminUsers, setAdminUsers] = useState([]);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-    const [adminUsers, setadminUsers] = useState([])
+  const getAdmins = () => {
+    fetch(`${backendUrl}/api/adminuser`)
+      .then((res) => res.json())
+      .then((data) => setAdminUsers(data));
+  };
 
-    const backendUrl = import.meta.env.VITE_BACKEND_URL
+  const deleteAdminUser = (id) => {
+    fetch(`${backendUrl}/api/adminuser/${id}`, { method: "DELETE" })
+      .then((res) => res.json())
+      .then(() => getAdmins());
+  };
 
-    function getAdmins() {
-        fetch(backendUrl + '/api/adminuser')
-            .then(response => response.json())
-            .then(data => setadminUsers(data))
+  useEffect(() => {
+    getAdmins();
+  }, []);
 
-    }
+  return (
+    <div className="menu-container">
+      <h5 className="section-title">Admin Dashboard</h5>
+      <h1 className="display-3 mb-0">Manage Admin Users</h1>
 
+      <div className="text-center my-4">
+        <Link to="/add_admin" className="btn btn-custom">
+          <i className="fa-solid fa-plus me-2"></i> Add New Admin
+        </Link>
+      </div>
 
-    function deleteadminuser(adminuser_id) {
+      <div className="menu-grid">
+        {adminUsers.length > 0 ? (
+          adminUsers.map((admin) => (
+            <div key={admin.id} className="menu-item">
+              <div className="label mb-2">Email: {admin.email}</div>
 
-        const requestOptions = {
-            method: 'DELETE'
-        }
-        fetch(backendUrl + '/api/adminuser/' + adminuser_id, requestOptions)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                getAdmins()
-            })
-
-    }
-
-
-    useEffect(() => {
-        getAdmins()
-
-    }, [])
-
-    return (
-        <div className="text-center mt-5">
-            <h1 className="display-4">These are the admins:</h1>
-
-            <div className="ml-auto">
-                <Link to="/add_admin">
-                    <button className="btn btn-success my-3">Registrate</button>
+              <div className="menu-actions">
+                <Link to={`/adminuser/${admin.id}`}>
+                  <button className="menu-btn edit" title="View Admin">
+                    <i className="fa-solid fa-eye"></i>
+                  </button>
                 </Link>
+
+                <Link to={`/adminuser/${admin.id}/edit`}>
+                  <button className="menu-btn edit" title="Edit Admin">
+                    <i className="fa-solid fa-pen"></i>
+                  </button>
+                </Link>
+
+                <button
+                  className="menu-btn delete"
+                  onClick={() => deleteAdminUser(admin.id)}
+                  title="Delete Admin"
+                >
+                  <i className="fa-solid fa-trash"></i>
+                </button>
+              </div>
             </div>
-
-            {adminUsers.map((adminuser) => (
-                <p key={adminuser.id}>
-                    email: {adminuser.email}
-
-                    <Link to={"/adminuser/" + adminuser.id}>
-                        <button className="btn btn-primary m-2">Ver Usuario</button>
-                    </Link>
-
-                    <Link to={"/adminuser/" + adminuser.id + "/edit"}>
-                        <button className="btn btn-info m-2">Editar Usuario</button>
-                    </Link>
-
-                    <button className="btn btn-danger m-2" onClick={() => deleteadminuser(adminuser.id)}>Eliminar Usuario</button>
-
-                </p>
-            ))}
-
-        </div>
-    );
-}; 
+          ))
+        ) : (
+          <h3 className="text-center mt-4">No admin users found.</h3>
+        )}
+      </div>
+    </div>
+  );
+};
