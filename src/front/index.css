@@ -33,3 +33,11 @@
     display: flex;
     min-height: 100vh;
 }
+
+.primary-orange{
+    background-color: #fb5b21;
+}
+
+.orange-active{
+    color:#fb5b21
+}

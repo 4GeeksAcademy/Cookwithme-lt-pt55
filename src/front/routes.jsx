@@ -106,6 +106,8 @@ import LoginAdminLayout from "./pages/LoginsSIgnupLayout/LoginAdminLayout.jsx";
 
 
  
+import WelcomeChef from "./pages/WelcomeChef.jsx";
+import NewIngredienteAI from "./pages/NewIngredienteAI"; 
 
 
 
@@ -230,6 +232,10 @@ export const router = createBrowserRouter(
       <Route path="/select_role" element={<RoleSelect />} />  
       
      
+     <Route path="/user_inventory" element={<InventoryUser />} />   
+     <Route path="/welcome_chef" element={<WelcomeChef />} /> 
+     <Route path="/add_ingrediente_ai" element={<NewIngredienteAI />} /> 
+
     </Route>
   )
 );

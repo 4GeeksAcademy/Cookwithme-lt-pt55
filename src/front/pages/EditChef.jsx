@@ -39,9 +39,9 @@ export const EditChef = () => {
       .then(response => response.json())
       .then((data) => {
         console.log("Chef actualizado:", data);
-        if (!store.authChef)
-          return navigate("/login_chef")
-        else navigate("/chef_profile")
+        if (store.authChef)
+          return navigate("/chef_profile")
+        else navigate("/chefs")
       })
   }
 

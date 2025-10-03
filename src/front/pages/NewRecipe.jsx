@@ -17,6 +17,16 @@ const NewRecipe = () => {
     const [chefs, setChefs] = useState([]);
     const [currentChef, setCurrentChef] = useState(null);
 
+
+    // State for the full list of ingredients (for the dropdown)
+    const [allIngredients, setAllIngredients] = useState([]);
+    // State for the user's selected ingredients (your "empty list")
+    const [selectedIngredients, setSelectedIngredients] = useState([]);
+    // State to hold the currently selected ingredient from the dropdown
+    const [currentSelection, setCurrentSelection] = useState('');
+    // The previous line was the problematic 'currentIngredient' concept, renamed to 'currentSelection'
+
+
     const [urlImg, setUrlImg] = useState("")
 
     const uploadRecipeImage = async (e) => {
@@ -85,6 +95,12 @@ const NewRecipe = () => {
 
         const finalImageUrl = urlImg || img
 
+        const ingredientsForPost = selectedIngredients.map(name => ({
+            name: name,
+            quantity: "1 unit" // Add a default quantity if your model requires it
+            // You may need to adjust this structure based on your backend API
+        }));
+
         const requestOptions = {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
@@ -94,7 +110,8 @@ const NewRecipe = () => {
                 "preparation": preparation,
                 "img": finalImageUrl,
                 "utensils": utensils,
-                "chef_id": currentChef.id
+                "chef_id": currentChef.id,
+                "ingredients": selectedIngredients
             })
         };
 
@@ -114,6 +131,7 @@ const NewRecipe = () => {
 
     useEffect(() => {
         getChefs();
+        ingredientsFromTheMealDB();
     }, []);
 
     useEffect(() => {
@@ -140,6 +158,48 @@ const NewRecipe = () => {
             clearTimeout(timerId);
         };
     }, [name]);
+
+
+    function ingredientsFromTheMealDB() {
+        fetch(`https://www.themealdb.com/api/json/v1/1/list.php?i=list`)
+            .then(response => response.json())
+            .then(data => {
+                const ingredientsArray = data.meals || [];
+                // Store the ingredient list for the dropdown
+                setAllIngredients(ingredientsArray);
+                // Set a default selection for the dropdown
+                if (ingredientsArray.length > 0) {
+                    setCurrentSelection(ingredientsArray[0].strIngredient);
+                }
+            })
+            .catch(error => console.error("Fetch error:", error));
+    }
+
+    const handleDropdownChange = (event) => {
+        // event.target.value holds the strIngredient of the selected item
+        setCurrentSelection(event.target.value);
+    };
+
+    const handleAddIngredient = (e) => {
+        // Prevent form submission if the button is inside the form
+        e.preventDefault();
+
+        if (currentSelection && !selectedIngredients.includes(currentSelection)) {
+            // Add only the ingredient name string to the selected list
+            setSelectedIngredients(prevIngredients => [
+                ...prevIngredients,
+                currentSelection
+            ]);
+        }
+    };
+
+    
+    const handleRemoveIngredient = (ingredientName) => {
+    setSelectedIngredients(prev =>
+        prev.filter(ing => ing !== ingredientName)
+    );
+    };
+
 
 
     useEffect(() => {
@@ -201,14 +261,70 @@ const NewRecipe = () => {
                     <input type="file" accept="image/*" onChange={uploadRecipeImage} />
                     {(urlImg || img) && (
                         <div>
-                            <img 
+                            <img
                                 src={urlImg || img}
-                                alt="Ingrediente Imagen" 
+                                alt="Ingrediente Imagen"
                                 style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
                             />
                         </div>
                     )}
                 </div>
+
+
+
+                {/* -------------------- INGREDIENT SELECTOR (FIXED) -------------------- */}
+                <div>
+                    <h2>Select Ingredients for your Recipe</h2>
+
+                    {/* Dropdown Section */}
+                    <div className="mb-3 d-flex align-items-center">
+                        <select
+                            value={currentSelection}
+                            onChange={handleDropdownChange}
+                            className="form-select me-2"
+                        >
+                            {/* Map over the fetched ingredients (allIngredients state) */}
+                            {allIngredients.map(ingredient => (
+                                <option
+                                    key={ingredient.idIngredient}
+                                    value={ingredient.strIngredient}
+                                >
+                                    {ingredient.strIngredient}
+                                </option>
+                            ))}
+                        </select>
+                        <button type="button" onClick={handleAddIngredient} className="btn btn-secondary" disabled={!currentSelection}>
+                            Add Ingredient ➕
+                        </button>
+                    </div>
+
+                    <hr />
+
+                    {/* Selected Ingredients List */}
+                    <h3>Selected Ingredients ({selectedIngredients.length})</h3>
+
+                    <ul className="list-group mb-3">
+                    {selectedIngredients.map((ingredient, index) => (
+                        <li 
+                        key={index} 
+                        className="list-group-item d-flex justify-content-between align-items-center"
+                        >
+                        <span>{ingredient}</span>
+                        <button 
+                            type="button" 
+                            className="btn btn-sm"
+                            onClick={() => handleRemoveIngredient(ingredient)}
+                        >
+                            ❌
+                        </button>
+                        </li>
+                    ))}
+                    </ul>
+                </div>
+                {/* --------------------------------------------------------------------- */}
+
+
+
 
                 <div className="dropdown">
                     <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">

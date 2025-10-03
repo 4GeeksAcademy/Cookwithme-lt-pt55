@@ -69,7 +69,6 @@ export const HomeChef = () => {
         <div className="container text-center mt-5">
             {store.authChef ?
                 <>
-
                     <h1 className="display-4">Hello, welcome {chef.name}!!</h1>
                     {chefRecipe.length != 0 ?
                         <>
@@ -79,6 +78,8 @@ export const HomeChef = () => {
                                         <h1>Name: {recipe.name}</h1>
                                         <p>Description: {recipe.description}</p>
                                         <p>Preparation: {recipe.preparation}</p>
+                                        <p>Ingredients: {recipe.ingredients}</p>
+                                        <p>Utensils: {recipe.utensils}</p>
                                         <div className="">
                                             <img 
                                                 src={recipe.img} 

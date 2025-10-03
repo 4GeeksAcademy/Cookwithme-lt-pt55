@@ -17,6 +17,53 @@ const EditChefRecipe = () => {
     const [preparation, setPreparation] = useState("");
     const [img, setImg] = useState("")
     const [urlImg, setUrlImg] = useState("")
+    const [utensils, setUtensils] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
+
+    function handleNameChange(e) {
+        const newName = e.target.value;
+        setName(newName);
+
+        if (newName.trim().length > 0) {
+            setDescription('');
+            setPreparation('');
+            setImg('');
+            setUtensils('');
+        }
+    }
+
+    function handleSelectSuggestion(meal) {
+        setName(meal.strMeal);
+        setDescription(`${meal.strCategory} (${meal.strArea})`);
+        setPreparation(meal.strInstructions);
+        setImg(meal.strMealThumb);
+        setSuggestions([]);
+    }
+
+    useEffect(() => {
+        const fetchRecipes = async () => {
+            if (name.trim().length > 1) {
+                try {
+                    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`);
+                    const data = await response.json();
+                    setSuggestions(data.meals || []);
+                } catch (error) {
+                    console.error("Error fetching recipes:", error);
+                    setSuggestions([]);
+                }
+            } else {
+                setSuggestions([]);
+            }
+        };
+
+        const timerId = setTimeout(() => {
+            fetchRecipes();
+        }, 300);
+
+        return () => {
+            clearTimeout(timerId);
+        };
+    }, [name]);
 
     const changeUploadedImage = async (e) => {
         const file = e.target.files[0];
@@ -67,7 +114,8 @@ const EditChefRecipe = () => {
                     "name": name,
                     "description": description,
                     "preparation": preparation,
-                    "img": finalImageUrl
+                    "img": finalImageUrl,
+                    "utensils": utensils
 
                 }
             ),
@@ -98,6 +146,21 @@ const EditChefRecipe = () => {
             });
     }
     useEffect(() => {
+        const keywords = ["pan", "oven", "plate", "spoon"];
+        if (!preparation) {
+            setUtensils('');
+            return;
+        }
+
+        const lowercasedPreparation = preparation.toLowerCase();
+        const foundKeywords = keywords.filter(keyword =>
+            lowercasedPreparation.includes(keyword)
+        );
+
+        setUtensils(foundKeywords.join(', '));
+    }, [preparation]);
+
+    useEffect(() => {
         get_current_data()
     }, [recipe_id]);
 
@@ -112,10 +175,23 @@ const EditChefRecipe = () => {
                             <label className="form-label">Nombre</label>
                             <input
                                 value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                onChange={handleNameChange}
                                 type="text"
                                 className="form-control"
                             />
+                            {suggestions.length > 0 && (
+                                <ul className="list-group mt-2">
+                                    {suggestions.slice(0, 5).map(meal => (
+                                        <li key={meal.idMeal}
+                                            className="list-group-item d-flex align-items-center"
+                                            style={{ cursor: "pointer" }}
+                                            onClick={() => handleSelectSuggestion(meal)}>
+                                            <img src={meal.strMealThumb} alt={meal.strMeal} width="40" className="me-2" />
+                                            {meal.strMeal}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
                         </div>
                         <div className="mb-3">
                             <label className="form-label">Description</label>
@@ -126,6 +202,18 @@ const EditChefRecipe = () => {
                                 className="form-control"
                             />
                         </div>
+
+                        <div className="mb-3">
+                            <label htmlFor="utensilsInput" className="form-label">Utensilios</label>
+                            <input
+                                value={utensils}
+                                onChange={(e) => setUtensils(e.target.value)}
+                                type="text"
+                                className="form-control"
+                                id="utensilsInput"
+                            />
+                        </div>
+
                         <div className="mb-3">
                             <label className="form-label">Preparation</label>
                             <input
