@@ -112,11 +112,6 @@ export const RoleSelect = () => {
 					</div>
 					</div>
 
-						<div className="ml-auto text-center">
-						<Link to="/login_admin">
-							<button className="btn btn-outline-light ">Login as Admin</button>
-						</Link>
-						</div>
 
 						<div className="ml-auto text-center">
 						<Link to="/">
@@ -126,6 +121,7 @@ export const RoleSelect = () => {
 					</div>
 					</div>
 					</div> }
+
 			
 
 			

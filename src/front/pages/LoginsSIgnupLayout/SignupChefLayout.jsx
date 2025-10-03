@@ -97,9 +97,9 @@ const SignupChefLayout = () => {
                     <div className="card ">
 
                         {/* <!-- Logo --> */}
-                        <div className=" py-4 text-center card-orange">
+                        <div className=" py-3 text-center card-orange">
                             <a href="index.html">
-                                <span><img src={Gemini_Generated_Image_neuv33neuv33neuv2r3} alt="logo" height="82"/></span>
+                                <span><img src={Gemini_Generated_Image_neuv33neuv33neuv2r3} alt="logo" height="100"/></span>
                             </a>
                         </div>
 
