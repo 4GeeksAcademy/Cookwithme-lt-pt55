@@ -114,17 +114,6 @@ export const Navbar = () => {
                 {/* Botón Sidebar + Logout si hay sesión */}
                 {(store.authChef || store.authUser || store.authAdmin) && (
                   <div className="d-flex align-items-center">
-                    {/* Botón Sidebar */}
-                    <button
-                      className="btn btn-primary ms-3"
-                      type="button"
-                      data-bs-toggle="offcanvas"
-                      data-bs-target="#offcanvasScrolling"
-                      aria-controls="offcanvasScrolling"
-                    >
-                      <i className="fa-solid fa-bars"></i>
-                    </button>
-
                     {/* Botón Logout */}
                     <button className="btn btn-danger ms-2" onClick={logout}>
                       Logout
