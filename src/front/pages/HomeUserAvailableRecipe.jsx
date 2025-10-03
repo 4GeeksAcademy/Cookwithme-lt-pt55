@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import "../css/Homechef.css"; // Reutilizamos el CSS existente
 
 export const HomeAvailableRecipes = () => {
-  const { store } = useGlobalReducer();
+  const { store, dispatch } = useGlobalReducer();
   const [recipes, setRecipes] = useState([]);
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -18,30 +19,42 @@ export const HomeAvailableRecipes = () => {
       .catch(err => console.error("Error fetching available recipes:", err));
   }, [store.token]);
 
+  const userFavs = store.authUser ? store.usersFavs[store.authUser.id] || [] : [];
+
   return (
-    <div className="w-75 mx-auto">
-      <h1 className="mb-4">Recetas que puedes preparar según tu inventario</h1>
+    <div className="available-recipes-container">
+      <h1 className="mb-4 text-center">Recetas disponibles según tu inventario</h1>
 
       {recipes.length === 0 ? (
-        <p>No tienes suficientes ingredientes o utensilios para preparar ninguna receta.</p>
+        <p className="text-center">No tienes suficientes ingredientes o utensilios para preparar ninguna receta.</p>
       ) : (
-        recipes.map(recipe => (
-          <div key={recipe.id} className="card mt-3 p-2">
-            <h3>{recipe.name}</h3>
-            <img
-              src={recipe.img}
-              alt={recipe.name}
-              className="img-fluid mb-2"
-              style={{ maxWidth: "100%", maxHeight: "200px", objectFit: "contain" }}
-            />
-            <p>{recipe.description}</p>
-            <div className="mt-2">
-              <Link to={`/recipes/${recipe.id}`}>
-                <button className="btn btn-primary">Ver receta</button>
-              </Link>
-            </div>
-          </div>
-        ))
+        <div className="menu-grid-vertical">
+          {recipes.map(recipe => {
+            const isFavorite = userFavs.includes(recipe.id);
+            return (
+              <div key={recipe.id} className="menu-item-vertical card">
+                <Link to={`/recipes/${recipe.id}`} className="text-decoration-none">
+                  <img
+                    src={recipe.img}
+                    alt={recipe.name}
+                    className="img-fluid mb-2"
+                    style={{ maxWidth: "100%", maxHeight: "200px", objectFit: "contain" }}
+                  />
+                  <div className="label text-center">{recipe.name}</div>
+                </Link>
+                <div className="menu-actions mt-2 justify-content-center">
+                  <button
+                    className={`menu-btn ${isFavorite ? 'edit' : 'see'}`}
+                    onClick={() => dispatch({ type: "toggle_fav_user", payload: recipe.id })}
+                  >
+                    {isFavorite ? "★" : "☆"}
+                  </button>
+
+                </div>
+              </div>
+            );
+          })}
+        </div>
       )}
     </div>
   );

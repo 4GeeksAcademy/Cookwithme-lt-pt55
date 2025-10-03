@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-import "../css/Homechef.css"; // Reutilizamos el CSS
+import "../css/Homechef.css"; 
 
 export const HomeUser = () => {
   const { store, dispatch } = useGlobalReducer();

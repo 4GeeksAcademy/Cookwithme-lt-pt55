@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import "../css/Bottoms.css"
 
 export const SignupChef = () => {
 
@@ -79,9 +80,9 @@ export const SignupChef = () => {
                     <input value={rating} onChange={(e) => setRating(e.target.value)} type="number" className="form-control" id="exampleInputRating" />
                 </div>
                 <div className="d-flex justify-content-around">
-                    <button type="submit" onClick={sendData} className="btn btn-primary">Submit</button>
+                    <button type="submit" onClick={sendData} className="btn btn-custom">Submit</button>
                     <Link to="/login_chef">
-                        <button className="btn btn-success">Log In as Chef</button>
+                        <button className="btn btn-custom">Log In as Chef</button>
                     </Link>
                 </div>
                 

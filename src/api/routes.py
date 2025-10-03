@@ -670,6 +670,7 @@ def delete_utensil_recipe(utensil_recipe_id):
     return jsonify({"message": f"Relation {utensil_recipe_id} deleted successfully"}), 200
 
 
+
 @api.route('/utensil_recipe/<int:utensil_recipe_id>', methods=['PUT'])
 def update_utensil_recipe(utensil_recipe_id):
     relation = Utensil_recipe.query.get(utensil_recipe_id)
@@ -1032,17 +1033,20 @@ def update_recipe_ingredient(ri_id):
 
 @api.route('/recipe_ingredients/<int:ri_id>', methods=['DELETE'])
 def delete_recipe_ingredient(ri_id):
-    record = Recipe_ingredient.query.filter_by(id=ri_id).first()
-    if record is None:
-        return jsonify({"error-msg": "enter a valid recipe_ingredient"}), 400
-
-    db.session.delete(record)
-    db.session.commit()
-
-    response_body = {
-        "message": f"Recipe_ingredient {ri_id} deleted successfully"
-    }
-    return jsonify(response_body), 200
+    if ri_id == 0:  #  0 = borrar todos para una receta
+        recipe_id = request.args.get("recipe_id", type=int)
+        if not recipe_id:
+            return jsonify({"error-msg": "recipe_id is required to delete all"}), 400
+        Recipe_ingredient.query.filter_by(recipe_id=recipe_id).delete()
+        db.session.commit()
+        return jsonify({"message": f"All ingredients for recipe {recipe_id} deleted"}), 200
+    else:
+        record = Recipe_ingredient.query.filter_by(id=ri_id).first()
+        if record is None:
+            return jsonify({"error-msg": "enter a valid recipe_ingredient"}), 400
+        db.session.delete(record)
+        db.session.commit()
+        return jsonify({"message": f"Recipe_ingredient {ri_id} deleted successfully"}), 200
 
 # --------utensil_user---------
 

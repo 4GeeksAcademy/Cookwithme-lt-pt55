@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import "../css/Bottoms.css"
 
 export const SingleRecipe = () => {
   const [recipe, setRecipe] = useState(null);
@@ -67,7 +68,7 @@ export const SingleRecipe = () => {
               </p>
             </div>
 
-            {/* Ingredientes */}
+
             <div className="mt-4">
               <h4>🧄 Ingredients</h4>
               {ingredients.length > 0 ? (
@@ -81,7 +82,7 @@ export const SingleRecipe = () => {
               )}
             </div>
 
-            {/* Utensilios */}
+
             <div className="mt-4">
               <h4>🍴 Utensils</h4>
               {utensils.length > 0 ? (
@@ -98,23 +99,23 @@ export const SingleRecipe = () => {
             <div className="d-flex align-items-center mt-4">
               {store.authChef ? (
                 <>
-                <Link to="/chef_home" className="btn btn-outline-primary me-2">
+                <Link to="/chef_home" className="btn btn-custom">
                   <i className="fa-solid fa-arrow-left me-2"></i> Back to Home
                 </Link>
-                <Link to={`/chef_recipes/${recipe.id}/update`} className="btn btn-outline-primary me-2">
+                <Link to={`/chef_recipes/${recipe.id}/update`} className="btn btn-custom">
                   <i className="fa-solid fa-arrow-left me-2"></i> Edit recipe
                 </Link>
                 </>
               ) : (
                 <Link
                   to="/home_user"
-                  className="btn btn-outline-secondary me-2"
+                  className="btn btn-custom me-2"
                 >
                   <i className="fa-solid fa-arrow-left me-2"></i> Back to Recipes
                 </Link>
               )}
 
-              {/* Favoritos */}
+              {/* Favoritos cuando es usuario*/}
               {store.authUser && (
                 <i
                   className={

@@ -82,22 +82,19 @@ export const Navbar = () => {
                   <>
                     <Link to="/chef_home" className="nav-item nav-link">Home Chef</Link>
                     <Link to="/chef_profile" className="nav-item nav-link">Perfil Chef</Link>
-                    <Link to="/utensilio_receta" className="nav-item nav-link">Agregar Utensilio a Receta</Link>
-                    <Link to="/add_recipe_ingredient" className="nav-item nav-link">Agregar Ingrediente</Link>
                   </>
                 )}
 
                 {/* Rol User */}
                 {store.authUser && (
                   <>
-                    <Link to="/home_user_avail_recipe" className="nav-item nav-link">Recetas Disponibles</Link>
+                    <Link to="/home_user_avail_recipe" className="nav-item nav-link mx-3">Recetas<br/> Disponibles</Link>
+                    <Link to="/home_user" className="nav-item nav-link">Todas las recetas</Link>
                     <Link to="/fav_recipe_user" className="nav-item nav-link">
                       Favoritos {userFavs.length > 0 && <span className="badge bg-secondary">{userFavs.length}</span>}
                     </Link>
-                    <Link to="/user_inventory" className="nav-item nav-link">Mi Inventario</Link>
-                    <Link to="/select_ingr&utensil" className="nav-item nav-link">Buscar por Componentes</Link>
-                    <Link to="/user_profile" className="nav-item nav-link">Perfil User</Link>
-                    <Link to="/utensil_user" className="nav-item nav-link">User's Utensils</Link>
+                    <Link to="/user_inventory" className="nav-item nav-link">Inventario</Link>
+                    <Link to="/user_profile" className="nav-item nav-link">Mi perfil</Link>
                   </>
                 )}
 

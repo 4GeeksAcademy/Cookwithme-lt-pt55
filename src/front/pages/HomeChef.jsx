@@ -9,7 +9,7 @@ export const HomeChef = () => {
   const [chef, setChef] = useState([]);
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-  // Obtener info del chef
+
   function getChefInfo() {
     const token = localStorage.getItem("tokenChef");
     fetch(backendUrl + `/api/chef_info`, {
@@ -19,7 +19,7 @@ export const HomeChef = () => {
       .then((data) => setChef(data));
   }
 
-  // Obtener recetas del chef
+
   function getChefRecipes() {
     const token = localStorage.getItem("tokenChef");
     fetch(backendUrl + `/api/chef_recipes`, {
@@ -29,7 +29,7 @@ export const HomeChef = () => {
       .then((data) => setChefRecipe(data));
   }
 
-  // Eliminar receta
+
   function deleteRecipe(recipe_id) {
     const token = localStorage.getItem("tokenChef");
     fetch(backendUrl + `/api/chef_recipes/${recipe_id}`, {
@@ -52,7 +52,7 @@ export const HomeChef = () => {
       <h5 className="section-title">Your Recipes</h5>
       <h1 className="display-3 mb-0">Manage Your Creations</h1>
 
-      {/* Botón grande para agregar receta */}
+
       <Link to="/new_chef_recipe" className="add-recipe-btn">
         <i className="fa-solid fa-plus me-2"></i> Add New Recipe
       </Link>
@@ -68,7 +68,7 @@ export const HomeChef = () => {
               </Link>
 
               <div className="menu-actions">
-                {/* Botones tipo icono */}
+
                 <Link to={`/chef_recipes/${recipe.id}/update`} className="menu-btn edit" title="Edit Recipe">
                   <i className="fa-solid fa-pen"></i>
                 </Link>

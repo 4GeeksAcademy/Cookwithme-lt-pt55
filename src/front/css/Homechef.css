@@ -174,3 +174,48 @@
 .add-recipe-btn:hover {
   opacity: 0.8;
 }
+
+.available-recipes-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 2rem 1rem;
+}
+
+.menu-grid-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 500px; /* Limita el ancho de las cards para que queden centradas */
+}
+
+.menu-item-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra imagen y texto */
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.menu-item-vertical:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.menu-item-vertical .label {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
+}
+
+.menu-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}

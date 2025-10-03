@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { Link } from "react-router-dom";
+import "../css/Bottoms.css";
 
 export const InventoryUser = ({ onInventoryChange }) => {
   const { store } = useGlobalReducer();
@@ -93,7 +94,7 @@ export const InventoryUser = ({ onInventoryChange }) => {
         })}
       </div>
 
-      <button className="btn btn-success mt-3" onClick={saveInventory}>Guardar Inventario</button>
+      <button className="btn btn-custom mt-3" onClick={saveInventory}>Guardar Inventario</button>
     </div>
   );
 };

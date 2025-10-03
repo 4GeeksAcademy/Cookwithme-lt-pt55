@@ -1,0 +1,13 @@
+a.btn-custom, button.btn-custom {
+  color: #0b0b0b;             
+  background-color: #fbfbfb;   
+  border: 2px solid #FB5B21;    
+  transition: all 0.3s ease;  
+  text-decoration: none;
+}
+
+a.btn-custom:hover, button.btn-custom:hover {
+  color: #ffffff;              
+  background-color: #FB5B21;    
+  border-color: #FB5B21;        
+}

@@ -2,7 +2,8 @@ import React from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom"
 import { useState, useEffect } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-
+import "../css/Bottoms.css"
+ 
 const NewChefRecipe = () => {
 
     const navigate = useNavigate()
@@ -330,7 +331,7 @@ async function sendData(e) {
                         ))}
                     </ul>
                 </div>
-                <button type="button" onClick={handleAddUtensil} className="btn btn-secondary" disabled={!currentSelectedUtensil}>
+                <button type="button" onClick={handleAddUtensil} className="btn btn-custom" disabled={!currentSelectedUtensil}>
                     Add Utensil ➕
                 </button>
 
@@ -367,7 +368,7 @@ async function sendData(e) {
                         ))}
                     </ul>
                 </div>
-                <button type="button" onClick={handleAddIngredient} className="btn btn-secondary" disabled={!currentSelection}>
+                <button type="button" onClick={handleAddIngredient} className="btn btn-custom" disabled={!currentSelection}>
                     Add Ingredient ➕
                 </button>
 
@@ -387,11 +388,11 @@ async function sendData(e) {
                         </div>
                     )}
                 </div>
-                <button type="submit" className="btn btn-primary">Create</button>
+                <Link className="btn btn-custom">Create</Link>
 
-                <Link to="/chef_home">
-                    <button className="btn btn-primary">Back to home</button>
-                </Link>
+
+                <Link to="/chef_home" className="btn btn-custom" >Back to home</Link>
+
             </form>
         </div >
     )
