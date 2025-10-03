@@ -3,6 +3,7 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { useNavigate } from "react-router-dom";
 import "../css/Navbar.css";
 import Sidebar from "./Sidebar.jsx";
+import  Gemini_Generated_Image_neuv33neuv33neuv2r3   from "../assets/img/Gemini_Generated_Image_neuv33neuv33neuv2r3.png";
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -48,15 +49,15 @@ export const Navbar = () => {
       </div>
 
       {/* Navbar */}
-      <div className="row gx-0">
+      <div className="row gx-0 ">
         <div className="col-lg-3 d-lg-block" style={{ backgroundColor: "#FB5B21" }}>
           <Link to="/" className="navbar-brand d-flex align-items-center justify-content-center">
-            <h1 className="text-white m-0 display-4">CookWithMe</h1>
+            <img src={Gemini_Generated_Image_neuv33neuv33neuv2r3} alt="logo cook with me" height="110" />
           </Link>
         </div>
 
         <div className="col-lg-9">
-          <nav className="navbar navbar-expand-lg navbar-dark navbar-main">
+          <nav className="navbar navbar-expand-lg navbar-dark navbar-main d-flex text-center ">
             <Link to="/" className="navbar-brand d-block d-lg-none">
               <h1 className="text-primary m-0 display-4">CookWithMe</h1>
             </Link>
@@ -69,53 +70,56 @@ export const Navbar = () => {
               <span className="navbar-toggler-icon"></span>
             </button>
 
-            <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+            <div className="collapse navbar-collapse d-flex justify-content-around align-items-center" id="navbarCollapse">
               <div className="navbar-nav">
-
+              <Link to="/about_us" className="nav-item nav-link text-light">About us</Link>
                 {/* Rol Admin */}
                 {store.authAdmin && (
                   <>
-                    <Link to="/home_admin" className="nav-item nav-link">Home</Link>
-                    <Link to="/adminuser" className="nav-item nav-link">Admins</Link>
-                    <Link to="/chefs" className="nav-item nav-link">Chefs</Link>
-                    <Link to="/recipes" className="nav-item nav-link">Recipes</Link>
-                    <Link to="/ingredientes" className="nav-item nav-link">Ingredientes</Link>
-                    <Link to="/utensilios" className="nav-item nav-link">Utensilios</Link>
-                    <Link to="/califications" className="nav-item nav-link">Califications</Link>
+                    <Link to="/home_admin" className="nav-item nav-link text-light ">Home</Link>
+                    <Link to="/adminuser" className="nav-item nav-link text-light">Admins</Link>
+                    <Link to="/chefs" className="nav-item nav-link text-light">Chefs</Link>
+                    <Link to="/recipes" className="nav-item nav-link text-light">Recipes</Link>
+                    <Link to="/ingredientes" className="nav-item nav-link text-light">Ingredientes</Link>
+                    <Link to="/utensilios" className="nav-item nav-link text-light">Utensilios</Link>
+                    <Link to="/califications" className="nav-item nav-link text-light">Califications</Link>
                   </>
                 )}
 
                 {/* Rol Chef */}
                 {store.authChef && (
                   <>
-                    <Link to="/chef_home" className="nav-item nav-link">Home Chef</Link>
-                    <Link to="/chef_profile" className="nav-item nav-link">Perfil Chef</Link>
+                    <Link to="/chef_home" className="nav-item nav-link text-light">Home Chef</Link>
+                    <Link to="/chef_profile" className="nav-item nav-link text-light btn">Perfil Chef</Link>
                   </>
                 )}
 
                 {/* Rol User */}
                 {store.authUser && (
                   <>
-                    <Link to="/home_user_avail_recipe" className="nav-item nav-link mx-3">
+                    <Link to="/home_user_avail_recipe" className="nav-item nav-link text-light mx-3">
                       Recetas<br /> Disponibles
                     </Link>
-                    <Link to="/home_user" className="nav-item nav-link">Todas las recetas</Link>
-                    <Link to="/fav_recipe_user" className="nav-item nav-link">
+                    <Link to="/home_user" className="nav-item nav-link text-light">Todas las recetas</Link>
+                    <Link to="/fav_recipe_user" className="nav-item nav-link text-light">
                       Favoritos{" "}
                       {userFavs.length > 0 && (
                         <span className="badge bg-secondary">{userFavs.length}</span>
                       )}
                     </Link>
-                    <Link to="/user_inventory" className="nav-item nav-link">Inventario</Link>
-                    <Link to="/user_profile" className="nav-item nav-link">Mi perfil</Link>
+                    <Link to="/user_inventory" className="nav-item nav-link text-light">Inventario</Link>
+                    <Link to="/user_profile" className="nav-item nav-link text-light">Mi perfil</Link>
                   </>
                 )}
+
+                
 
                 {/* Botón Sidebar + Logout si hay sesión */}
                 {(store.authChef || store.authUser || store.authAdmin) && (
                   <div className="d-flex align-items-center">
-                    {/* Botón Logout */}
-                    <button className="btn btn-danger ms-2" onClick={logout}>
+
+                     {/* Botón Logout */}
+                    <button className="btn btn-outline-light ms-2" onClick={logout}>
                       Logout
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         fill="currentColor" className="bi bi-door-open-fill mx-2" viewBox="0 0 16 16">
@@ -127,11 +131,24 @@ export const Navbar = () => {
                           .5.448.5 1-.224 1-.5 1"/>
                       </svg>
                     </button>
+
+                    {/* Botón Sidebar */}
+                    <button
+                      className="btn btn btn-outline-light ms-3"
+                      type="button"
+                      data-bs-toggle="offcanvas"
+                      data-bs-target="#offcanvasScrolling"
+                      aria-controls="offcanvasScrolling"
+                    >
+                      <i className="fa-solid fa-bars"></i>
+                    </button>
+
+                   
                   </div>
                 )}
               </div>
 
-              <Link to="/about_us" className="nav-item nav-link">About us</Link>
+              
 
               {/* Social Icons */}
               <div className="d-none d-lg-flex align-items-center social-icons">
