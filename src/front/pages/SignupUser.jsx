@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import "../css/Bottoms.css";
 
 export const SignupUser = () => {
 
@@ -82,9 +83,9 @@ export const SignupUser = () => {
                 </div>
 
                 <div className="d-flex justify-content-around">
-                    <button type="submit" onClick={sendData} className="btn btn-primary">Submit</button>
+                    <button type="submit" onClick={sendData} className="btn btn-custom">Submit</button>
                     <Link to="/login_user">
-                        <button className="btn btn-success">Log In as user</button>
+                        <button className="btn btn-custom">Log In as user</button>
                     </Link>
                 </div>
                 

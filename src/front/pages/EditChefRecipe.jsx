@@ -1,263 +1,316 @@
 import React, { useState, useEffect } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { useParams, useNavigate, Link } from "react-router-dom";
-
+import "../css/Bottoms.css"
 
 const EditChefRecipe = () => {
+  const navigate = useNavigate();
+  const { store } = useGlobalReducer();
+  const token = localStorage.getItem("tokenChef");
+  const { recipe_id } = useParams();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-    const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [preparation, setPreparation] = useState("");
+  const [img, setImg] = useState("");
+  const [urlImg, setUrlImg] = useState("");
 
-    const { store, dispatch } = useGlobalReducer()
-    const token = localStorage.getItem("tokenChef")
-    const { recipe_id } = useParams();
-    const backendUrl = import.meta.env.VITE_BACKEND_URL
+  const [ingredients, setIngredients] = useState([]); // {id, name}
+  const [utensils, setUtensils] = useState([]); // {id, name}
 
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [preparation, setPreparation] = useState("");
-    const [img, setImg] = useState("")
-    const [urlImg, setUrlImg] = useState("")
-    const [utensils, setUtensils] = useState('');
-    const [suggestions, setSuggestions] = useState([]);
+  const [newIngredient, setNewIngredient] = useState("");
+  const [newUtensil, setNewUtensil] = useState("");
 
-    function handleNameChange(e) {
-        const newName = e.target.value;
-        setName(newName);
+  const [allIngredients, setAllIngredients] = useState([]); // {id, name}
+  const [allUtensils, setAllUtensils] = useState([]); // {id, name}
 
-        if (newName.trim().length > 0) {
-            setDescription('');
-            setPreparation('');
-            setImg('');
-            setUtensils('');
-        }
+  const [ingredientSuggestions, setIngredientSuggestions] = useState([]);
+  const [utensilSuggestions, setUtensilSuggestions] = useState([]);
+
+// ====== Cargar datos de la receta ======
+const get_current_data = async () => {
+  try {
+    // Receta principal
+    const resRecipe = await fetch(`${backendUrl}/api/chef_recipes/${recipe_id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const recipeData = await resRecipe.json();
+    setName(recipeData.name);
+    setDescription(recipeData.description);
+    setPreparation(recipeData.preparation);
+    setImg(recipeData.img);
+
+    // Ingredientes actuales de la receta
+    const resRecipeIngredients = await fetch(`${backendUrl}/api/recipe_ingredients`);
+    const allRecipeIngredients = await resRecipeIngredients.json();
+    const recipeIngredients = allRecipeIngredients
+      .filter((i) => i.recipe_id === parseInt(recipe_id))
+      .map((i) => ({ id: i.ingredient_id, name: i.ingredient_name }));
+    setIngredients(recipeIngredients);
+
+    // Utensilios actuales de la receta
+    const resRecipeUtensils = await fetch(`${backendUrl}/api/utensil_recipe`);
+    const allRecipeUtensils = await resRecipeUtensils.json();
+    const recipeUtensils = allRecipeUtensils
+      .filter((u) => u.recipe_id === parseInt(recipe_id))
+      .map((u) => ({ id: u.utensil_id, name: u.utensil_name }));
+    setUtensils(recipeUtensils);
+
+    // Todos los ingredientes disponibles (para autocompletado)
+    const resAllIngredients = await fetch(`${backendUrl}/api/ingredients`);
+    const allIngredientsData = await resAllIngredients.json();
+    setAllIngredients(allIngredientsData.map((i) => ({ id: i.id, name: i.name })));
+
+    // Todos los utensilios disponibles (para autocompletado)
+    const resAllUtensils = await fetch(`${backendUrl}/api/utensils`);
+    const allUtensilsData = await resAllUtensils.json();
+    setAllUtensils(allUtensilsData.map((u) => ({ id: u.id, name: u.name })));
+
+  } catch (error) {
+    console.error("Error fetching recipe data:", error);
+  }
+};
+
+
+  useEffect(() => {
+    get_current_data();
+  }, [recipe_id]);
+
+  // ====== Autocompletado predictivo ======
+useEffect(() => {
+    if (newIngredient.trim() === "") return setIngredientSuggestions([]);
+
+    const filtered = allIngredients.filter((i) => {
+        // Evita mostrar ingredientes ya agregados
+        const alreadyAdded = ingredients.some((ing) => ing.name === i.name);
+        return i.name.toLowerCase().includes(newIngredient.toLowerCase()) && !alreadyAdded;
+    });
+
+    setIngredientSuggestions(filtered.slice(0, 5));
+}, [newIngredient, allIngredients, ingredients]);
+
+
+  useEffect(() => {
+    if (newUtensil.trim() === "") return setUtensilSuggestions([]);
+    const filtered = allUtensils.filter(
+      (u) =>
+        u.name.toLowerCase().includes(newUtensil.toLowerCase()) &&
+        !utensils.some((ut) => ut.id === u.id)
+    );
+    setUtensilSuggestions(filtered.slice(0, 5));
+  }, [newUtensil, allUtensils, utensils]);
+
+  //  Agregar / eliminar
+  const addIngredient = (ingObj = null) => {
+    const val = ingObj || allIngredients.find((i) => i.name === newIngredient.trim());
+    if (!val) return;
+    if (!ingredients.some((i) => i.id === val.id)) {
+      setIngredients([...ingredients, val]);
     }
+    setNewIngredient("");
+    setIngredientSuggestions([]);
+  };
 
-    function handleSelectSuggestion(meal) {
-        setName(meal.strMeal);
-        setDescription(`${meal.strCategory} (${meal.strArea})`);
-        setPreparation(meal.strInstructions);
-        setImg(meal.strMealThumb);
-        setSuggestions([]);
+  const addUtensil = (utObj = null) => {
+    const val = utObj || allUtensils.find((u) => u.name === newUtensil.trim());
+    if (!val) return;
+    if (!utensils.some((u) => u.id === val.id)) {
+      setUtensils([...utensils, val]);
     }
+    setNewUtensil("");
+    setUtensilSuggestions([]);
+  };
 
-    useEffect(() => {
-        const fetchRecipes = async () => {
-            if (name.trim().length > 1) {
-                try {
-                    const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${name}`);
-                    const data = await response.json();
-                    setSuggestions(data.meals || []);
-                } catch (error) {
-                    console.error("Error fetching recipes:", error);
-                    setSuggestions([]);
-                }
-            } else {
-                setSuggestions([]);
-            }
-        };
+  const removeIngredient = (ing) => setIngredients(ingredients.filter((i) => i.id !== ing.id));
+  const removeUtensil = (ut) => setUtensils(utensils.filter((u) => u.id !== ut.id));
 
-        const timerId = setTimeout(() => {
-            fetchRecipes();
-        }, 300);
 
-        return () => {
-            clearTimeout(timerId);
-        };
-    }, [name]);
+  const changeUploadedImage = async (e) => {
+    const file = e.target.files[0];
+    setImg("");
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "chef_image");
+    formData.append("cloud_name", "dwi8lacfr");
 
-    const changeUploadedImage = async (e) => {
-        const file = e.target.files[0];
-
-        setImg("");
-
-        const formData = new FormData()
-
-        formData.append('file', file)
-        formData.append('upload_preset', 'chef_image')
-        formData.append('cloud_name', 'dwi8lacfr')
-
-        try {
-            const response = await fetch("https://api.cloudinary.com/v1_1/dwi8lacfr/image/upload", {
-                method: 'POST',
-                body: formData
-            })
-
-            const data = await response.json()
-            console.log(data)
-
-            if (data.secure_url) {
-                setUrlImg(data.secure_url)
-
-            } else {
-                console.error("Failed to upload the image, please try again");
-            }
-
-        }
-        catch (error) {
-            console.error("Error uploading image:", error)
-        }
+    try {
+      const response = await fetch("https://api.cloudinary.com/v1_1/dwi8lacfr/image/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      if (data.secure_url) setUrlImg(data.secure_url);
+    } catch (error) {
+      console.error("Error uploading image:", error);
     }
+  };
 
-    function updateData(e) {
-        e.preventDefault();
+const updateData = async (e) => {
+    e.preventDefault();
+    const finalImageUrl = urlImg || img;
 
-        const finalImageUrl = urlImg || img
-
-        const requestOptions = {
+    try {
+        // Actualizar receta principal
+        await fetch(`${backendUrl}/api/chef_recipes/${recipe_id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify(
-                {
-                    "name": name,
-                    "description": description,
-                    "preparation": preparation,
-                    "img": finalImageUrl,
-                    "utensils": utensils
+            body: JSON.stringify({ name, description, preparation, img: finalImageUrl }),
+        });
 
-                }
-            ),
-        };
-
-        fetch(backendUrl + `/api/chef_recipes/` + recipe_id, requestOptions)
-            .then(response => response.json())
-            .then((data) => {
-                console.log("Recipe actualizado:", data);
-                navigate("/chef_home");
-            })
-    }
-
-    function get_current_data() {
-
-        const requestOptions = {
-            headers: { "Authorization": `Bearer ${token}` }
-        }
-
-        fetch(backendUrl + `/api/chef_recipes/` + recipe_id, requestOptions)
-            .then(response => response.json())
-            .then((data) => {
-                console.log(data)
-                setName(data.name);
-                setDescription(data.description);
-                setPreparation(data.preparation);
-                setImg(data.img);
-            });
-    }
-    useEffect(() => {
-        const keywords = ["pan", "oven", "plate", "spoon"];
-        if (!preparation) {
-            setUtensils('');
-            return;
-        }
-
-        const lowercasedPreparation = preparation.toLowerCase();
-        const foundKeywords = keywords.filter(keyword =>
-            lowercasedPreparation.includes(keyword)
+        // Traer relaciones actuales de ingredientes y utensilios
+        const resIngCurrent = await fetch(`${backendUrl}/api/recipe_ingredients`);
+        const currentIngredients = await resIngCurrent.json();
+        const ingredientsToDelete = currentIngredients.filter(
+            (i) => i.recipe_id === parseInt(recipe_id)
         );
 
-        setUtensils(foundKeywords.join(', '));
-    }, [preparation]);
+        const resUtCurrent = await fetch(`${backendUrl}/api/utensil_recipe`);
+        const currentUtensils = await resUtCurrent.json();
+        const utensilsToDelete = currentUtensils.filter(
+            (u) => u.recipe_id === parseInt(recipe_id)
+        );
 
-    useEffect(() => {
-        get_current_data()
-    }, [recipe_id]);
+        // Borrar relaciones existentes una x una pero con un for
+        for (let ing of ingredientsToDelete) {
+            await fetch(`${backendUrl}/api/recipe_ingredients/${ing.id}`, {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${token}` },
+            });
+        }
 
-    return (
-        <div className="container">
-            {store.authChef ?
-                <>
+        for (let ut of utensilsToDelete) {
+            await fetch(`${backendUrl}/api/utensil_recipe/${ut.id}`, {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${token}` },
+            });
+        }
 
-                    <h1 className="display-4">Editar Recipe</h1>
-                    <form className="w-50 mx-auto" onSubmit={updateData}>
-                        <div className="mb-3">
-                            <label className="form-label">Nombre</label>
-                            <input
-                                value={name}
-                                onChange={handleNameChange}
-                                type="text"
-                                className="form-control"
-                            />
-                            {suggestions.length > 0 && (
-                                <ul className="list-group mt-2">
-                                    {suggestions.slice(0, 5).map(meal => (
-                                        <li key={meal.idMeal}
-                                            className="list-group-item d-flex align-items-center"
-                                            style={{ cursor: "pointer" }}
-                                            onClick={() => handleSelectSuggestion(meal)}>
-                                            <img src={meal.strMealThumb} alt={meal.strMeal} width="40" className="me-2" />
-                                            {meal.strMeal}
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label">Description</label>
-                            <input
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                type="text"
-                                className="form-control"
-                            />
-                        </div>
+        // Guardar nuevas relaciones
+        for (let ing of ingredients) {
+            await fetch(`${backendUrl}/api/recipe_ingredients`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ recipe_id: parseInt(recipe_id), ingredient_id: ing.id }),
+            });
+        }
 
-                        <div className="mb-3">
-                            <label htmlFor="utensilsInput" className="form-label">Utensilios</label>
-                            <input
-                                value={utensils}
-                                onChange={(e) => setUtensils(e.target.value)}
-                                type="text"
-                                className="form-control"
-                                id="utensilsInput"
-                            />
-                        </div>
+        for (let ut of utensils) {
+            await fetch(`${backendUrl}/api/utensil_recipe`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ recipe_id: parseInt(recipe_id), utensil_id: ut.id }),
+            });
+        }
 
-                        <div className="mb-3">
-                            <label className="form-label">Preparation</label>
-                            <input
-                                value={preparation}
-                                onChange={(e) => setPreparation(e.target.value)}
-                                type="text"
-                                className="form-control"
-                            />
-                        </div>
-                        {/* <div className="mb-3">
-                            <label className="form-label">Image</label>
-                            <input
-                                value={img}
-                                onChange={(e) => setImg(e.target.value)}
-                                type="text"
-                                className="form-control"
-                            />
-                        </div> */}
-                        <div>
-                            <input type="file" accept="image/*" onChange={changeUploadedImage} />
-                            {(urlImg || img) && (
-                                <div>
-                                    <img
-                                        src={urlImg || img}
-                                        alt="Ingrediente Imagen"
-                                        style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }}
-                                    />
-                                </div>
-                            )}
-                        </div>
-                        <button type="submit" className="btn btn-primary">
-                            Guardar Cambios
-                        </button>
-                        <Link to="/chef_home">
-                            <button className="btn btn-primary">Back to home</button>
-                        </Link>
-                    </form>
-                </>
-                :
-                <h1>Not authorized</h1>
-            }
+        navigate("/chef_home");
+    } catch (error) {
+        console.error("Error updating recipe:", error);
+    }
+};
+
+
+
+  if (!store.authChef) return <h1>Not authorized</h1>;
+
+  return (
+    <div className="container">
+      <h1 className="display-4 mb-4">Editar Recipe</h1>
+      <form className="w-50 mx-auto" onSubmit={updateData}>
+
+        <div className="mb-3">
+          <label className="form-label">Nombre</label>
+          <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} />
         </div>
-    );
-}
 
 
-export default EditChefRecipe 
+        <div className="mb-3">
+          <label className="form-label">Description</label>
+          <input type="text" className="form-control" value={description} onChange={(e) => setDescription(e.target.value)} />
+        </div>
+
+
+        <div className="mb-3">
+          <label className="form-label">Preparation</label>
+          <textarea className="form-control" value={preparation} onChange={(e) => setPreparation(e.target.value)} />
+        </div>
+
+
+        <div className="mb-3">
+          <input type="file" accept="image/*" onChange={changeUploadedImage} />
+          {(urlImg || img) && (
+            <div className="mt-2">
+              <img src={urlImg || img} alt="Recipe" style={{ maxWidth: "100%", maxHeight: "200px", objectFit: "contain" }} />
+            </div>
+          )}
+        </div>
+
+
+        <div className="mb-3">
+          <label className="form-label">Ingredientes</label>
+          <div className="d-flex mb-2">
+            <input type="text" className="form-control me-2" value={newIngredient} onChange={(e) => setNewIngredient(e.target.value)} placeholder="Agregar ingrediente" />
+            {/* <button type="button" className="btn btn-success" onClick={() => addIngredient()}>+</button> */}
+          </div>
+          {ingredientSuggestions.length > 0 && (
+            <ul className="list-group mb-2">
+              {ingredientSuggestions.map((ing) => (
+                <li key={ing.id} className="list-group-item list-group-item-action" style={{ cursor: "pointer" }} onClick={() => addIngredient(ing)}>
+                  {ing.name}
+                </li>
+              ))}
+            </ul>
+          )}
+          <div>
+            {ingredients.map((ing) => (
+              <span key={ing.id} className="badge bg-primary me-1 mb-1">
+                {ing.name} <i className="fa-solid fa-xmark ms-1" style={{ cursor: "pointer" }} onClick={() => removeIngredient(ing)}></i>
+              </span>
+            ))}
+          </div>
+        </div>
+
+
+        <div className="mb-3">
+          <label className="form-label">Utensilios</label>
+          <div className="d-flex mb-2">
+            <input type="text" className="form-control me-2" value={newUtensil} onChange={(e) => setNewUtensil(e.target.value)} placeholder="Agregar utensilio" />
+            {/* <button type="button" className="btn btn-success" onClick={() => addUtensil()}>+</button> */}
+          </div>
+          {utensilSuggestions.length > 0 && (
+            <ul className="list-group mb-2">
+              {utensilSuggestions.map((ut) => (
+                <li key={ut.id} className="list-group-item list-group-item-action" style={{ cursor: "pointer" }} onClick={() => addUtensil(ut)}>
+                  {ut.name}
+                </li>
+              ))}
+            </ul>
+          )}
+          <div>
+            {utensils.map((ut) => (
+              <span key={ut.id} className="badge bg-warning text-dark me-1 mb-1">
+                {ut.name} <i className="fa-solid fa-xmark ms-1" style={{ cursor: "pointer" }} onClick={() => removeUtensil(ut)}></i>
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="d-flex justify-content-between">
+          <button type="submit" className="btn btn-custom">Guardar Cambios</button>
+          <Link to="/chef_home" className="btn btn-custom">Back to home</Link>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default EditChefRecipe;

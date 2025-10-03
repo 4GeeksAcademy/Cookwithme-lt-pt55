@@ -1,224 +1,179 @@
 import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { useNavigate } from "react-router-dom";
+import "../css/Navbar.css";
 import Sidebar from "./Sidebar.jsx";
 
 export const Navbar = () => {
   const navigate = useNavigate();
   const { store, dispatch } = useGlobalReducer();
 
-  // Logout unificado
   function logout() {
     if (store.authChef) {
       localStorage.removeItem("tokenChef");
       dispatch({ type: "set_auth_chef", payload: false });
-      navigate("/"); // o /login_chef si quieres
+      navigate("/");
     }
     if (store.authUser) {
       localStorage.removeItem("tokenUser");
       dispatch({ type: "set_auth_user", payload: false });
-      navigate("/"); // o /login_user
+      navigate("/");
     }
     if (store.authAdmin) {
       localStorage.removeItem("tokenAdmin");
       dispatch({ type: "set_auth_admin", payload: false });
-      navigate("/"); // o /login_admin
+      navigate("/");
     }
   }
 
   const userFavs = store.authUser ? store.usersFavs[store.authUser.id] || [] : [];
 
   return (
-    <nav className="navbar navbar-light bg-light">
-      <div className="container d-flex  flex-column">
-        <div className="d-flex justify-content-between align-items-center flex-wrap w-100">
-          {(store.authChef || store.authUser || store.authAdmin) && (
-            <>
-              {/* <Sidebar /> */}
-              <button class="btn btn-outline-dark border border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i class="fa-solid fa-bars"></i></button>
-              <button className="btn btn-danger" onClick={logout}>
-                Logout
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-door-open-fill mx-2" viewBox="0 0 16 16">
-                  <path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15zM11
-              2h.5a.5.5 0 0 1 .5.5V15h-1zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"/>
-                </svg>
-              </button>
-            </>
-          )}
-
-          {/* Botones según rol */}
-          {store.authUser && (
-            <>
-
-              <Link to="/home_user_avail_recipe">
-                <button className="btn btn-primary">
-                  🧑‍🍳 Recetas disponibles
-                </button>
-              </Link>
-
-              <Link to="/fav_recipe_user">
-                <button className="btn btn-primary">
-                  ⭐ Ver recetas favoritas <span className="badge text-bg-secondary">{userFavs.length}</span>
-                </button>
-              </Link>
-
-              <Link to="/user_inventory">
-                <button className="btn btn-primary">
-                  Ingresar mi inventario 🥦🍴
-                </button>
-              </Link>
-
-              <Link to="/select_ingr&utensil">
-                <button className="btn btn-primary m-2">
-                  Buscar recetas por componentes
-                </button>
-              </Link>
-
-              <Link to="/home_user_avail_recipe">
-                <button className="btn btn-primary">
-                  home recetas disponible
-                </button>
-              </Link>
-            </>
-          )}
-
-          {store.authChef && (
-            <Link to="/chef_profile">
-              <button className="btn btn-success m-2">Perfil Chef
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-square mx-2" viewBox="0 0 16 16">
-                  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                  <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1v-1c0-1-1-4-6-4s-6 3-6
-                4v1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
-                </svg>
-              </button>
-            </Link>
-          )}
-
-          {store.authUser && (
-            <Link to="/user_profile">
-              <button className="btn btn-success m-2">Perfil User
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-square mx-2" viewBox="0 0 16 16">
-                  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
-                  <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1v-1c0-1-1-4-6-4s-6 3-6
-                4v1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
-                </svg>
-              </button>
-            </Link>
-          )}
-
-          {store.authAdmin && (
-            <Link to="/adminuser">
-              <button className="btn btn-primary m-2">Admins</button>
-            </Link>
-          )}
-
-
-          {/* Dropdown de favoritos SOLO para USER */}
-          {store.authUser && userFavs.length > 0 && (
-            <div className="mt-2 dropdown">
-              <button
-                className="btn btn-primary m-2 dropdown-toggle"
-                type="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Mis Favoritos <span className="badge text-bg-secondary">{userFavs.length}</span>
-              </button>
-              <ul className="dropdown-menu">
-                {userFavs.map((fav, index) => (
-                  <li key={index} className="dropdown-item d-flex justify-content-between align-items-center">
-                    {fav}
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-danger"
-                      onClick={() => dispatch({ type: "toggle_fav_user", payload: fav })}
-                    >
-                      X
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Otros botones (combina lógica de develop y tu rama) */}
-
-          {/* Botones Home */}
-          {(store.authChef) && (
-            <Link to="/chef_home">
-              <button className="btn btn-primary m-2">HOME</button>
-            </Link>)}
-          {(store.authAdmin) && (
-            <Link to="/home_admin">
-              <button className="btn btn-primary m-2">HOME</button>
-            </Link>)}
-          {(store.authUser) && (
-            <Link to="/home_user">
-              <button className="btn btn-primary m-2">HOME</button>
-            </Link>)}
-
-          {/* <Link to="/demo">
-            <button className="btn btn-primary m-2">Check the Context</button>
-          </Link>  */}
-          {store.authAdmin && (
-            <Link to="/chefs">
-              <button className="btn btn-primary m-2">Chefs</button>
-            </Link>)}
-          {store.authAdmin && (
-            <Link to="/recipes">
-              <button className="btn btn-primary m-2">Recipes</button>
-            </Link>)}
-          {store.authAdmin && (
-            <Link to="/ingredientes">
-              <button className="btn btn-primary m-2">Ingredientes</button>
-            </Link>)}
-          {store.authAdmin && (
-            <Link to="/utensilios">
-              <button className="btn btn-danger  m-2">Utensilios</button>
-            </Link>)}
-          {(store.authChef || store.authUser || store.authAdmin) && (
-            <Link to="/questions">
-              <button className="btn btn-primary m-2">Questions</button>
-            </Link>)}
-          {(store.authUser || store.authChef || store.authAdmin) && (
-            <Link to="/answers">
-              <button className="btn btn-primary m-2">Answers</button>
-            </Link>)}
-          {(store.authUser || store.authAdmin) && (
-            <Link to="/utensil_user">
-              <button className="btn btn-primary m-2">User's Utensils</button>
-            </Link>)}
-          {(store.authAdmin) && (
-            <Link to="/califications">
-              <button className="btn btn-primary m-2">Califications</button>
-            </Link>)}
-          {(store.authChef || store.authAdmin) && (
-            <Link to="/utensilio_receta">
-              <button className="btn btn-danger">Agregar utensilio a receta</button>
-            </Link>)}
-          {(store.authUser || store.authAdmin) && (
-            <Link to="/ingredient_users">
-              <button className="btn btn-primary m-2">Ingredient Users</button>
-            </Link>)}
-          {(store.authAdmin) && (
-            <Link to="/users">
-              <button className="btn btn-danger  m-2">Agregar usuario</button>
-            </Link>)}
-          {(store.authChef || store.authAdmin) && (
-            <Link to="/add_recipe_ingredient">
-              <button className="btn btn-danger  m-2">Agregar ingrediente a receta</button>
-            </Link>)}
-
+    <div className="navbar-container">
+      {/* Top Info Bar */}
+      <button class="btn btn-outline-dark border border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i class="fa-solid fa-bars"></i></button>
+      <div className="row gx-0 top-bar">
+        <div className="col-6 text-start">
+          <div className="info-item">
+            <i className="fa fa-envelope text-primary me-2"></i>
+            <span>info@example.com</span>
+          </div>
+        </div>
+        <div className="col-6 text-end">
+          <div className="info-item">
+            <i className="fa fa-phone-alt text-primary me-2"></i>
+            <span>+012 345 6789</span>
+          </div>
         </div>
       </div>
 
-{/* ----------------------Body Sidebar------------------------------ */}
+      {/* Navbar */}
+      <div className="row gx-0">
+        <div className="col-lg-3 d-lg-block" style={{ backgroundColor: "#FB5B21" }}>
+          <Link to="/" className="navbar-brand d-flex align-items-center justify-content-center">
+            <h1 className="text-white m-0 display-4">CookWithMe</h1>
+          </Link>
+        </div>
 
+        <div className="col-lg-9">
+          <nav className="navbar navbar-expand-lg navbar-dark navbar-main">
+            <Link to="/" className="navbar-brand d-block d-lg-none">
+              <h1 className="text-primary m-0 display-4">CookWithMe</h1>
+            </Link>
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarCollapse"
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
 
-      <div class="offcanvas offcanvas-start bg-dark" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
-        <Sidebar/>
+            <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+              <div className="navbar-nav">
+
+                {/* Rol Admin */}
+                {store.authAdmin && (
+                  <>
+                    <Link to="/home_admin" className="nav-item nav-link">Home</Link>
+                    <Link to="/adminuser" className="nav-item nav-link">Admins</Link>
+                    <Link to="/chefs" className="nav-item nav-link">Chefs</Link>
+                    <Link to="/recipes" className="nav-item nav-link">Recipes</Link>
+                    <Link to="/ingredientes" className="nav-item nav-link">Ingredientes</Link>
+                    <Link to="/utensilios" className="nav-item nav-link">Utensilios</Link>
+                    <Link to="/califications" className="nav-item nav-link">Califications</Link>
+                  </>
+                )}
+
+                {/* Rol Chef */}
+                {store.authChef && (
+                  <>
+                    <Link to="/chef_home" className="nav-item nav-link">Home Chef</Link>
+                    <Link to="/chef_profile" className="nav-item nav-link">Perfil Chef</Link>
+                  </>
+                )}
+
+                {/* Rol User */}
+                {store.authUser && (
+                  <>
+                    <Link to="/home_user_avail_recipe" className="nav-item nav-link mx-3">
+                      Recetas<br /> Disponibles
+                    </Link>
+                    <Link to="/home_user" className="nav-item nav-link">Todas las recetas</Link>
+                    <Link to="/fav_recipe_user" className="nav-item nav-link">
+                      Favoritos{" "}
+                      {userFavs.length > 0 && (
+                        <span className="badge bg-secondary">{userFavs.length}</span>
+                      )}
+                    </Link>
+                    <Link to="/user_inventory" className="nav-item nav-link">Inventario</Link>
+                    <Link to="/user_profile" className="nav-item nav-link">Mi perfil</Link>
+                  </>
+                )}
+
+                {/* Botón Sidebar + Logout si hay sesión */}
+                {(store.authChef || store.authUser || store.authAdmin) && (
+                  <div className="d-flex align-items-center">
+                    {/* Botón Sidebar */}
+                    <button
+                      className="btn btn-primary ms-3"
+                      type="button"
+                      data-bs-toggle="offcanvas"
+                      data-bs-target="#offcanvasScrolling"
+                      aria-controls="offcanvasScrolling"
+                    >
+                      <i className="fa-solid fa-bars"></i>
+                    </button>
+
+                    {/* Botón Logout */}
+                    <button className="btn btn-danger ms-2" onClick={logout}>
+                      Logout
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" className="bi bi-door-open-fill mx-2" viewBox="0 0 16 16">
+                        <path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5
+                          A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0
+                          0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15zM11
+                          2h.5a.5.5 0 0 1 .5.5V15h-1zm-2.5
+                          8c-.276 0-.5-.448-.5-1s.224-1 .5-1
+                          .5.448.5 1-.224 1-.5 1"/>
+                      </svg>
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              <Link to="/about_us" className="nav-item nav-link">About us</Link>
+
+              {/* Social Icons */}
+              <div className="d-none d-lg-flex align-items-center social-icons">
+                <a className="btn btn-outline-secondary btn-square rounded-circle ms-2" href="">
+                  <i className="fab fa-facebook-f"></i>
+                </a>
+                <a className="btn btn-outline-secondary btn-square rounded-circle ms-2" href="">
+                  <i className="fab fa-twitter"></i>
+                </a>
+                <a className="btn btn-outline-secondary btn-square rounded-circle ms-2" href="">
+                  <i className="fab fa-linkedin-in"></i>
+                </a>
+              </div>
+            </div>
+          </nav>
+        </div>
       </div>
 
-    </nav>
+      {/* Offcanvas Sidebar */}
+      {(store.authChef || store.authUser || store.authAdmin) && (
+        <div
+          className="offcanvas offcanvas-start bg-dark text-white"
+          data-bs-scroll="true"
+          data-bs-backdrop="false"
+          tabIndex="-1"
+          id="offcanvasScrolling"
+          aria-labelledby="offcanvasScrollingLabel"
+        >
+          <Sidebar />
+        </div>
+      )}
+    </div>
   );
 };

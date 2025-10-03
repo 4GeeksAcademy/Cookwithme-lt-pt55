@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { Link, useNavigate } from "react-router-dom";
+import "../css/Bottoms.css";
 
 const FormUser = () => {
   const navigate = useNavigate();
@@ -65,11 +66,11 @@ const FormUser = () => {
       </div>
 
       <div className="d-flex justify-content-between">
-        <button type="submit" onClick={sendData} className="btn btn-primary">
+        <button type="submit" onClick={sendData} className="btn btn-custom">
           Submit
         </button>
         <Link to="/signup_user">
-          <button type="button" className="btn btn-warning">Signup</button>
+          <button type="button" className="btn btn-custom">Signup</button>
         </Link>
       </div>
     </form>
