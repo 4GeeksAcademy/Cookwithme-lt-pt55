@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useGlobalReducer from "../../hooks/useGlobalReducer.jsx";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import "../../css/Bottoms.css"
 
 export const SignupAdmin = () => {
 
@@ -44,7 +45,7 @@ export const SignupAdmin = () => {
                 console.log(data)
                 localStorage.setItem("tokenAdmin", data.access_token);
                 dispatch({ type: "set_auth_admin", payload: true })
-                navigate("/testadm");
+                navigate("/home_admin");
             }
         );
     }
@@ -68,9 +69,9 @@ export const SignupAdmin = () => {
                     <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" className="form-control" id="exampleInputPassword1" />
                 </div>
                 <div className="d-flex justify-content-around">
-                    <button type="submit" onClick={sendData} className="btn btn-primary">Submit</button>
+                    <button type="submit" onClick={sendData} className="btn btn-custom">Submit</button>
                     <Link to="/login_admin">
-                        <button className="btn btn-success">Log In as Admin</button>
+                        <button className="btn btn-custom">Log In as Admin</button>
                     </Link>
                 </div>
                 

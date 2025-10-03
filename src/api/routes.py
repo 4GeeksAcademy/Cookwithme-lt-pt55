@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User, Chef, Utensil, Ingredient, Admin_user, Question, Answer, Recipe, Calification, Utensil_recipe, Recipe_ingredient, Utensil_user, Ingredient_user, Fav_recipe
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
+from werkzeug.security import generate_password_hash
 from api.gemini_service import detect_ingredients_from_image
 
 from flask_jwt_extended import create_access_token
@@ -671,6 +672,7 @@ def delete_utensil_recipe(utensil_recipe_id):
     return jsonify({"message": f"Relation {utensil_recipe_id} deleted successfully"}), 200
 
 
+
 @api.route('/utensil_recipe/<int:utensil_recipe_id>', methods=['PUT'])
 def update_utensil_recipe(utensil_recipe_id):
     relation = Utensil_recipe.query.get(utensil_recipe_id)
@@ -897,15 +899,19 @@ def add_current_chef_recipe():
 @jwt_required()
 def delete_chef_recipe(recipe_id):
     chef_recipe = Recipe.query.filter_by(id=recipe_id).first()
-    print(chef_recipe, "id del recipe")
     if chef_recipe is None:
         return {"error-msg": "enter a valid recipe"}, 400
+    
+    Utensil_recipe.query.filter_by(recipe_id=recipe_id).delete()
+    
+    Recipe_ingredient.query.filter_by(recipe_id=recipe_id).delete()
+
     db.session.delete(chef_recipe)
     db.session.commit()
-    response_body = {
-        "message": "se elimino el recipe " + chef_recipe.name
-    }
 
+    response_body = {
+        "message": f"Se eliminó el recipe {chef_recipe.name}"
+    }
     return jsonify(response_body), 200
 
 
@@ -956,6 +962,8 @@ def test_adm():
     return jsonify(logged_in_as=current_admin), 200
 
 
+from werkzeug.security import check_password_hash
+
 @api.route("/login_admin", methods=["POST"])
 def login_as_admin():
     email = request.json.get("email", None)
@@ -964,8 +972,8 @@ def login_as_admin():
     adminu = Admin_user.query.filter_by(email=email).first()
     if adminu is None:
         return jsonify({"msg": "Bad email or password"}), 401
-    print(adminu)
-    if password != adminu.password:
+
+    if not check_password_hash(adminu.password, password):
         return jsonify({"msg": "Bad email or password"}), 401
 
     access_token = create_access_token(identity=email)
@@ -1029,17 +1037,20 @@ def update_recipe_ingredient(ri_id):
 
 @api.route('/recipe_ingredients/<int:ri_id>', methods=['DELETE'])
 def delete_recipe_ingredient(ri_id):
-    record = Recipe_ingredient.query.filter_by(id=ri_id).first()
-    if record is None:
-        return jsonify({"error-msg": "enter a valid recipe_ingredient"}), 400
-
-    db.session.delete(record)
-    db.session.commit()
-
-    response_body = {
-        "message": f"Recipe_ingredient {ri_id} deleted successfully"
-    }
-    return jsonify(response_body), 200
+    if ri_id == 0:  #  0 = borrar todos para una receta
+        recipe_id = request.args.get("recipe_id", type=int)
+        if not recipe_id:
+            return jsonify({"error-msg": "recipe_id is required to delete all"}), 400
+        Recipe_ingredient.query.filter_by(recipe_id=recipe_id).delete()
+        db.session.commit()
+        return jsonify({"message": f"All ingredients for recipe {recipe_id} deleted"}), 200
+    else:
+        record = Recipe_ingredient.query.filter_by(id=ri_id).first()
+        if record is None:
+            return jsonify({"error-msg": "enter a valid recipe_ingredient"}), 400
+        db.session.delete(record)
+        db.session.commit()
+        return jsonify({"message": f"Recipe_ingredient {ri_id} deleted successfully"}), 200
 
 # --------utensil_user---------
 
@@ -1291,6 +1302,7 @@ def delete_user_favrecipe(recipe_id):
     return jsonify({"msg": f"Recipe {recipe_id} removed from favorites"}), 200
 
 # -----se crea para ver los resultado de recetas disponibles segun ingredientes y utensilios
+# ----- se crea para ver los resultado de recetas disponibles segun ingredientes y utensilios
 @api.route('/user/recipes/available', methods=['GET'])
 @jwt_required()
 def get_user_available_recipes():
@@ -1313,14 +1325,28 @@ def get_user_available_recipes():
         if not recipe_ingredient_ids and not recipe_utensil_ids:
             continue
 
-        missing_ingredients = recipe_ingredient_ids - user_ingredient_ids
-        missing_utensils = recipe_utensil_ids - user_utensil_ids
+        missing_ingredient_ids = recipe_ingredient_ids - user_ingredient_ids
+        missing_utensil_ids = recipe_utensil_ids - user_utensil_ids
 
-        # Solo agregar si no falta nada
-        if not missing_ingredients and not missing_utensils:
-            available_recipes.append(recipe.serialize())
+        # 🔹 Convertir los IDs en nombres
+        missing_ingredients = [
+            ing.name for ing in Ingredient.query.filter(Ingredient.id.in_(missing_ingredient_ids)).all()
+        ]
+        missing_utensils = [
+            ut.name for ut in Utensil.query.filter(Utensil.id.in_(missing_utensil_ids)).all()
+        ]
+
+        recipe_data = recipe.serialize()
+        recipe_data.update({
+            "is_available": not missing_ingredients and not missing_utensils,
+            "missing_ingredients": missing_ingredients,
+            "missing_utensils": missing_utensils
+        })
+
+        available_recipes.append(recipe_data)
 
     return jsonify(available_recipes), 200
+
 
 # --------------
 @api.route('/ingredient_users_bulk', methods=['POST'])
@@ -1351,18 +1377,26 @@ def ingredient_users_bulk():
     db.session.commit()
     return jsonify({"msg": "Selections updated"}), 201
 
+from werkzeug.security import generate_password_hash
+
 @api.route('/signup_admin', methods=['POST'])
 def signup_as_admin():
     adminu_body = request.get_json()
-    adminu = Admin_user.query.filter_by(email=adminu_body ["email"]).first()
+    adminu = Admin_user.query.filter_by(email=adminu_body["email"]).first()
     if adminu:
         return jsonify({"msg": "Admin already exist"}), 401
 
-    adminu = Admin_user( email=adminu_body["email"],password=adminu_body["password"],)
+    hashed_pw = generate_password_hash(adminu_body["password"])
+    adminu = Admin_user(
+        email=adminu_body["email"],
+        password=hashed_pw,
+    )
     db.session.add(adminu)
     db.session.commit()
+
     access_token = create_access_token(identity=adminu_body["email"])
     return jsonify(access_token=access_token), 200
+
 
 #--------------------inventario de usuario ingredientes
 @api.route('/user/inventory/ingredients', methods=['GET'])

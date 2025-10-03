@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { Link, Navigate } from "react-router-dom";
 import { useParams, useNavigate } from "react-router-dom";
+import "../css/Bottoms.css"
 
 
 const FormChef = () => {
@@ -66,12 +67,10 @@ const FormChef = () => {
             </div>
             <div className="d-flex align-content-around">
                 <div className="col-6">
-                    <button type="submit" onClick={sendData} className="btn btn-primary">Submit</button>
+                    <button type="submit" onClick={sendData} className="btn btn-custom">Submit</button>
                 </div>
                 <div className="col-6">
-                    <Link to="/signup_chef">
-                        <button className="btn btn-warning">Signup as New Chef</button>
-                    </Link>
+                        <Link to="/signup_chef" className="btn btn-custom">Signup as New Chef</Link>
                 </div>
             </div>
         </form>
