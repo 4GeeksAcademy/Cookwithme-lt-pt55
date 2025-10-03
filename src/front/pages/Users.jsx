@@ -36,6 +36,8 @@ export const Users = () => {
       {users.map((u) => (
         <div key={u.id} className="card my-2 p-3">
           <p>Email: {u.email}</p>
+          <p>Name: {u.name}</p>
+          <p>UserName: {u.username}</p>
           <div className="d-flex justify-content-center gap-2">
             <Link to={`/users/${u.id}`}>
               <button className="btn btn-primary">Ver</button>

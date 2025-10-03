@@ -1,8 +1,54 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import React, { useEffect, useState } from "react";
 
 const SidebarEx = () => {
     const { store, dispatch } = useGlobalReducer();
+    const [chef, setChef] = useState([])
+    const [user, setUser] = useState([])
+    // const [admininfo, setadmininfo] = useState('');
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+    const { chef_id } = useParams()
+    const { user_id } = useParams()
+    const { admin_id } = useParams()
+
+    function getChefInfo() {
+        const token = localStorage.getItem("tokenChef")
+        fetch(backendUrl + `/api/chef_info`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                setChef(data)
+            }
+            )
+    }
+
+    function getUserInfo() {
+        const token = localStorage.getItem("tokenUser")
+        fetch(backendUrl + `/api/user_info`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                setUser(data)
+            }
+            )
+    }
+
+    // function getAdminInfo() {
+    //     const token = localStorage.getItem("tokenAdmin")
+    //     fetch(backendUrl + "/api/adminuser/" + admin_id, {
+    //         headers: { 'Authorization': `Bearer ${token}` }
+    //     })
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //             console.log(data)    
+    //             setadmininfo(data)
+    //         })
+    // }
 
     function logout() {
         if (store.authChef) {
@@ -21,6 +67,11 @@ const SidebarEx = () => {
             navigate("/"); // o /login_admin
         }
     }
+
+    useEffect(() => {
+        getChefInfo()
+        getUserInfo()
+    }, [chef_id, user_id]);
     return (
         <>
             {store.authChef && (
@@ -59,10 +110,10 @@ const SidebarEx = () => {
                             <div class="row justify-content-around">
                                 <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
                                     <div className="col-4">
-                                        <i class="fa-solid fa-user"></i>
+                                        <img src={chef.image_url} alt="" class="img-fluid" />
                                     </div>
                                     <div className="col-4">
-                                        <span>User Name</span>
+                                        <span>{chef.name}</span>
                                     </div>
                                 </a>
                                 <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
@@ -135,10 +186,10 @@ const SidebarEx = () => {
                             <div class="row justify-content-around">
                                 <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
                                     <div className="col-4">
-                                        <i class="fa-solid fa-user"></i>
+                                        <img src={user.image_url} alt="" class="img-fluid" />
                                     </div>
                                     <div className="col-4">
-                                        <span>User Name</span>
+                                        <span>{user.name}</span>
                                     </div>
                                 </a>
                                 <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
@@ -215,7 +266,7 @@ const SidebarEx = () => {
                                         <i class="fa-solid fa-user"></i>
                                     </div>
                                     <div className="col-4">
-                                        <span>User Name</span>
+                                        <span>{admininfo.email}</span>
                                     </div>
                                 </a>
                                 <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
