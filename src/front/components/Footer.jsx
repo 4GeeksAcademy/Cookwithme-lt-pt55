@@ -11,6 +11,7 @@ import thai from "../assets/img/Thai.webp";
 const Footer = () => {
   return (
     <>
+      {/* Franja superior con imágenes */}
       <div className="container-fluid px-0 pt-5 mt-5">
         <div className="row g-0">
           {[ceviche, lasagna, paella, ramen, taco, thai].map((img, index) => (
@@ -24,10 +25,12 @@ const Footer = () => {
         </div>
       </div>
 
+      {/* Footer */}
       <div className="container-fluid bg-dark text-light footer pt-5">
         <div className="container py-2">
           <div className="row g-5">
-            <div className="col-lg-3 col-md-6">
+            {/* Get in Touch */}
+            <div className="col-lg-4 col-md-6">
               <h4 className="section-title text-start ff-secondary fw-normal mb-4">
                 Get In Touch
               </h4>
@@ -57,31 +60,36 @@ const Footer = () => {
               </div>
             </div>
 
-            <div className="col-lg-3 col-md-6">
+            {/* Quick Links con IDs de Home */}
+            <div className="col-lg-4 col-md-6">
               <h4 className="section-title text-start ff-secondary fw-normal mb-4">
                 Quick Links
               </h4>
-              <a className="btn btn-link" href="#">Home</a>
-              <a className="btn btn-link" href="#">About Us</a>
-              <a className="btn btn-link" href="#">Food Menu</a>
-              <a className="btn btn-link" href="#">Our Chefs</a>
-              <a className="btn btn-link" href="#">Latest Blog</a>
-              <a className="btn btn-link" href="#">Contact Us</a>
+              <ul className="list-unstyled">
+                {[
+                  { text: "Home", url: "/" },
+                  { text: "About Us", url: "/#cookwithme" },
+                  { text: "Food Menu", url: "/#menu" },
+                  { text: "Our Chefs", url: "/#chefs" },
+                ].map((link, i) => (
+                  <li key={i} className="mb-2 d-flex align-items-center">
+                    <i
+                      className="fa fa-arrow-right me-2"
+                      style={{ color: "#FB5B21" }}
+                    ></i>
+                    <a
+                      href={link.url}
+                      className="text-light text-decoration-none"
+                    >
+                      {link.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            <div className="col-lg-3 col-md-6">
-              <h4 className="section-title text-start ff-secondary fw-normal mb-4">
-                More Links
-              </h4>
-              <a className="btn btn-link" href="#">Home</a>
-              <a className="btn btn-link" href="#">About Us</a>
-              <a className="btn btn-link" href="#">Food Menu</a>
-              <a className="btn btn-link" href="#">Our Chefs</a>
-              <a className="btn btn-link" href="#">Latest Blog</a>
-              <a className="btn btn-link" href="#">Contact Us</a>
-            </div>
-
-            <div className="col-lg-3 col-md-6">
+            {/* Newsletter */}
+            <div className="col-lg-4 col-md-12">
               <h4 className="section-title text-start ff-secondary fw-normal mb-4">
                 Newsletter
               </h4>
