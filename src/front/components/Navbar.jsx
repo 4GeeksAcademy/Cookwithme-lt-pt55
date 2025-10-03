@@ -35,7 +35,7 @@ export const Navbar = () => {
           {(store.authChef || store.authUser || store.authAdmin) && (
             <>
               {/* <Sidebar /> */}
-              <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i class="fa-solid fa-bars"></i></button>
+              <button class="btn btn-outline-dark border border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i class="fa-solid fa-bars"></i></button>
               <button className="btn btn-danger" onClick={logout}>
                 Logout
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-door-open-fill mx-2" viewBox="0 0 16 16">
