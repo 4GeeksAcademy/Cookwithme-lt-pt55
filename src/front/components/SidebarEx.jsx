@@ -30,29 +30,29 @@ const SidebarEx = () => {
                     </div>
                     <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
                         <Link to="/chef_home">
-                            <button class="list-group-item border-end-0 d-inline-block text-truncate list-group-item-action list-group-item-dark" data-bs-parent="#sidebar">
-                                <i class="fa-solid fa-house p-2"></i>
-                                <span>Home</span>
+                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                                <i class="fa-solid fa-house p-2 text-secondary"></i>
+                                <span className="text-secondary">Home</span>
                             </button>
                         </Link>
                         <Link to="/chef_home">
-                            <button class="list-group-item border-end-0 d-inline-block text-truncate list-group-item-action list-group-item-dark" data-bs-parent="#sidebar">
-                                <i class="fa-solid fa-book p-2"></i>
-                                <span>Recetas</span>
+                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                                <i class="fa-solid fa-book p-2 text-secondary"></i>
+                                <span className="text-secondary">Recetas</span>
                             </button>
                         </Link>
 
 
                         <Link to="/new_chef_recipe">
-                            <button class="list-group-item border-end-0 d-inline-block text-truncate list-group-item-action list-group-item-dark" data-bs-parent="#sidebar">
-                                <i class="fa-solid fa-square-plus p-2"></i>
-                                <span>Nueva Receta</span>
+                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                                <i class="fa-solid fa-square-plus p-2 text-secondary"></i>
+                                <span className="text-secondary">Nueva Receta</span>
                             </button>
                         </Link>
                         <Link to="/chef_home">
-                            <button class="list-group-item border-end-0 d-inline-block text-truncate list-group-item-action list-group-item-dark" data-bs-parent="#sidebar">
-                                <i class="fa-solid fa-question p-2"></i>
-                                <span>Preguntas</span>
+                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                                <i class="fa-solid fa-question p-2 text-secondary"></i>
+                                <span className="text-secondary">Preguntas</span>
                             </button>
                         </Link>
                         <div className="dropdown bg-dark container text-center">
@@ -62,7 +62,7 @@ const SidebarEx = () => {
                                         <i class="fa-solid fa-user"></i>
                                     </div>
                                     <div className="col-4">
-                                        <strong>User Name</strong>
+                                        <span>User Name</span>
                                     </div>
                                 </a>
                                 <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
@@ -100,35 +100,35 @@ const SidebarEx = () => {
                     </div>
                     <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
                         <Link to="/home_user">
-                            <button class="list-group-item border-end-0 d-inline-block text-truncate list-group-item-action list-group-item-dark" data-bs-parent="#sidebar">
-                                <i class="fa-solid fa-house p-2"></i>
-                                <span>Home</span>
+                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                                <i class="fa-solid fa-house p-2 text-secondary"></i>
+                                <span className="text-secondary">Home</span>
                             </button>
                         </Link>
                         <Link to="/home_user">
-                            <button class="list-group-item border-end-0 d-inline-block text-truncate list-group-item-action list-group-item-dark" data-bs-parent="#sidebar">
-                                <i class="fa-solid fa-book p-2"></i>
-                                <span>Buscar Recetas</span>
+                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                                <i class="fa-solid fa-book p-2 text-secondary"></i>
+                                <span className="text-secondary">Buscar Recetas</span>
                             </button>
                         </Link>
 
 
                         <Link to="/add_ingredient_user">
-                            <button class="list-group-item border-end-0 d-inline-block text-truncate list-group-item-action list-group-item-dark" data-bs-parent="#sidebar">
-                                <i class="fa-solid fa-bowl-food p-2"></i>
-                                <span>Agregar Ingrediente</span>
+                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                                <i class="fa-solid fa-bowl-food p-2 text-secondary"></i>
+                                <span className="text-secondary">Agregar Ingrediente</span>
                             </button>
                         </Link>
                         <Link to="/add_utensil_to_user">
-                            <button class="list-group-item border-end-0 d-inline-block text-truncate list-group-item-action list-group-item-dark" data-bs-parent="#sidebar">
-                                <i class="fa-solid fa-utensils p-2"></i>
-                                <span>Agregar Utensilio</span>
+                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                                <i class="fa-solid fa-utensils p-2 text-secondary"></i>
+                                <span className="text-secondary">Agregar Utensilio</span>
                             </button>
                         </Link>
                         <Link to="/fav_recipe_user">
-                            <button class="list-group-item border-end-0 d-inline-block text-truncate list-group-item-action list-group-item-dark" data-bs-parent="#sidebar">
-                                <i class="fa-solid fa-heart p-2"></i>
-                                <span>Recetas Favoritas</span>
+                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                                <i class="fa-solid fa-heart p-2 text-secondary"></i>
+                                <span className="text-secondary">Recetas Favoritas</span>
                             </button>
                         </Link>
                         <div className="dropdown bg-dark container text-center">
@@ -138,7 +138,7 @@ const SidebarEx = () => {
                                         <i class="fa-solid fa-user"></i>
                                     </div>
                                     <div className="col-4">
-                                        <strong>User Name</strong>
+                                        <span>User Name</span>
                                     </div>
                                 </a>
                                 <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
@@ -176,36 +176,36 @@ const SidebarEx = () => {
                     </div>
                     <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
                         <Link to="/users">
-                            <button class="list-group-item border-end-0 d-inline-block text-truncate list-group-item-action list-group-item-dark" data-bs-parent="#sidebar">
-                                <i class="fa-solid fa-house p-2"></i>
-                                <span>Usuarios</span>
+                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                                <i class="fa-solid fa-house p-2 text-secondary"></i>
+                                <span className="text-secondary">Usuarios</span>
                             </button>
                         </Link>
                         <Link to="/adminuser">
-                            <button class="list-group-item border-end-0 d-inline-block text-truncate list-group-item-action list-group-item-dark" data-bs-parent="#sidebar">
-                                <i class="fa-solid fa-user-tie p-2"></i>
-                                <span>Admins</span>
+                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                                <i class="fa-solid fa-user-tie p-2 text-secondary"></i>
+                                <span className="text-secondary">Admins</span>
                             </button>
                         </Link>
 
 
                         <Link to="/chefs">
-                            <button class="list-group-item border-end-0 d-inline-block text-truncate list-group-item-action list-group-item-dark" data-bs-parent="#sidebar">
-                                <i class="fa-solid fa-kitchen-set p-2"></i>
-                                <span>Chefs</span>
+                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                                <i class="fa-solid fa-kitchen-set p-2 text-secondary"></i>
+                                <span className="text-secondary">Chefs</span>
                             </button>
                         </Link>
 
                         <Link to="/utensilios">
-                            <button class="list-group-item border-end-0 d-inline-block text-truncate list-group-item-action list-group-item-dark" data-bs-parent="#sidebar">
-                                <i class="fa-solid fa-utensils p-2"></i>
-                                <span>Utensilios</span>
+                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                                <i class="fa-solid fa-utensils p-2 text-secondary"></i>
+                                <span className="text-secondary">Utensilios</span>
                             </button>
                         </Link>
                         <Link to="/ingredientes">
-                            <button class="list-group-item border-end-0 d-inline-block text-truncate list-group-item-action list-group-item-dark" data-bs-parent="#sidebar">
-                                <i class="fa-solid fa-bowl-food p-2"></i>
-                                <span>Ingredientes</span>
+                            <button type="button" class="btn btn-dark object-fit-fill" data-bs-parent="#sidebar">
+                                <i class="fa-solid fa-bowl-food p-2 text-secondary"></i>
+                                <span className="text-secondary">Ingredientes</span>
                             </button>
                         </Link>
                         <div className="dropdown bg-dark container text-center">
@@ -215,7 +215,7 @@ const SidebarEx = () => {
                                         <i class="fa-solid fa-user"></i>
                                     </div>
                                     <div className="col-4">
-                                        <strong>User Name</strong>
+                                        <span>User Name</span>
                                     </div>
                                 </a>
                                 <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
