@@ -7,8 +7,11 @@ import paella from "../assets/img/Paella.webp";
 import ramen from "../assets/img/Ramen.jpg";
 import taco from "../assets/img/Taco.jpeg";
 import thai from "../assets/img/Thai.webp";
+import { Link } from "react-router-dom";
+import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 const Footer = () => {
+  const { store, dispatch } = useGlobalReducer();
   return (
     <>
       {/* Franja superior con imágenes */}
@@ -66,8 +69,15 @@ const Footer = () => {
                 Quick Links
               </h4>
               <ul className="list-unstyled">
+                <li className="mb-2 d-flex align-items-center">
+                    <i
+                      className="fa fa-arrow-right me-2"
+                      style={{ color: "#FB5B21" }}
+                    ></i>
+                  <Link to="/" className="text-light text-decoration-none">Home</Link>
+                  </li>
+                  {!store.authUser}
                 {[
-                  { text: "Home", url: "/" },
                   { text: "About Us", url: "/#cookwithme" },
                   { text: "Food Menu", url: "/#menu" },
                   { text: "Our Chefs", url: "/#chefs" },
