@@ -3,7 +3,7 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { useNavigate } from "react-router-dom";
 import "../css/Navbar.css";
 import Sidebar from "./Sidebar.jsx";
-import  Gemini_Generated_Image_neuv33neuv33neuv2r3   from "../assets/img/Gemini_Generated_Image_neuv33neuv33neuv2r3.png";
+import Gemini_Generated_Image_neuv33neuv33neuv2r3 from "../assets/img/Gemini_Generated_Image_neuv33neuv33neuv2r3.png";
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -32,18 +32,33 @@ export const Navbar = () => {
   return (
     <div className="navbar-container">
       {/* Top Info Bar */}
-      <button class="btn btn-outline-dark border border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i class="fa-solid fa-bars"></i></button>
       <div className="row gx-0 top-bar">
         <div className="col-6 text-start">
           <div className="info-item">
-            <i className="fa fa-envelope text-primary me-2"></i>
-            <span>info@example.com</span>
+            {/* Botón Sidebar */}
+            <button class="btn btn-outline-light border border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling"><i class="fa-solid fa-bars"></i></button>
           </div>
         </div>
         <div className="col-6 text-end">
           <div className="info-item">
-            <i className="fa fa-phone-alt text-primary me-2"></i>
-            <span>+012 345 6789</span>
+            {(store.authChef || store.authUser || store.authAdmin) && (
+              <div className="d-flex align-items-center">
+
+                {/* Botón Logout */}
+                <button className="btn btn-outline-light border border-0" onClick={logout}>
+                  Logout
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    fill="currentColor" className="bi bi-door-open-fill mx-2" viewBox="0 0 16 16">
+                    <path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5
+                          A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0
+                          0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15zM11
+                          2h.5a.5.5 0 0 1 .5.5V15h-1zm-2.5
+                          8c-.276 0-.5-.448-.5-1s.224-1 .5-1
+                          .5.448.5 1-.224 1-.5 1"/>
+                  </svg>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -72,7 +87,7 @@ export const Navbar = () => {
 
             <div className="collapse navbar-collapse d-flex justify-content-around align-items-center" id="navbarCollapse">
               <div className="navbar-nav">
-              <Link to="/about_us" className="nav-item nav-link text-light">About us</Link>
+                <Link to="/about_us" className="nav-item nav-link text-light">About us</Link>
                 {/* Rol Admin */}
                 {store.authAdmin && (
                   <>
@@ -112,43 +127,13 @@ export const Navbar = () => {
                   </>
                 )}
 
-                
+
 
                 {/* Botón Sidebar + Logout si hay sesión */}
-                {(store.authChef || store.authUser || store.authAdmin) && (
-                  <div className="d-flex align-items-center">
 
-                     {/* Botón Logout */}
-                    <button className="btn btn-outline-light ms-2" onClick={logout}>
-                      Logout
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                        fill="currentColor" className="bi bi-door-open-fill mx-2" viewBox="0 0 16 16">
-                        <path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5
-                          A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0
-                          0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15zM11
-                          2h.5a.5.5 0 0 1 .5.5V15h-1zm-2.5
-                          8c-.276 0-.5-.448-.5-1s.224-1 .5-1
-                          .5.448.5 1-.224 1-.5 1"/>
-                      </svg>
-                    </button>
-
-                    {/* Botón Sidebar */}
-                    <button
-                      className="btn btn btn-outline-light ms-3"
-                      type="button"
-                      data-bs-toggle="offcanvas"
-                      data-bs-target="#offcanvasScrolling"
-                      aria-controls="offcanvasScrolling"
-                    >
-                      <i className="fa-solid fa-bars"></i>
-                    </button>
-
-                   
-                  </div>
-                )}
               </div>
 
-              
+
 
               {/* Social Icons */}
               <div className="d-none d-lg-flex align-items-center social-icons">
