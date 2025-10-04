@@ -66,7 +66,7 @@ export const Home = () => {
         <div className="container-fluid bg-dark px-0">
         <div className="row gx-0 wow fadeIn" data-wow-delay="0.1s">
             <div className="col-lg-3  d-none d-lg-block">
-                <a href="index.html" className="navbar-brand primary-orange w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
+                <a href="/" className="navbar-brand primary-orange w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
                     <img src={Gemini_Generated_Image_neuv33neuv33neuv2r3} alt="logo cook with me" height="110" />
                 </a>
             </div>

@@ -136,9 +136,9 @@ const Sidebar = () => {
                         />
 
                         <CustomSidebarButton
-                            to="/chef_home"
+                            to="/About_us"
                             iconClass="fa-solid fa-question"
-                            text="Preguntas"
+                            text="About us"
                         />
                         <div className="dropdown container text-center">
                             <div class="row justify-content-around">
@@ -191,21 +191,15 @@ const Sidebar = () => {
                         />
 
                         <CustomSidebarButton
-                            to="/home_user"
+                            to="/home_user_avail_recipe"
                             iconClass="fa-solid fa-book"
-                            text="Buscar Recetas"
+                            text="Recetas Disponibles"
                         />
 
                         <CustomSidebarButton
-                            to="/add_ingredient_user"
+                            to="/user_inventory"
                             iconClass="fa-solid fa-bowl-food"
-                            text="Agregar Ingrediente"
-                        />
-
-                        <CustomSidebarButton
-                            to="/add_utensil_to_user"
-                            iconClass="fa-solid fa-utensils"
-                            text="Agregar Utensilio"
+                            text="Inventario"
                         />
 
                         <CustomSidebarButton
