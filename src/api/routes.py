@@ -1359,10 +1359,10 @@ def ingredient_users_bulk():
     if not user_id:
         return jsonify({"error": "user_id required"}), 400
 
-    # Limpiar selecciones previas
-    Ingredient_user.query.filter_by(user_id=user_id).delete()
-    Utensil_user.query.filter_by(user_id=user_id).delete()
-    db.session.commit()
+    # # Limpiar selecciones previas
+    # Ingredient_user.query.filter_by(user_id=user_id).delete()
+    # Utensil_user.query.filter_by(user_id=user_id).delete()
+    # db.session.commit()
 
     # Agregar nuevas selecciones de ingredientes
     for ing_id in ingredient_ids:

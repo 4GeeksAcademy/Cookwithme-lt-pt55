@@ -115,6 +115,12 @@ export const Navbar = () => {
                     <Link to="/home_user_avail_recipe" className="nav-item nav-link text-light mx-3">
                       Recetas<br /> Disponibles
                     </Link>
+                    <Link to="/home_user_incomplete_recipe" className="nav-item nav-link text-light mx-3">
+                      Recetas<br /> Incompletas
+                    </Link>
+                    <Link to="/shopping_list" className="nav-item nav-link text-light mx-3">
+                      Lista<br /> De Compras
+                    </Link>
                     <Link to="/home_user" className="nav-item nav-link text-light">Todas las recetas</Link>
                     <Link to="/fav_recipe_user" className="nav-item nav-link text-light">
                       Favoritos{" "}
