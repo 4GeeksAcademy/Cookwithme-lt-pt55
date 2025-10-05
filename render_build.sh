@@ -10,3 +10,7 @@ pipenv install
 pipenv run upgrade
 
 flask insert-test-data
+flask insert-test-users
+flask insert-test-chefs
+flask insert-test-ingredients
+flask insert-test-utensils

@@ -26,7 +26,7 @@ def setup_commands(app):
             user.is_active = True
             user.username = "Test"
             user.image_url = "/"
-            user.name = "Test"
+            user.name = "User-Test"
             db.session.add(user)
             db.session.commit()
             print("User: ", user.email, " created.")
@@ -43,7 +43,7 @@ def setup_commands(app):
             chef.password = "123456"
             chef.rating = "5"
             chef.image_url = "/"
-            chef.name = "Test"
+            chef.name = "Chef-Test"
             db.session.add(chef)
             db.session.commit()
             print("Chef: ", chef.email, " created.")
@@ -58,7 +58,7 @@ def setup_commands(app):
             ingredient = Ingredient()
             ingredient.image_url = "/"
             ingredient.description = "Test"
-            ingredient.name = "Test"
+            ingredient.name = "Ingredient-Test"
             db.session.add(ingredient)
             db.session.commit()
             print("Ingredient: ", ingredient.name, " created.")
@@ -73,7 +73,7 @@ def setup_commands(app):
             utensil = Utensil()
             utensil.url_img = "/"
             utensil.description = "Test"
-            utensil.name = "Test"
+            utensil.name = "Utensil-Test"
             db.session.add(utensil)
             db.session.commit()
             print("Utensil: ", utensil.name, " created.")
