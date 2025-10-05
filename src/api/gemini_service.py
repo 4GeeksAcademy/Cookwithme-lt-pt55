@@ -26,6 +26,8 @@ def detect_ingredients_from_image(image_url: str):
       ]
     }
 
+    Si en la imagen NO hay ingredientes o comida, devuelve:
+    {"ingredients": []}
     No incluyas explicaciones ni texto adicional fuera del JSON.
     """
 
@@ -41,18 +43,32 @@ def detect_ingredients_from_image(image_url: str):
 
     raw_text = response.text.strip()
 
-    # Intentar parsear como JSON
+    # Intentar parsear JSON
     try:
         data = json.loads(raw_text)
-        return data
     except json.JSONDecodeError:
-        # Si Gemini devuelve texto extraño, intentar limpiar
         start = raw_text.find("{")
         end = raw_text.rfind("}") + 1
         if start != -1 and end != -1:
             try:
-                return json.loads(raw_text[start:end])
-            except:
-                pass
-        # fallback: devolver como texto plano
-        return {"ingredients": [], "raw_response": raw_text}
+                data = json.loads(raw_text[start:end])
+            except Exception:
+                data = {"ingredients": []}
+        else:
+            data = {"ingredients": []}
+
+    # Validar detección
+    ingredients = data.get("ingredients", [])
+
+    # Lista de palabras NO ingrediente (ruido común)
+    non_ingredients = {"person", "table", "plate", "cup", "fork", "knife", "bowl", "pan", "background", "object"}
+
+    valid_ingredients = [
+        ing for ing in ingredients
+        if ing.get("name") and ing["name"].lower() not in non_ingredients
+    ]
+
+    if not valid_ingredients:
+        return {"ingredients": [], "message": "No hay ingredientes en la foto"}
+
+    return {"ingredients": valid_ingredients}
