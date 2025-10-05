@@ -1,25 +1,37 @@
 import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-import { Link } from "react-router-dom";
 import "../css/Bottoms.css";
+import { useNavigate } from "react-router-dom"; 
 
 export const InventoryUser = ({ onInventoryChange }) => {
   const { store } = useGlobalReducer();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const navigate = useNavigate(); 
 
+  // master lists
   const [ingredients, setIngredients] = useState([]);
   const [utensils, setUtensils] = useState([]);
+
+  // seleccionados en input
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [selectedUtensils, setSelectedUtensils] = useState([]);
+
+  // inventario ya guardado del usuario
+  const [userIngredients, setUserIngredients] = useState([]);
+  const [userUtensils, setUserUtensils] = useState([]);
+
+  // inputs de búsqueda
   const [ingredientInput, setIngredientInput] = useState("");
   const [utensilInput, setUtensilInput] = useState("");
   const [ingredientSuggestions, setIngredientSuggestions] = useState([]);
   const [utensilSuggestions, setUtensilSuggestions] = useState([]);
 
+  // IA
   const [uploadedImg, setUploadedImg] = useState("");
   const [detected, setDetected] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // Cargar catálogos
   useEffect(() => {
     fetch(`${backendUrl}/api/ingredients`)
       .then(res => res.json())
@@ -29,6 +41,24 @@ export const InventoryUser = ({ onInventoryChange }) => {
       .then(data => setUtensils(data));
   }, []);
 
+  // Cargar inventario actual del usuario
+  useEffect(() => {
+    if (!store.token) return;
+
+    fetch(`${backendUrl}/api/user/inventory/ingredients`, {
+      headers: { Authorization: `Bearer ${store.token}` },
+    })
+      .then(res => res.json())
+      .then(data => setUserIngredients(data));
+
+    fetch(`${backendUrl}/api/user/inventory/utensils`, {
+      headers: { Authorization: `Bearer ${store.token}` },
+    })
+      .then(res => res.json())
+      .then(data => setUserUtensils(data));
+  }, [store.token]);
+
+  // sugerencias
   useEffect(() => {
     if (ingredientInput === "") setIngredientSuggestions([]);
     else
@@ -49,13 +79,13 @@ export const InventoryUser = ({ onInventoryChange }) => {
       );
   }, [utensilInput, utensils]);
 
+  // seleccionar temporalmente
   const addIngredient = (id) => {
     if (!selectedIngredients.includes(id))
       setSelectedIngredients([...selectedIngredients, id]);
     setIngredientInput("");
     setIngredientSuggestions([]);
   };
-
   const removeIngredient = (id) => {
     setSelectedIngredients(selectedIngredients.filter(ingId => ingId !== id));
   };
@@ -66,13 +96,31 @@ export const InventoryUser = ({ onInventoryChange }) => {
     setUtensilInput("");
     setUtensilSuggestions([]);
   };
-
   const removeUtensil = (id) => {
     setSelectedUtensils(selectedUtensils.filter(utId => utId !== id));
   };
 
+  // eliminar de inventario ya guardado
+  const removeUserIngredient = (id) => {
+    fetch(`${backendUrl}/api/user/inventory/ingredients/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${store.token}` },
+    }).then(res => {
+      if (res.ok) setUserIngredients(userIngredients.filter(i => i.id !== id));
+    });
+  };
+
+  const removeUserUtensil = (id) => {
+    fetch(`${backendUrl}/api/user/inventory/utensils/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${store.token}` },
+    }).then(res => {
+      if (res.ok) setUserUtensils(userUtensils.filter(u => u.id !== id));
+    });
+  };
+
+  // guardar selección nueva
   const saveInventory = () => {
-    console.log(store.authUser)
     fetch(`${backendUrl}/api/ingredient_users_bulk`, {
       method: "POST",
       headers: {
@@ -89,9 +137,13 @@ export const InventoryUser = ({ onInventoryChange }) => {
       .then(() => {
         alert("Se ha actualizado su inventario");
         if (onInventoryChange) onInventoryChange();
+        setSelectedIngredients([]);
+        setSelectedUtensils([]);
+        navigate("/home_user_avail_recipe");
       });
   };
 
+  // subir imagen + IA
   const UploadIngredientImage = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -107,18 +159,15 @@ export const InventoryUser = ({ onInventoryChange }) => {
         "https://api.cloudinary.com/v1_1/dwi8lacfr/image/upload",
         { method: "POST", body: formData }
       );
-
       const data = await response.json();
       if (data.secure_url) {
         setUploadedImg(data.secure_url);
 
-        // 🔹 Llamar a tu backend IA
         const aiRes = await fetch(`${backendUrl}/api/detect_ingredients`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ image_url: data.secure_url })
         });
-
         const aiData = await aiRes.json();
         setDetected(aiData.ingredients || []);
       }
@@ -144,8 +193,51 @@ export const InventoryUser = ({ onInventoryChange }) => {
     <div className="container">
       <h2>🛒 Tu Inventario</h2>
 
-      {/* Ingredientes */}
-      <h4>Ingredientes</h4>
+      {/* Inventario actual like home user*/}
+      <div className="mt-3">
+        <h4>Ingredientes guardados</h4>
+        {userIngredients.length > 0 ? (
+          <div>
+            {userIngredients.map(ing => (
+              <span
+                key={ing.id}
+                className="badge bg-primary me-1 mb-1 d-inline-flex align-items-center"
+              >
+                {ing.name}
+                <i
+                  className="fa-solid fa-xmark ms-2"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => removeUserIngredient(ing.id)}
+                ></i>
+              </span>
+            ))}
+          </div>
+        ) : <p>No tienes ingredientes agregados.</p>}
+
+        <h4 className="mt-3">Utensilios guardados</h4>
+        {userUtensils.length > 0 ? (
+          <div>
+            {userUtensils.map(ut => (
+              <span
+                key={ut.id}
+                className="badge bg-success me-1 mb-1 d-inline-flex align-items-center"
+              >
+                {ut.name}
+                <i
+                  className="fa-solid fa-xmark ms-2"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => removeUserUtensil(ut.id)}
+                ></i>
+              </span>
+            ))}
+          </div>
+        ) : <p>No tienes utensilios agregados.</p>}
+      </div>
+
+      <hr />
+
+      {/* Inputs para añadir nuevos */}
+      <h4>Agregar Ingredientes</h4>
       <input
         type="text"
         className="form-control"
@@ -172,13 +264,12 @@ export const InventoryUser = ({ onInventoryChange }) => {
             <span
               key={id}
               className="badge me-1 d-inline-flex align-items-center"
-              style={{ backgroundColor: "#f57c00", color: "white" }} // 🔹 Naranja personalizado
+              style={{ backgroundColor: "#f57c00", color: "white" }}
             >
               {ing?.name}
               <button
                 type="button"
                 className="btn-close btn-close-white btn-sm ms-2"
-                aria-label="Remove"
                 onClick={() => removeIngredient(id)}
                 style={{ fontSize: "0.6rem" }}
               />
@@ -196,9 +287,7 @@ export const InventoryUser = ({ onInventoryChange }) => {
           onChange={UploadIngredientImage}
           className="form-control"
         />
-
         {loading && <p className="mt-2">Analizando con IA...</p>}
-
         {uploadedImg && (
           <div className="mt-2">
             <img
@@ -235,7 +324,7 @@ export const InventoryUser = ({ onInventoryChange }) => {
       )}
 
       {/* Utensilios */}
-      <h4 className="mt-3">🍴 Utensilios</h4>
+      <h4 className="mt-3">Agregar Utensilios</h4>
       <input
         type="text"
         className="form-control"
@@ -267,7 +356,6 @@ export const InventoryUser = ({ onInventoryChange }) => {
               <button
                 type="button"
                 className="btn-close btn-close-white btn-sm ms-2"
-                aria-label="Remove"
                 onClick={() => removeUtensil(id)}
                 style={{ fontSize: "0.6rem" }}
               />
