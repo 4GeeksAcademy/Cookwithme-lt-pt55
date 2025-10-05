@@ -226,7 +226,6 @@ export const router = createBrowserRouter(
      <Route path="/home_user_avail_recipe" element={<HomeAvailableRecipes />} />   
      <Route path="/user_inventory" element={<InventoryUser />} />  
 
-      <Route path="/login_user" element={<LoginUserLayout />} />  
       <Route path="/signup_user" element={<SignupUserLayout />} />
       <Route path="/login_chef" element={<LoginChefLayout />} />  
       <Route path="/signup_chef" element={<SignupChefLayout />} /> 
@@ -234,7 +233,7 @@ export const router = createBrowserRouter(
       <Route path="/select_role" element={<RoleSelect />} />  
       
      
-     <Route path="/user_inventory" element={<InventoryUser />} />   
+      
      <Route path="/welcome_chef" element={<WelcomeChef />} /> 
 
      <Route path="/About_us" element={<AboutUs />} /> 
