@@ -105,10 +105,13 @@ import LoginAdminLayout from "./pages/LoginsSIgnupLayout/LoginAdminLayout.jsx";
 
 
 
- 
+
 import WelcomeChef from "./pages/WelcomeChef.jsx";
 import { AboutUs } from "./pages/AboutUs.jsx";
 import NewIngredienteAI from "./pages/NewIngredienteAI"; 
+import { HomeIncompleteRecipes } from "./pages/HomeUserIncomplete.jsx";
+import { ShoppingList } from "./pages/ShoppingLists.jsx";
+
 
 
 
@@ -240,6 +243,8 @@ export const router = createBrowserRouter(
      <Route path="/About_us" element={<AboutUs />} /> 
 
      <Route path="/add_ingrediente_ai" element={<NewIngredienteAI />} /> 
+     <Route path="/home_user_incomplete_recipe" element={<HomeIncompleteRecipes />} /> 
+     <Route path="/shopping_list" element={<ShoppingList />} /> 
     </Route>
   )
 );
