@@ -75,7 +75,7 @@ const Sidebar = () => {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data)    
+                console.log(data)
                 setadminInfo(data)
             })
     }
@@ -140,41 +140,46 @@ const Sidebar = () => {
                             iconClass="fa-solid fa-question"
                             text="About us"
                         />
-                        <div className="dropdown container text-center">
-                            <div class="row justify-content-around">
-                                <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
-                                    <div className="col-4">
-                                        <span><img src={chef.image_url} alt="" class="img-fluid" /></span>
-                                    </div>
-                                    <div className="col-4">
+                        <hr style={{ "margin-top": "55vh" }}></hr>
+                        <div className="position-relative">
+                            <div className="dropdown container text-center">
+                                <div class="row justify-content-start">
+                                    <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
+                                        <div className="col-2">
+                                            <span><img src={chef.image_url} alt="" class="rounded-circle" style={{ "width": "32px", "height": "32px" }} /></span>
+                                        </div>
+
                                         <span>{chef.name}</span>
-                                    </div>
-                                </a>
-                                <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
-                                    <li>
-                                        <a className="dropdown-item" href="#">
-                                            Settings
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <Link to="/chef_profile">
-                                            <button class="dropdown-item border-end-0 d-inline-block text-truncate list-group-item-dark" data-bs-parent="#sidebar">
-                                                <span>Profile</span>
-                                            </button>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                    </li>
-                                    <li>
-                                        <Link to="/login_chef">
-                                            <button class="dropdown-item border-end-0 d-inline-block text-truncate list-group-item-dark" data-bs-parent="#sidebar" onClick={logout}>
-                                                <span>Sing out</span>
-                                            </button>
-                                        </Link>
-                                    </li>
-                                </ul>
+
+                                    </a>
+                                    <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
+                                        <li>
+                                            <a className="dropdown-item" href="#">
+                                                Settings
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <Link to="/chef_profile">
+                                                <button class="dropdown-item border-end-0 d-inline-block text-truncate list-group-item-dark" data-bs-parent="#sidebar">
+                                                    <span>Profile</span>
+                                                </button>
+                                            </Link>
+                                        </li>
+                                        <li>
+                                        </li>
+                                        <li>
+                                            <Link to="/login_chef">
+                                                <button class="dropdown-item border-end-0 d-inline-block text-truncate list-group-item-dark" data-bs-parent="#sidebar" onClick={logout}>
+                                                    <span>Sing out</span>
+                                                </button>
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
+
                         </div>
+
                     </div>
                 </div>
             )}
@@ -207,39 +212,43 @@ const Sidebar = () => {
                             iconClass="fa-solid fa-heart"
                             text="Recetas Favoritas"
                         />
-                        <div className="dropdown container text-center">
-                            <div class="row justify-content-around">
-                                <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
-                                    <div className="col-4">
-                                        <img src={user.image_url} alt="" class="img-fluid" />
-                                    </div>
-                                    <div className="col-4">
+                        <hr style={{ "margin-top": "55vh" }}></hr>
+                        <div className="position-relative">
+
+                            <div className="dropdown container text-center">
+                                <div class="row justify-content-start">
+                                    <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
+                                        <div className="col-2">
+                                            <img src={user.image_url} alt="" class="rounded-circle" style={{ "width": "32px", "height": "32px" }} />
+                                        </div>
+
                                         <span>{user.name}</span>
-                                    </div>
-                                </a>
-                                <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
-                                    <li>
-                                        <a className="dropdown-item" href="#">
-                                            Settings
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <Link to="/user_profile">
-                                            <button class="dropdown-item border-end-0 d-inline-block text-truncate list-group-item-dark" data-bs-parent="#sidebar">
-                                                <span>Profile</span>
-                                            </button>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                    </li>
-                                    <li>
-                                        <Link to="/login_user">
-                                            <button class="dropdown-item border-end-0 d-inline-block text-truncate list-group-item-dark" data-bs-parent="#sidebar" onClick={logout}>
-                                                <span>Sing out</span>
-                                            </button>
-                                        </Link>
-                                    </li>
-                                </ul>
+
+                                    </a>
+                                    <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
+                                        <li>
+                                            <a className="dropdown-item" href="#">
+                                                Settings
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <Link to="/user_profile">
+                                                <button class="dropdown-item border-end-0 d-inline-block text-truncate list-group-item-dark" data-bs-parent="#sidebar">
+                                                    <span>Profile</span>
+                                                </button>
+                                            </Link>
+                                        </li>
+                                        <li>
+                                        </li>
+                                        <li>
+                                            <Link to="/login_user">
+                                                <button class="dropdown-item border-end-0 d-inline-block text-truncate list-group-item-dark" data-bs-parent="#sidebar" onClick={logout}>
+                                                    <span>Sing out</span>
+                                                </button>
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -280,41 +289,48 @@ const Sidebar = () => {
                             iconClass="fa-solid fa-bowl-food"
                             text="Ingredientes"
                         />
-                        <div className="dropdown container text-center">
-                            <div class="row justify-content-around">
-                                <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
-                                    <div className="col-4">
-                                        <i class="fa-solid fa-user"></i>
-                                    </div>
-                                    <div className="col-4">
-                                        <span>{adminInfo.name || "Admin"}</span>
-                                    </div>
-                                </a>
-                                <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
-                                    <li>
-                                        <a className="dropdown-item" href="#">
-                                            Settings
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <Link to="/adminuser">
-                                            <button class="dropdown-item border-end-0 d-inline-block text-truncate list-group-item-dark" data-bs-parent="#sidebar">
-                                                <span>Profile</span>
-                                            </button>
-                                        </Link>
-                                    </li>
-                                    <li>
-                                    </li>
-                                    <li>
-                                        <Link to="/login_admin">
-                                            <button class="dropdown-item border-end-0 d-inline-block text-truncate list-group-item-dark" data-bs-parent="#sidebar" onClick={logout}>
-                                                <span>Sing out</span>
-                                            </button>
-                                        </Link>
-                                    </li>
-                                </ul>
+
+                        <hr style={{ "margin-top": "55vh" }}></hr>
+                        <div className="position-relative">
+                            <div className="dropdown container text-center">
+                                <div class="row justify-content-start">
+                                    <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
+                                        <div className="col-2">
+                                            <i class="fa-solid fa-user"></i>
+                                        </div>
+                                        
+                                            <span>{adminInfo.name || "Admin"}</span>
+                                        
+                                    </a>
+                                    <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
+                                        <li>
+                                            <a className="dropdown-item" href="#">
+                                                Settings
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <Link to="/adminuser">
+                                                <button class="dropdown-item border-end-0 d-inline-block text-truncate list-group-item-dark" data-bs-parent="#sidebar">
+                                                    <span>Profile</span>
+                                                </button>
+                                            </Link>
+                                        </li>
+                                        <li>
+                                        </li>
+                                        <li>
+                                            <Link to="/login_admin">
+                                                <button class="dropdown-item border-end-0 d-inline-block text-truncate list-group-item-dark" data-bs-parent="#sidebar" onClick={logout}>
+                                                    <span>Sing out</span>
+                                                </button>
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
+
                         </div>
+
+
                     </div>
                 </div>
             )}
