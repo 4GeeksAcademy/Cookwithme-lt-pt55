@@ -56,9 +56,9 @@ def setup_commands(app):
         print("Creating test ingredients")
         for x in range(1, int(count) + 1):
             ingredient = Ingredient()
-            ingredient.image_url = "/"
+            ingredient.image = "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSRgtJF2-CjGrCFU0GPszrh22NPv3eHSLXZGKmX3twbN1NoYzNXsnYUCs02o2vw-8wtmmu1ePTiVvfljeJJFU0J-W-AHvkpvP6784g9YdZXqw"
             ingredient.description = "Test"
-            ingredient.name = "Ingredient-Test"
+            ingredient.name = "Ingredient-Test" + str(x)
             db.session.add(ingredient)
             db.session.commit()
             print("Ingredient: ", ingredient.name, " created.")
@@ -71,9 +71,9 @@ def setup_commands(app):
         print("Creating test utensils")
         for x in range(1, int(count) + 1):
             utensil = Utensil()
-            utensil.url_img = "/"
+            utensil.url_img = "https://m.media-amazon.com/images/I/51X0jzGB9NL._UF894,1000_QL80_.jpg"
             utensil.description = "Test"
-            utensil.name = "Utensil-Test"
+            utensil.name = "Utensil-Test" + str(x)
             db.session.add(utensil)
             db.session.commit()
             print("Utensil: ", utensil.name, " created.")

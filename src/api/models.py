@@ -88,7 +88,7 @@ class Ingredient(db.Model):
     name: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
     description: Mapped[str] = mapped_column(nullable=False)
     image: Mapped[str] = mapped_column(
-        String(120), unique=True, nullable=False)
+        String(250), nullable=False)
 
     recipe_ingredients: Mapped[List["Recipe_ingredient"]] = relationship(
         back_populates="ingredient")
