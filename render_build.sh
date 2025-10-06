@@ -8,6 +8,7 @@ npm run build
 pip install
 
 pip run upgrade
+chmod +x render_build.sh
 
 flask insert-test-data
 flask insert-test-users
