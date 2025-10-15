@@ -70,15 +70,15 @@ const Footer = () => {
               </h4>
               <ul className="list-unstyled">
                 <li className="mb-2 d-flex align-items-center">
-                    <i
-                      className="fa fa-arrow-right me-2"
-                      style={{ color: "#FB5B21" }}
-                    ></i>
+                  <i
+                    className="fa fa-arrow-right me-2"
+                    style={{ color: "#FB5B21" }}
+                  ></i>
                   <Link to="/" className="text-light text-decoration-none">Home</Link>
-                  </li>
-                  {!store.authUser}
+                </li>
+                {!store.authUser}
                 {[
-                  { text: "About Us", url: "/#cookwithme" },
+                  { text: "About Us", url: "/#aboutus" },
                   { text: "Food Menu", url: "/#menu" },
                   { text: "Our Chefs", url: "/#chefs" },
                 ].map((link, i) => (

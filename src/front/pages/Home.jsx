@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-import  Gemini_Generated_Image_neuv33neuv33neuv2r3   from "../assets/img/Gemini_Generated_Image_neuv33neuv33neuv2r3.png";
+import Gemini_Generated_Image_neuv33neuv33neuv2r3 from "../assets/img/Gemini_Generated_Image_neuv33neuv33neuv2r3.png";
 import personafeliz from "../assets/img/personafeliz.png";
 import logov1 from "../assets/img/logov1.png";
 import iafoto from "../assets/img/iafoto.png";
@@ -9,7 +9,7 @@ import { Link } from "react-router-dom"
 
 export const Home = () => {
 
-  const { store,dispatch } = useGlobalReducer();
+  const { store, dispatch } = useGlobalReducer();
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const loadMessage = async () => {
@@ -23,25 +23,25 @@ export const Home = () => {
       console.error(error.message);
     }
   };
-  
-    // Logout unificado
-    function logout() {
-      if (store.authChef) {
-        localStorage.removeItem("tokenChef");
-        dispatch({ type: "set_auth_chef", payload: false });
-        navigate("/"); // o /login_chef si quieres
-      }
-      if (store.authUser) {
-        localStorage.removeItem("tokenUser");
-        dispatch({ type: "set_auth_user", payload: false });
-        navigate("/"); // o /login_user
-      }
-      if (store.authAdmin) {
-        localStorage.removeItem("tokenAdmin");
-        dispatch({ type: "set_auth_admin", payload: false });
-        navigate("/"); // o /login_admin
-      }
+
+  // Logout unificado
+  function logout() {
+    if (store.authChef) {
+      localStorage.removeItem("tokenChef");
+      dispatch({ type: "set_auth_chef", payload: false });
+      navigate("/"); // o /login_chef si quieres
     }
+    if (store.authUser) {
+      localStorage.removeItem("tokenUser");
+      dispatch({ type: "set_auth_user", payload: false });
+      navigate("/"); // o /login_user
+    }
+    if (store.authAdmin) {
+      localStorage.removeItem("tokenAdmin");
+      dispatch({ type: "set_auth_admin", payload: false });
+      navigate("/"); // o /login_admin
+    }
+  }
 
   useEffect(() => {
     loadMessage();
@@ -59,41 +59,36 @@ export const Home = () => {
 
   return (
     <>
-     
+
 
       {/* Navbar Exclusivo de HOME */}
-      {store.authChef || store.authUser || store.authAdmin ? null: 
+      {store.authChef || store.authUser || store.authAdmin ? null :
         <div className="container-fluid bg-dark px-0">
-        <div className="row gx-0 wow fadeIn" data-wow-delay="0.1s">
+          <div className="row gx-0 wow fadeIn" data-wow-delay="0.1s">
             <div className="col-lg-3  d-none d-lg-block">
-                <a href="/" className="navbar-brand primary-orange w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
-                    <img src={Gemini_Generated_Image_neuv33neuv33neuv2r3} alt="logo cook with me" height="110" />
-                </a>
+              <a href="/" className="navbar-brand primary-orange w-100 h-100 m-0 p-0 d-flex align-items-center justify-content-center">
+                <img src={Gemini_Generated_Image_neuv33neuv33neuv2r3} alt="logo cook with me" height="110" />
+              </a>
             </div>
             <div className="col-lg-9 ">
-                <nav className="navbar navbar-expand-lg navbar-dark p-3 p-lg-0 px-lg-5 h-100" style={{background: '#111111'}}>
+              <nav className="navbar navbar-expand-lg navbar-dark p-3 p-lg-0 px-lg-5 h-100" style={{ background: '#111111' }}>
 
-                    <button type="button" className="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse justify-content-between align-items-center" id="navbarCollapse">
-                        <div className="navbar-nav mr-auto py-0">
-                          <button className="btn text-light m-2">Recipes</button>
-                           <button className="btn text-light m-2">Chefs</button>
-                           <button className="btn text-light m-2">About us</button>
-                           <button className="btn text-light m-2">Contact</button>
-                            <Link to="/select_role">
-                            <button className="btn btn-outline-light m-2">Enter</button>
-                            </Link>
-                          
-                            
-                         
-                        </div>
+                <button type="button" className="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                  <span className="navbar-toggler-icon"></span>
+                </button>
+                <div className="container text-center justify-content-end" id="navbarCollapse">
+                  <div className="row align-items-center">
+                    <div className="col">
+                      <Link to="/select_role">
+                        <button className="btn btn-outline-light m-2 btn-lg">Enter</button>
+                      </Link>
                     </div>
-                </nav>
+                  </div>
+                </div>
+              </nav>
             </div>
-        </div>
-        </div> }
+          </div>
+        </div>}
       {/* --------------------------------- */}
 
       {/* === NUEVA SECCIÓN: Layout tipo "foto" === */}
@@ -267,9 +262,8 @@ export const Home = () => {
               <div key={idx} className="col-12 col-sm-6 col-lg-3">
                 <div className="position-relative rounded-3 overflow-hidden shadow-sm">
                   <img
-                    src={`https://themewagon.github.io/Chefer/img/menu-${
-                      (idx % 8) + 1
-                    }.jpg`}
+                    src={`https://themewagon.github.io/Chefer/img/menu-${(idx % 8) + 1
+                      }.jpg`}
                     alt="Menu item"
                     className="img-fluid w-100"
                     style={{ aspectRatio: "4 / 3", objectFit: "cover" }}
